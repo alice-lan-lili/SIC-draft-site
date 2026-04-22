@@ -6,6 +6,7 @@ import Programs from './components/Programs';
 import Insights from './components/Insights';
 import Sponsors from './components/Sponsors';
 import Team from './components/Team';
+import SignIn from './components/SignIn';
 
 function App() {
   return (
@@ -27,6 +28,9 @@ function App() {
           } />
           <Route path="team" element={
             <div style={{ paddingTop: '100px' }}><Team /></div>
+          } />
+          <Route path="signin" element={
+            <div style={{ paddingTop: '100px' }}><SignIn /></div>
           } />
         </Route>
       </Routes>

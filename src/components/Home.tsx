@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Hero from './Hero';
 import { Link } from 'react-router-dom';
+import { Activity, ArrowRight } from 'lucide-react';
 
 function CosmicOverlay({ active }: { active: boolean }) {
   const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
@@ -177,20 +178,93 @@ export default function Home() {
               <Link to="/directory" className="btn-outline">View Full Directory</Link>
             </div>
             <div className="grid-2">
-              <div className="glass-card" style={{ padding: '2rem', display: 'flex', gap: '2rem', alignItems: 'center' }}>
-                <div style={{ width: '80px', height: '80px', background: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}></div>
-                <div>
-                  <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Signalor</h3>
-                  <p className="text-muted">Building autonomous drone infrastructure.</p>
-                </div>
-              </div>
-              <div className="glass-card" style={{ padding: '2rem', display: 'flex', gap: '2rem', alignItems: 'center' }}>
-                <div style={{ width: '80px', height: '80px', background: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}></div>
-                <div>
-                  <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>VoidTech</h3>
-                  <p className="text-muted">Deep tech materials for aerospace.</p>
-                </div>
-              </div>
+              {[
+                { 
+                  name: "Signalor", 
+                  link: "SIGNALOR.APP", 
+                  logo: "S",
+                  desc: "Signalor provides the intelligence layer to culture. Quantitatively observe granular sentiment data from across hundreds of platforms..."
+                },
+                { 
+                  name: "VoidTech", 
+                  link: "VOIDTECH.IO", 
+                  logo: "V",
+                  desc: "Specialized orbital manufacturing modules, allowing material scientists to produce perfect fiber optics and alloys impossible to create under Earth's gravity."
+                }
+              ].map((startup, idx) => (
+                <motion.div 
+                  key={idx}
+                  initial="rest"
+                  whileHover="hover"
+                  style={{ 
+                    background: 'var(--bg-tertiary)', 
+                    border: '1px solid var(--border-color)', 
+                    borderRadius: '8px',
+                    padding: '2.5rem', 
+                    cursor: 'pointer', 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    gap: '1.5rem',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <motion.div
+                    variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
+                    transition={{ duration: 0.3 }}
+                    style={{
+                      position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                      background: 'radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 50%)',
+                      pointerEvents: 'none'
+                    }}
+                  />
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', zIndex: 1 }}>
+                    <div style={{ 
+                      width: '60px', height: '60px', background: 'var(--border-color)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '1.5rem', fontWeight: 700, color: 'var(--purple)',
+                      fontFamily: 'var(--font-heading)', borderRadius: '12px'
+                    }}>
+                      {startup.logo}
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '1.5rem', margin: 0, marginBottom: '4px' }}>{startup.name}</h3>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', letterSpacing: '1px', fontFamily: 'var(--font-mono)' }}>
+                        {startup.link}
+                      </div>
+                    </div>
+                  </div>
+
+                  <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: '1rem', zIndex: 1 }}>{startup.desc}</p>
+                  
+                  <motion.div
+                    variants={{
+                      rest: { opacity: 0, height: 0, marginTop: 0 },
+                      hover: { opacity: 1, height: 'auto', marginTop: '0.5rem' }
+                    }}
+                    transition={{ duration: 0.3 }}
+                    style={{
+                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)',
+                      borderRadius: '6px', padding: '1rem', overflow: 'hidden', zIndex: 1
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--yellow)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', marginBottom: '8px' }}>
+                      <Activity size={12} /> Live Preview
+                    </div>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                      [FILLER PREVIEW] Currently in stealth. Recent metrics show 240% MoM user acquisition in target demographics. Preparing for Series A raise in Q4.
+                    </p>
+                  </motion.div>
+
+                  <motion.div 
+                    variants={{ rest: { color: 'var(--text-secondary)' }, hover: { color: 'var(--purple)' } }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', letterSpacing: '2px', fontFamily: 'var(--font-mono)', marginTop: 'auto', textTransform: 'uppercase', zIndex: 1 }}
+                  >
+                    VIEW PROFILE <ArrowRight size={16} />
+                  </motion.div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>

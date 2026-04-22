@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, X, ArrowRight } from 'lucide-react';
+import { ExternalLink, X, ArrowRight, Activity } from 'lucide-react';
 
 export default function Directory() {
   const [selected, setSelected] = useState<number | null>(null);
@@ -10,7 +10,7 @@ export default function Directory() {
       name: "Signalor", 
       link: "SIGNALOR.APP", 
       logo: "S",
-      desc: "Signalor provides the intelligence layer to culture. Quantitatively observe granular sentiment data from across hundreds of platforms to make better investments, improve...", 
+      desc: "Signalor provides the intelligence layer to culture. Quantitatively observe granular sentiment data from across hundreds of platforms...", 
       fullDesc: "Signalor provides the intelligence layer to culture. Quantitatively observe granular sentiment data from across hundreds of platforms to make better investments, improve strategic marketing, and understand shifts in consumer behavior before they happen."
     },
     { 
@@ -68,33 +68,45 @@ export default function Directory() {
               key={idx}
               layoutId={`card-${idx}`}
               onClick={() => setSelected(idx)}
-              whileHover={{ y: -5 }}
+              initial="rest"
+              whileHover="hover"
               style={{ 
                 background: 'var(--bg-tertiary)', 
                 border: '1px solid var(--border-color)', 
-                borderRadius: '4px',
+                borderRadius: '8px',
                 padding: '2.5rem', 
                 cursor: 'pointer', 
                 display: 'flex', 
                 flexDirection: 'column', 
                 gap: '1.5rem',
-                transition: 'border 0.3s ease'
+                position: 'relative',
+                overflow: 'hidden'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--purple)'}
-              onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              {/* Dynamic Hover Background Glow */}
+              <motion.div
+                variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
+                transition={{ duration: 0.3 }}
+                style={{
+                  position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                  background: 'radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 50%)',
+                  pointerEvents: 'none'
+                }}
+              />
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', zIndex: 1 }}>
                 <div style={{ 
                   width: '60px', 
                   height: '60px', 
-                  background: 'var(--border-color)', // acts as neutral gray box
+                  background: 'var(--border-color)',
                   display: 'flex', 
                   alignItems: 'center', 
                   justifyContent: 'center',
                   fontSize: '1.5rem',
                   fontWeight: 700,
                   color: 'var(--purple)',
-                  fontFamily: 'var(--font-heading)'
+                  fontFamily: 'var(--font-heading)',
+                  borderRadius: '12px'
                 }}>
                   {startup.logo}
                 </div>
@@ -106,11 +118,38 @@ export default function Directory() {
                 </div>
               </div>
 
-              <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: '1rem' }}>{startup.desc}</p>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: '1rem', zIndex: 1 }}>{startup.desc}</p>
               
-              <div style={{ color: 'var(--purple)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', letterSpacing: '2px', fontFamily: 'var(--font-mono)', marginTop: 'auto', textTransform: 'uppercase' }}>
+              {/* Unique Motion Preview State revealed on hover */}
+              <motion.div
+                variants={{
+                  rest: { opacity: 0, height: 0, marginTop: 0 },
+                  hover: { opacity: 1, height: 'auto', marginTop: '0.5rem' }
+                }}
+                transition={{ duration: 0.3 }}
+                style={{
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.05)',
+                  borderRadius: '6px',
+                  padding: '1rem',
+                  overflow: 'hidden',
+                  zIndex: 1
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--yellow)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  <Activity size={12} /> Live Preview
+                </div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                  [FILLER PREVIEW] Currently in stealth. Recent metrics show 240% MoM user acquisition in target demographics. Preparing for Series A raise in Q4.
+                </p>
+              </motion.div>
+
+              <motion.div 
+                variants={{ rest: { color: 'var(--text-secondary)' }, hover: { color: 'var(--purple)' } }}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', letterSpacing: '2px', fontFamily: 'var(--font-mono)', marginTop: 'auto', textTransform: 'uppercase', zIndex: 1 }}
+              >
                 VIEW PROFILE <ArrowRight size={16} />
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>
@@ -118,36 +157,35 @@ export default function Directory() {
         {/* Modal Overlay */}
         <AnimatePresence>
           {selected !== null && (
-            <>
+            <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setSelected(null)}
-                style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', zIndex: 1000 }}
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
               />
+              
+              {/* By using a flex wrapper above, we can drop the buggy translate(-50%, -50%) which conflicts with framer motion's layoutId engine */}
               <motion.div
                 layoutId={`card-${selected}`}
                 style={{
-                  position: 'fixed',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
                   width: '90%',
                   maxWidth: '700px',
                   background: 'var(--bg-tertiary)',
                   padding: '4rem',
-                  borderRadius: '4px',
+                  borderRadius: '8px',
                   border: '1px solid var(--border-color)',
                   zIndex: 1001,
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '2rem'
+                  gap: '2rem',
+                  position: 'relative'
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                    <div style={{ width: '80px', height: '80px', background: 'var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 700, color: 'var(--purple)', fontFamily: 'var(--font-heading)' }}>
+                    <div style={{ width: '80px', height: '80px', background: 'var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 700, color: 'var(--purple)', fontFamily: 'var(--font-heading)', borderRadius: '16px' }}>
                       {startups[selected].logo}
                     </div>
                     <div>
@@ -168,7 +206,7 @@ export default function Directory() {
                   <button className="btn-primary" style={{ width: '100%', padding: '16px' }}>Contact Founders</button>
                 </div>
               </motion.div>
-            </>
+            </div>
           )}
         </AnimatePresence>
 

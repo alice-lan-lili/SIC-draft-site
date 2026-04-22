@@ -115,6 +115,7 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', zIndex: 101 }}>
+          <Link to="/signin" className="btn-outline" style={{ padding: '8px 20px', fontSize: '0.85rem', fontFamily: 'var(--font-mono)', textTransform: 'uppercase' }}>Sign In</Link>
           <button onClick={toggleTheme} style={{ background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
             {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
           </button>
@@ -146,10 +147,11 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
                 background: 'var(--bg-secondary)',
                 borderRight: '1px solid var(--border-color)',
                 zIndex: 999,
-                padding: '8rem 4rem 4rem 4rem',
+                padding: '7rem 3rem 3rem 3rem',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '2.5rem'
+                gap: '1.5rem',
+                overflowY: 'auto'
               }}
             >
               {[
