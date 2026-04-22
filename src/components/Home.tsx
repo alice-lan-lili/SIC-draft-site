@@ -13,7 +13,7 @@ function CosmicOverlay({ active }: { active: boolean }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.3 } }}
-          style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 150, pointerEvents: 'none', mixBlendMode: 'screen' }}
+          style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 105, pointerEvents: 'none', mixBlendMode: 'screen' }}
         >
           {/* Hyper-dense high-speed star streaks (Warp Speed) */}
           {Array.from({ length: 150 }).map((_, i) => {
