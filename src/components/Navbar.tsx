@@ -165,8 +165,7 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
                   style={{ 
                     display: 'block',
                     padding: '10px 0',
-                    borderBottom: '1px solid var(--border-color)',
-                    group: 'true'
+                    borderBottom: '1px solid var(--border-color)'
                   }}
                   className="nav-link-group"
                 >

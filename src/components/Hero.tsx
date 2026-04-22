@@ -49,7 +49,7 @@ export default function Hero({ onLaunch }: { onLaunch?: () => void }) {
             This makes the bright engines and stars physically "breathe" and glow. */}
         <motion.div
           animate={{ opacity: [0.2, 0.6, 0.2], filter: ['blur(8px)', 'blur(12px)', 'blur(8px)'] }}
-          transition={{ duration: 0.8, repeat: Infinity, ease: "steps(4)" }}
+          transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
           style={{
             position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
             backgroundImage: 'url(/rocket_bg.png)',
@@ -62,7 +62,7 @@ export default function Hero({ onLaunch }: { onLaunch?: () => void }) {
         {/* Stop Motion Cinematic Flicker Overlay */}
         <motion.div
           animate={{ opacity: [0, 0.08, 0, 0.05, 0] }}
-          transition={{ duration: 0.6, repeat: Infinity, ease: "steps(3)" }}
+          transition={{ duration: 0.6, repeat: Infinity, ease: "linear" }}
           style={{
             position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
             background: '#ffffff', mixBlendMode: 'overlay'
