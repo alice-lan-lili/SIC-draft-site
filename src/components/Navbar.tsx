@@ -62,7 +62,7 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
         transition: 'background 0.3s ease, border-color 0.3s ease',
       }}
     >
-      {/* Logo */}
+      {/* Logo — external asset so colors always render; larger + stacked above centered nav */}
       <Link
         to="/"
         style={{
@@ -70,30 +70,17 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
           alignItems: 'center',
           gap: '10px',
           flexShrink: 0,
+          position: 'relative',
+          zIndex: 20,
         }}
       >
-        <div style={{ width: '28px', height: '28px', display: 'block', color: isTransparent ? '#FFFFFF' : '#4B1BA7' }}>
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g stroke="#FCCC3C" strokeWidth="2" strokeLinecap="round">
-              <line x1="50" y1="2" x2="50" y2="14" />
-              <line x1="50" y1="86" x2="50" y2="98" />
-              <line x1="2" y1="50" x2="14" y2="50" />
-              <line x1="86" y1="50" x2="98" y2="50" />
-              <line x1="16" y1="16" x2="24" y2="24" />
-              <line x1="84" y1="84" x2="76" y2="76" />
-              <line x1="16" y1="84" x2="24" y2="76" />
-              <line x1="84" y1="16" x2="76" y2="24" />
-            </g>
-            <path d="M 38 78 A 30 30 0 0 1 20 50 A 30 30 0 0 1 38 22" stroke="#4B1BA7" strokeWidth="6" strokeLinecap="round" fill="none" />
-            <polygon points="32,12 48,22 32,32" fill="#4B1BA7" />
-            <path d="M 62 22 A 30 30 0 0 1 80 50 A 30 30 0 0 1 62 78" stroke="#4B1BA7" strokeWidth="6" strokeLinecap="round" fill="none" />
-            <polygon points="68,88 52,78 68,68" fill="#4B1BA7" />
-            <path d="M 50 26 C 36 26 32 40 38 52 C 42 58 43 60 43 66 L 57 66 C 57 60 58 58 62 52 C 68 40 64 26 50 26 Z" fill="#FCCC3C" />
-            <rect x="42" y="68" width="16" height="4" rx="2" fill="#4B1BA7" />
-            <rect x="43" y="74" width="14" height="4" rx="2" fill="#4B1BA7" />
-            <path d="M 46 80 L 54 80 L 52 85 L 48 85 Z" fill="#4B1BA7" />
-          </svg>
-        </div>
+        <img
+          src="/logo-sic.svg"
+          alt=""
+          width={40}
+          height={40}
+          style={{ display: 'block', flexShrink: 0 }}
+        />
         <span style={{
           fontFamily: 'var(--font-body)',
           fontWeight: 600,
@@ -114,6 +101,8 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
         position: 'absolute',
         left: '50%',
         transform: 'translateX(-50%)',
+        zIndex: 10,
+        pointerEvents: 'auto',
       }}>
         {navLinks.map(link => {
           const active = location.pathname === link.to;
