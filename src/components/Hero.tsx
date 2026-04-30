@@ -1,194 +1,242 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-export default function Hero({ onLaunch }: { onLaunch?: () => void }) {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+const stats = [
+  { value: '24+', label: 'Companies' },
+  { value: '$4M+', label: 'Raised' },
+  { value: '50+', label: 'Mentors' },
+];
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    // Normalize coordinates from -1 to 1 based on window center
-    const x = (e.clientX / window.innerWidth - 0.5) * 2;
-    const y = (e.clientY / window.innerHeight - 0.5) * 2;
-    setMousePos({ x, y });
-  };
-
-  const handleLaunch = () => {
-    if (onLaunch) onLaunch();
-  };
-
+export default function Hero({ onScroll }: { onScroll?: () => void }) {
   return (
-    <div 
-      onMouseMove={handleMouseMove}
-      style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden', background: '#050505', perspective: '1200px' }}
-    >
-      {/* The Original High-Quality Photo, now existing in interactive 3D space */}
-      <motion.div
-        animate={{ 
-          x: mousePos.x * -30, 
-          y: mousePos.y * -30,
-          rotateX: mousePos.y * 4,
-          rotateY: mousePos.x * 4,
-          scale: 1.1 // Scaled to prevent edges from showing during 3D rotation
-        }}
-        transition={{ type: 'spring', stiffness: 40, damping: 20 }}
-        style={{
-          position: 'absolute',
-          top: 0, left: 0, width: '100%', height: '100%',
-          zIndex: 1,
-          transformStyle: 'preserve-3d'
-        }}
-      >
-        {/* Base Image */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-          backgroundImage: 'url(/rocket_bg.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }} />
-
-        {/* Dynamic Glow Layer: Duplicates the image, blurs it, and pulses it using stop-motion steps.
-            This makes the bright engines and stars physically "breathe" and glow. */}
-        <motion.div
-          animate={{ opacity: [0.2, 0.6, 0.2], filter: ['blur(8px)', 'blur(12px)', 'blur(8px)'] }}
-          transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-          style={{
-            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-            backgroundImage: 'url(/rocket_bg.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            mixBlendMode: 'screen',
-          }}
-        />
-
-        {/* Stop Motion Cinematic Flicker Overlay */}
-        <motion.div
-          animate={{ opacity: [0, 0.08, 0, 0.05, 0] }}
-          transition={{ duration: 0.6, repeat: Infinity, ease: "linear" }}
-          style={{
-            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-            background: '#ffffff', mixBlendMode: 'overlay'
-          }}
-        />
-      </motion.div>
-
-      {/* Dynamic Lighting Spotlight that follows the mouse */}
-      <motion.div
-        animate={{ 
-          x: mousePos.x * 200, 
-          y: mousePos.y * 200 
-        }}
-        transition={{ type: 'spring', stiffness: 50, damping: 20 }}
-        style={{
-          position: 'absolute',
-          top: '50%', left: '50%',
-          width: '100vw', height: '100vw',
-          marginLeft: '-50vw', marginTop: '-50vw',
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 40%)',
-          mixBlendMode: 'screen',
-          zIndex: 2,
-          pointerEvents: 'none'
-        }}
-      />
-
-      {/* Dark overlay for text readability */}
+    <div style={{
+      position: 'relative',
+      width: '100%',
+      height: '100vh',
+      overflow: 'hidden',
+      background: '#000',
+    }}>
+      {/* Background photo */}
       <div style={{
         position: 'absolute',
-        top: 0, left: 0, width: '100%', height: '100%',
-        background: 'linear-gradient(to bottom, rgba(5,5,5,0.1) 0%, rgba(5,5,5,0.9) 100%)',
-        zIndex: 5,
-        pointerEvents: 'none'
+        inset: 0,
+        backgroundImage: 'url(/rocket_bg.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        opacity: 0.45,
+        zIndex: 1,
       }} />
 
-      {/* Main Content */}
-      <motion.div 
-        className="container" 
-        style={{ 
-          position: 'relative', 
-          zIndex: 10, 
-          height: '100%', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
+      {/* Gradient overlay — heavier at bottom so text sits clean */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.6) 72%, rgba(0,0,0,0.96) 100%)',
+        zIndex: 2,
+      }} />
+
+      {/* Main content */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          pointerEvents: 'none'
+          padding: '0 5%',
         }}
       >
-        <div style={{
-          background: 'rgba(47, 14, 122, 0.4)',
-          border: '1px solid var(--purple)',
-          padding: '6px 20px',
-          borderRadius: '100px',
+        {/* Status label */}
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.25 }}
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.68rem',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.45)',
+            marginBottom: '2.25rem',
+          }}
+        >
+          Applications Open — Spring 2026
+        </motion.p>
+
+        {/* Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.38 }}
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(3.5rem, 9vw, 8rem)',
+            fontWeight: 400,
+            lineHeight: 1.0,
+            color: '#FFFFFF',
+            marginBottom: '1.75rem',
+            maxWidth: '860px',
+          }}
+        >
+          Venture<br />
+          <em>Starts Here.</em>
+        </motion.h1>
+
+        {/* Subheadline */}
+        <motion.p
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.52 }}
+          style={{
+            fontSize: '1.05rem',
+            fontWeight: 300,
+            color: 'rgba(255,255,255,0.65)',
+            maxWidth: '480px',
+            lineHeight: 1.65,
+            marginBottom: '3rem',
+            letterSpacing: '-0.01em',
+          }}
+        >
+          UC San Diego's startup incubator for the next generation of deep tech founders — from research lab to Series A.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.64 }}
+          style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}
+        >
+          <button
+            style={{
+              background: '#FFFFFF',
+              color: '#000000',
+              fontFamily: 'var(--font-body)',
+              fontWeight: 500,
+              fontSize: '0.9rem',
+              letterSpacing: '-0.01em',
+              padding: '12px 28px',
+              borderRadius: '980px',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+          >
+            Apply Now
+          </button>
+          <button
+            onClick={onScroll}
+            style={{
+              background: 'rgba(255,255,255,0.08)',
+              color: '#FFFFFF',
+              fontFamily: 'var(--font-body)',
+              fontWeight: 400,
+              fontSize: '0.9rem',
+              letterSpacing: '-0.01em',
+              padding: '12px 28px',
+              borderRadius: '980px',
+              border: '1px solid rgba(255,255,255,0.18)',
+              cursor: 'pointer',
+              backdropFilter: 'blur(8px)',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.14)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
+          >
+            Explore Portfolio
+          </button>
+        </motion.div>
+      </motion.div>
+
+      {/* Stats row */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.9 }}
+        style={{
+          position: 'absolute',
+          bottom: '5.5rem',
+          left: 0,
+          width: '100%',
+          zIndex: 10,
           display: 'flex',
+          justifyContent: 'center',
+          gap: '4rem',
+          padding: '0 5%',
+        }}
+      >
+        {stats.map((s, i) => (
+          <div key={i} style={{ textAlign: 'center' }}>
+            <div style={{
+              fontSize: '1.5rem',
+              fontWeight: 600,
+              color: '#FFFFFF',
+              fontFamily: 'var(--font-body)',
+              letterSpacing: '-0.03em',
+              lineHeight: 1,
+              marginBottom: '4px',
+            }}>
+              {s.value}
+            </div>
+            <div style={{
+              fontSize: '0.65rem',
+              color: 'rgba(255,255,255,0.38)',
+              fontFamily: 'var(--font-mono)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em',
+            }}>
+              {s.label}
+            </div>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Scroll indicator */}
+      <motion.button
+        onClick={onScroll}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 1.1 }}
+        style={{
+          position: 'absolute',
+          bottom: '1.5rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 10,
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           gap: '8px',
-          marginBottom: '2rem',
-          pointerEvents: 'auto'
-        }}>
-          <motion.div 
-            animate={{ opacity: [1, 0.2, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--yellow)' }}
-          />
-          <span style={{ fontSize: '0.75rem', letterSpacing: '2px', color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>
-            System Status: Applications Open - Spring 2026
-          </span>
-        </div>
-
-        <h1 style={{
-          fontFamily: 'var(--font-heading)',
-          fontSize: 'clamp(3rem, 10vw, 8rem)',
-          lineHeight: 1,
-          letterSpacing: '2px',
+          padding: '8px',
+        }}
+      >
+        <span style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.6rem',
+          letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          margin: '0 0 2rem 0',
-          textShadow: '0 0 40px rgba(0,0,0,0.5)',
-          pointerEvents: 'auto'
+          color: 'rgba(255,255,255,0.28)',
         }}>
-          <span style={{ color: 'var(--white)' }}>PREPARE FOR</span><br />
-          <span style={{ color: 'var(--yellow)' }}>LIFTOFF</span>
-        </h1>
-
-        <p style={{
-          fontSize: '1.2rem',
-          maxWidth: '700px',
-          color: 'rgba(255,255,255,0.9)',
-          marginBottom: '3rem',
-          lineHeight: 1.5,
-          pointerEvents: 'auto'
-        }}>
-          Welcome to the largest network of entrepreneurs, builders,<br/>and founders at UCSD.
-        </p>
-
-        <motion.button
-          onClick={handleLaunch}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          Scroll
+        </span>
+        <motion.div
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
           style={{
-            background: 'rgba(0,0,0,0.4)',
-            color: 'var(--yellow)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '1.1rem',
-            fontWeight: 600,
-            letterSpacing: '2px',
-            padding: '16px 40px',
-            border: 'none',
-            cursor: 'pointer',
-            position: 'relative',
-            textTransform: 'uppercase',
-            transition: 'background 0.3s ease',
-            backdropFilter: 'blur(4px)',
-            boxShadow: '0 0 20px rgba(75, 27, 167, 0.4)',
-            pointerEvents: 'auto'
+            width: '1px',
+            height: '28px',
+            background: 'linear-gradient(to bottom, rgba(255,255,255,0.35), transparent)',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(47, 14, 122, 0.6)'}
-          onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.4)'}
-        >
-          Launch Now
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '20px', height: '100%', borderLeft: '2px solid var(--purple)', borderTop: '2px solid var(--purple)', borderBottom: '2px solid var(--purple)' }}></div>
-          <div style={{ position: 'absolute', top: 0, right: 0, width: '20px', height: '100%', borderRight: '2px solid var(--purple)', borderTop: '2px solid var(--purple)', borderBottom: '2px solid var(--purple)' }}></div>
-        </motion.button>
-
-      </motion.div>
+        />
+      </motion.button>
     </div>
   );
 }
