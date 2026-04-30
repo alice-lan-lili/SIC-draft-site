@@ -5,6 +5,8 @@
   --purple: #4B1BA7;
   --purple-mid: #6D28D9;
   --purple-light: #8B5CF6;
+  --accent-gold: #FCCC3C;
+  --accent-blue: #4DA3FF;
 
   --font-display: 'DM Serif Display', serif;
   --font-body: 'Inter', sans-serif;
@@ -18,8 +20,10 @@
   --bg-tertiary: #1C1C1E;
   --text-primary: #F5F5F7;
   --text-secondary: #86868B;
-  --text-accent: #9D80FF;
+  --text-accent: #BFA7FF;
   --yellow: #F5A623;
+  --accent-gold: #FCCC3C;
+  --accent-blue: #66B8FF;
   --border-color: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.16);
   --btn-bg: #F5F5F7;
@@ -34,8 +38,10 @@
   --bg-tertiary: #E5E5EA;
   --text-primary: #1D1D1F;
   --text-secondary: #6E6E73;
-  --text-accent: var(--purple);
+  --text-accent: #5A2CCF;
   --yellow: #C69214;
+  --accent-gold: #D89A12;
+  --accent-blue: #3D7BFF;
   --border-color: #D2D2D7;
   --border-strong: #AEAEB2;
   --btn-bg: #1D1D1F;
@@ -126,7 +132,7 @@ a:hover {
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--text-secondary);
+  color: var(--accent-gold);
   display: block;
   margin-bottom: 1rem;
 }
@@ -135,9 +141,9 @@ a:hover {
   display: inline-block;
   padding: 3px 10px;
   border-radius: 980px;
-  background: var(--bg-tertiary);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--purple-light) 12%, transparent);
+  color: var(--text-accent);
+  border: 1px solid color-mix(in srgb, var(--purple-light) 35%, var(--border-color));
   font-size: 0.68rem;
   font-family: var(--font-mono);
   text-transform: uppercase;
