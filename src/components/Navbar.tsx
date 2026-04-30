@@ -48,10 +48,10 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
         >
           <Link to="/" onClick={() => window.location.href = '/'} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', color: 'inherit' }}>
             {/* Highly accurate SVG representation of the provided SIC Logo */}
-            <div style={{ width: '45px', height: '45px', flexShrink: 0, marginRight: '4px', background: '#fff', borderRadius: '4px', padding: '4px' }}>
+            <div style={{ width: '45px', height: '45px', flexShrink: 0, marginRight: '4px', background: 'transparent', borderRadius: '4px', padding: '4px' }}>
               <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 {/* Radiating yellow lines */}
-                <g stroke="#FCCC3C" strokeWidth="2" strokeLinecap="round">
+                <g stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <line x1="50" y1="2" x2="50" y2="14" />
                   <line x1="50" y1="86" x2="50" y2="98" />
                   <line x1="2" y1="50" x2="14" y2="50" />
@@ -71,46 +71,29 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
                 </g>
                 
                 {/* Thick purple circling arrows */}
-                <path d="M 38 78 A 30 30 0 0 1 20 50 A 30 30 0 0 1 38 22" stroke="#4B1BA7" strokeWidth="6" strokeLinecap="round" fill="none" />
-                <polygon points="32,12 48,22 32,32" fill="#4B1BA7" />
+                <path d="M 38 78 A 30 30 0 0 1 20 50 A 30 30 0 0 1 38 22" stroke="currentColor" strokeWidth="6" strokeLinecap="round" fill="none" />
+                <polygon points="32,12 48,22 32,32" fill="currentColor" />
                 
-                <path d="M 62 22 A 30 30 0 0 1 80 50 A 30 30 0 0 1 62 78" stroke="#4B1BA7" strokeWidth="6" strokeLinecap="round" fill="none" />
-                <polygon points="68,88 52,78 68,68" fill="#4B1BA7" />
+                <path d="M 62 22 A 30 30 0 0 1 80 50 A 30 30 0 0 1 62 78" stroke="currentColor" strokeWidth="6" strokeLinecap="round" fill="none" />
+                <polygon points="68,88 52,78 68,68" fill="currentColor" />
                 
                 {/* Yellow Lightbulb with purple base */}
-                <path d="M 50 26 C 36 26 32 40 38 52 C 42 58 43 60 43 66 L 57 66 C 57 60 58 58 62 52 C 68 40 64 26 50 26 Z" fill="#FCCC3C" />
-                <rect x="42" y="68" width="16" height="4" rx="2" fill="#4B1BA7" />
-                <rect x="43" y="74" width="14" height="4" rx="2" fill="#4B1BA7" />
-                <path d="M 46 80 L 54 80 L 52 85 L 48 85 Z" fill="#4B1BA7" />
+                <path d="M 50 26 C 36 26 32 40 38 52 C 42 58 43 60 43 66 L 57 66 C 57 60 58 58 62 52 C 68 40 64 26 50 26 Z" fill="#f2f2f2" />
+                <rect x="42" y="68" width="16" height="4" rx="2" fill="currentColor" />
+                <rect x="43" y="74" width="14" height="4" rx="2" fill="currentColor" />
+                <path d="M 46 80 L 54 80 L 52 85 L 48 85 Z" fill="currentColor" />
               </svg>
             </div>
             
-            <AnimatePresence mode="wait">
-              {panelOpen ? (
-                <motion.div
-                  key="full"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ display: 'flex', flexDirection: 'column' }}
-                >
-                  <span style={{ fontSize: '1rem', fontWeight: 600, lineHeight: 1.1, fontFamily: 'var(--font-heading)', letterSpacing: '1px', color: 'var(--purple)' }}>STARTUP INCUBATOR</span>
-                  <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-accent)', letterSpacing: '0.5px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>UC SAN DIEGO</span>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="short"
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ display: 'flex', flexDirection: 'column' }}
-                >
-                  <span style={{ fontSize: '1.2rem', fontWeight: 600, lineHeight: 1.1, fontFamily: 'var(--font-heading)', color: 'var(--purple)' }}>SIC</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.25 }}
+              style={{ display: 'flex', flexDirection: 'column' }}
+            >
+              <span style={{ fontSize: '1rem', fontWeight: 700, lineHeight: 1.1, fontFamily: 'var(--font-heading)', letterSpacing: '0.5px', color: 'var(--text-primary)' }}>Startup Incubator</span>
+              <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-accent)', letterSpacing: '0.7px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>UC San Diego</span>
+            </motion.div>
           </Link>
         </div>
 
