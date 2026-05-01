@@ -1079,8 +1079,16 @@ button {
   padding-right: clamp(1.5rem, 4vw, 5rem);
 }
 
+.nav-signin-btn {
+  box-shadow: none !important;
+  transform: translateY(0);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
 .nav-signin-btn:hover {
   color: #000 !important;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18) !important;
+  transform: translateY(-1px);
 }
 
 .program-outline {
@@ -1221,11 +1229,7 @@ button {
 :root[data-theme="light"] .nav-signin-btn:hover {
   color: #000 !important;
   background: rgba(245, 240, 232, 0.95);
-}
-
-:root[data-theme="light"] .nav-signin-btn:hover {
-  color: #000 !important;
-  background: rgba(245, 240, 232, 0.95);
+  box-shadow: 0 5px 12px rgba(29, 29, 31, 0.12) !important;
 }
 
 @media (max-width: 720px) {
