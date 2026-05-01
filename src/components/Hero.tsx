@@ -1,19 +1,47 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+
+function mulberry32(seed: number) {
+  return function () {
+    let t = (seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+type Star = {
+  id: number;
+  left: number;
+  top: number;
+  size: number;
+  depth: number;
+  delay: number;
+  duration: number;
+  driftX: number;
+  driftY: number;
+};
+
+function buildStars(count: number, seed: number): Star[] {
+  const rnd = mulberry32(seed);
+  return Array.from({ length: count }, (_, id) => ({
+    id,
+    left: rnd() * 100,
+    top: rnd() * 100,
+    size: 0.65 + rnd() * 2.95,
+    depth: rnd(),
+    delay: rnd() * 3,
+    duration: 1.8 + rnd() * 2.4,
+    driftX: (rnd() - 0.5) * 14,
+    driftY: (rnd() - 0.5) * 10,
+  }));
+}
 
 export default function Hero({ onScroll }: { onScroll?: () => void }) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const stars = useMemo(
-    () =>
-      Array.from({ length: 36 }).map((_, i) => ({
-        id: i,
-        left: (i * 19) % 100,
-        top: (i * 37) % 100,
-        size: (i % 3) + 1,
-        depth: (i % 5) + 1,
-      })),
-    []
-  );
+  const stars = useMemo(() => buildStars(200, 20260201), []);
+  const dust = useMemo(() => buildStars(85, 20260202), []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const nx = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -22,65 +50,118 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
   };
 
   return (
-    <div style={{
-      position: 'relative',
-      width: '100%',
-      height: '100vh',
-      overflow: 'hidden',
-      background: '#000',
-    }}
+    <div
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100vh',
+        overflow: 'hidden',
+        background: '#000',
+      }}
       onMouseMove={handleMouseMove}
     >
-      {/* Space background image layer */}
       <motion.div
         animate={{ x: mouse.x * -24, y: mouse.y * -16, rotateY: mouse.x * 2.2, rotateX: mouse.y * -1.8, scale: 1.08 }}
         transition={{ type: 'spring', stiffness: 45, damping: 20 }}
         style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundImage: 'url(/rocket_bg.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        opacity: 0.5,
-        zIndex: 1,
-        transformStyle: 'preserve-3d',
-      }}
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'url(/rocket_bg.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.4,
+          zIndex: 1,
+          transformStyle: 'preserve-3d',
+        }}
+      />
+      <div className="hero-loop-overlay" aria-hidden />
+
+      {/* Tone down photo so hero copy / stars stay legible */}
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 2,
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.12) 0%, transparent 42%, transparent 62%, rgba(0,0,0,0.35) 100%)',
+          pointerEvents: 'none',
+        }}
       />
 
-      {/* Floating stars layer */}
-      <motion.div
-        animate={{ x: mouse.x * -42, y: mouse.y * -28 }}
-        transition={{ type: 'spring', stiffness: 35, damping: 18 }}
-        style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }}
-      >
-        {stars.map((star) => (
-          <motion.div
-            key={star.id}
-            animate={{ opacity: [0.3, 0.9, 0.3], scale: [1, 1.2, 1] }}
-            transition={{ duration: 2.2 + star.depth * 0.15, repeat: Infinity, ease: 'easeInOut', delay: star.id * 0.04 }}
-            style={{
-              position: 'absolute',
-              left: `${star.left}%`,
-              top: `${star.top}%`,
-              width: `${star.size}px`,
-              height: `${star.size}px`,
-              borderRadius: '999px',
-              background: '#fff',
-              boxShadow: '0 0 10px rgba(255,255,255,0.45)',
-            }}
-          />
-        ))}
-      </motion.div>
+      {/* Fine dust — visible grain + parallax */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 5, pointerEvents: 'none' }}>
+        {dust.map((s) => {
+          const parallax = 5 + s.depth * 12;
+          return (
+            <motion.div
+              key={`d-${s.id}`}
+              animate={{
+                opacity: [0.2, 0.55, 0.2],
+                x: [0, s.driftX * 0.45, 0],
+                y: [0, s.driftY * 0.38, 0],
+              }}
+              transition={{ duration: s.duration * 1.35, repeat: Infinity, ease: 'easeInOut', delay: s.delay }}
+              style={{
+                position: 'absolute',
+                left: `${s.left}%`,
+                top: `${s.top}%`,
+                width: s.size * 0.62,
+                height: s.size * 0.62,
+                borderRadius: '50%',
+                background: 'rgba(255,255,255,0.9)',
+                boxShadow: `0 0 ${2 + s.depth * 4}px rgba(255,255,255,${0.35 + s.depth * 0.35})`,
+                transform: `translate3d(${mouse.x * parallax}px, ${mouse.y * (parallax * 0.88)}px, 0)`,
+              }}
+            />
+          );
+        })}
+      </div>
 
-      {/* Gradient overlay — heavier at bottom so text sits clean */}
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.6) 72%, rgba(0,0,0,0.96) 100%)',
-        zIndex: 2,
-      }} />
+      {/* Brighter stars — above vignette so they stay vivid */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 6, pointerEvents: 'none' }}>
+        {stars.map((s) => {
+          const parallax = 12 + s.depth * 40;
+          const twinkleLo = 0.45 + s.depth * 0.22;
+          const twinkleHi = 0.88 + s.depth * 0.11;
+          const glow = 3 + s.depth * 22;
+          const glowAlpha = 0.52 + s.depth * 0.44;
+          return (
+            <motion.div
+              key={s.id}
+              animate={{
+                opacity: [twinkleLo, twinkleHi, twinkleLo],
+                scale: [1, 1.12 + s.depth * 0.18, 1],
+              }}
+              transition={{ duration: s.duration, repeat: Infinity, ease: 'easeInOut', delay: s.delay }}
+              style={{
+                position: 'absolute',
+                left: `${s.left}%`,
+                top: `${s.top}%`,
+                width: s.size,
+                height: s.size,
+                borderRadius: '50%',
+                background: 'radial-gradient(circle at 30% 30%, rgba(255,250,235,1), rgba(255,255,255,0.88) 40%, rgba(200,215,255,0.65) 100%)',
+                boxShadow: `
+                  0 0 ${glow * 0.45}px rgba(255,255,255,${glowAlpha * 0.9}),
+                  0 0 ${glow}px rgba(164,189,255,${glowAlpha * 0.55})`,
+                transform: `translate3d(${mouse.x * parallax}px, ${mouse.y * (parallax * 0.82)}px, 0)`,
+              }}
+            />
+          );
+        })}
+      </div>
 
-      {/* Main content */}
+      {/* Vignette under stars (dims photo only), stronger at bottom */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.02) 35%, rgba(0,0,0,0.45) 78%, rgba(0,0,0,0.88) 100%)',
+          zIndex: 4,
+          pointerEvents: 'none',
+        }}
+      />
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -97,7 +178,6 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
           padding: '0 5%',
         }}
       >
-        {/* Status label */}
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -111,10 +191,9 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
             marginBottom: '2.25rem',
           }}
         >
-          Applications Open — Spring 2026
+          Startup Incubator · UC San Diego
         </motion.p>
 
-        {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -133,7 +212,6 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
           <em>Liftoff.</em>
         </motion.h1>
 
-        {/* Subheadline */}
         <motion.p
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -148,18 +226,19 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
             letterSpacing: '-0.01em',
           }}
         >
-          Welcome to the largest network of entrepreneurs, builders, and founders at UCSD.
+          Welcome to the largest network of entrepreneurs, builders, and founders at UC San Diego.
         </motion.p>
 
-        {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.64 }}
+          className="hero-cta-row"
           style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}
         >
           <button
-            className="btn-primary"
+            type="button"
+            className="btn-primary btn-burst"
             style={{
               fontFamily: 'var(--font-body)',
               fontWeight: 500,
@@ -168,14 +247,14 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
               padding: '12px 28px',
               cursor: 'pointer',
             }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
           >
             Apply Now
           </button>
-          <button
-            onClick={onScroll}
-            className="btn-outline"
+          <Link
+            to="/directory"
+            className="btn-outline btn-burst"
             style={{
               color: '#FFFFFF',
               fontFamily: 'var(--font-body)',
@@ -185,16 +264,16 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
               padding: '12px 28px',
               cursor: 'pointer',
             }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.14)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
+            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.14)')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
           >
-            Explore Portfolio
-          </button>
+            Explore Directory
+          </Link>
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
       <motion.button
+        type="button"
         onClick={onScroll}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -215,13 +294,15 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
           padding: '8px',
         }}
       >
-        <span style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '0.6rem',
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: 'rgba(255,255,255,0.28)',
-        }}>
+        <span
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.6rem',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.28)',
+          }}
+        >
           Scroll
         </span>
         <motion.div

@@ -1,108 +1,125 @@
-import { ArrowRight } from 'lucide-react';
-
-const COHORT_NOTION_URL =
-  'https://www.notion.so/Startup-Incubator-3534ff5b4e7d8232a49481c00f44b783';
-
-const startups = [
-  {
-    name: 'ssam.ai',
-    oneLiner: 'AI-first founder tools for rapid decision support and workflow acceleration.',
-    details: 'Building practical AI copilots to help startup teams operate faster with clearer prioritization.',
-  },
-  {
-    name: 'Revize',
-    oneLiner: 'A platform helping teams iterate quickly on strategy and execution.',
-    details: 'Focused on reducing revision loops and making product direction easier to communicate and execute.',
-  },
-  {
-    name: 'Complexity',
-    oneLiner: 'Product infrastructure focused on simplifying hard technical coordination.',
-    details: 'Brings structure to complex build processes so teams can move from ambiguity to delivery.',
-  },
-  {
-    name: 'Unicircle',
-    oneLiner: 'Community-centric software for modern campus and startup ecosystems.',
-    details: 'Designed to strengthen high-intent connections between founders, collaborators, and opportunities.',
-  },
-  {
-    name: 'Aesthetic',
-    oneLiner: 'Design-forward tooling for creators and product teams.',
-    details: 'Improves speed and consistency across product design workflows without sacrificing quality.',
-  },
-  {
-    name: 'Rialto',
-    oneLiner: 'Marketplace and operations rails for high-trust transactions.',
-    details: 'Developing the reliability and visibility layer needed for seamless high-value exchanges.',
-  },
-  {
-    name: 'UDOWN?',
-    oneLiner: 'A social planning layer built around intent and real-time action.',
-    details: 'Turning “maybe plans” into coordinated activity with clearer context and momentum.',
-  },
-  {
-    name: 'Protellect',
-    oneLiner: 'Protective intelligence workflows for modern teams and organizations.',
-    details: 'Creating operational tooling that helps teams identify risk and respond with confidence.',
-  },
-];
+import { motion } from 'framer-motion';
+import PageHero from './PageHero';
+import { StartupLinks } from './StartupLinks';
+import { cohortStartups, formatFoundersLine } from '../data/cohort';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function Directory() {
-  return (
-    <section className="section">
-      <div className="container">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.4rem', flexWrap: 'wrap', gap: '1.2rem' }}>
-          <div>
-            <span className="section-label">Portfolio</span>
-            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>Startups in Our Cohort</h1>
-            <p style={{ color: 'var(--text-secondary)', maxWidth: '640px', marginTop: '0.8rem', fontSize: '1rem', lineHeight: 1.65 }}>
-              Current ventures in Startup Incubator. We&apos;ll continue enriching these profiles as more founder details are finalized.
-            </p>
-          </div>
-          <button className="btn-accent">Join the Cohort</button>
-        </div>
+  const location = useLocation();
 
-        <div style={{ display: 'grid', gap: '0.3rem' }}>
-          {startups.map((startup) => (
-            <article key={startup.name} style={{ borderTop: '1px solid var(--border-color)', padding: '1.1rem 0' }}>
-              <div
-                className="directory-row"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'minmax(0, 1fr) auto',
-                  gap: '1rem 1.25rem',
-                  alignItems: 'start',
-                }}
+  useEffect(() => {
+    if (!location.hash) return;
+    const el = document.getElementById(location.hash.slice(1));
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [location.hash]);
+
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <PageHero
+        eyebrow="Portfolio"
+        title={
+          <>
+            Startups in
+            <br />
+            <em>Our Cohort.</em>
+          </>
+        }
+        subtitle="Logos, one-liners, founders, and direct links—everything you need to explore what teams are shipping."
+      />
+      <section className="section section-after-hero" style={{ flex: 1 }}>
+        <div className="container">
+          <div style={{ display: 'grid', gap: 0 }}>
+            {cohortStartups.map((startup, i) => (
+              <motion.article
+                key={startup.id}
+                id={startup.id}
+                className="directory-card-shell"
+                style={{ borderTop: '1px solid var(--border-color)', padding: '1.35rem 0' }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.45, delay: Math.min(i * 0.04, 0.35) }}
               >
-                <div style={{ minWidth: 0, maxWidth: '72ch' }}>
-                  <h2 style={{ fontSize: '1.35rem', marginBottom: '0.25rem' }}>{startup.name}</h2>
-                  <p style={{ fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '0.2rem' }}>{startup.oneLiner}</p>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{startup.details}</p>
-                </div>
-                <a
-                  href={COHORT_NOTION_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="directory-row-cta"
+                <div
+                  className="directory-row"
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.45rem',
-                    fontSize: '0.78rem',
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                    color: 'var(--text-accent)',
-                    whiteSpace: 'nowrap',
-                    alignSelf: 'start',
-                    paddingTop: '0.15rem',
+                    display: 'grid',
+                    gridTemplateColumns: '88px minmax(0, 1fr)',
+                    gap: '1.25rem 1.5rem',
+                    alignItems: 'start',
                   }}
                 >
-                  Notion <ArrowRight size={14} />
-                </a>
-              </div>
-            </article>
-          ))}
+                  <motion.div
+                    className={startup.id === 'aesthetic' ? 'directory-logo-mark directory-logo-mark--aesthetic' : 'directory-logo-mark'}
+                    data-startup-logo={startup.id}
+                    style={{
+                      width: 88,
+                      height: 88,
+                      borderRadius: 6,
+                      border: '1px solid var(--border-color)',
+                      background: 'var(--bg-secondary)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: startup.logoObjectFit === 'contain' ? 8 : 0,
+                    }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+                  >
+                    <img
+                      src={startup.logoSrc}
+                      alt=""
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: startup.logoObjectFit ?? 'cover',
+                        objectPosition: startup.logoPosition ?? 'center',
+                      }}
+                    />
+                  </motion.div>
+                  <div style={{ minWidth: 0 }}>
+                    <h2 style={{ fontSize: '1.35rem', marginBottom: '0.35rem' }}>{startup.name}</h2>
+                    <p
+                      style={{
+                        fontSize: '0.98rem',
+                        color: 'var(--text-primary)',
+                        marginBottom: '0.55rem',
+                        fontWeight: 500,
+                      }}
+                    >
+                      {startup.tagline}
+                    </p>
+                    <div style={{ marginBottom: '0.65rem' }}>
+                      <StartupLinks website={startup.links.website} app={startup.links.app} compact />
+                    </div>
+                    {formatFoundersLine(startup.founders) && (
+                      <p
+                        className="directory-founders"
+                        style={{
+                          fontSize: '0.88rem',
+                          color: 'var(--text-secondary)',
+                          marginBottom: '0.5rem',
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        <span
+                          style={{ color: 'var(--text-primary)', fontWeight: 600, fontFamily: 'var(--font-body)' }}
+                        >
+                          Founders{' '}
+                        </span>
+                        {formatFoundersLine(startup.founders)}
+                      </p>
+                    )}
+                    <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.65 }}>
+                      {startup.summary}
+                    </p>
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }

@@ -2,17 +2,9 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Hero from './Hero';
+import { cohortStartups } from '../data/cohort';
 
-const startups = [
-  { name: 'ssam.ai', desc: 'AI-first founder tools for rapid decision support and workflow acceleration.' },
-  { name: 'Revize', desc: 'A platform helping teams iterate quickly on strategy and execution.' },
-  { name: 'Complexity', desc: 'Product infrastructure focused on simplifying hard technical coordination.' },
-  { name: 'Unicircle', desc: 'Community-centric software for modern campus and startup ecosystems.' },
-  { name: 'Aesthetic', desc: 'Design-forward tooling for creators and product teams.' },
-  { name: 'Rialto', desc: 'Marketplace and operations rails for high-trust transactions.' },
-  { name: 'UDOWN?', desc: 'A social planning layer built around intent and real-time action.' },
-  { name: 'Protellect', desc: 'Protective intelligence workflows for modern teams and organizations.' },
-];
+const TEAM_PHOTO = '/brand/about-team.png';
 
 const sectionReveal = {
   initial: { opacity: 0, y: 42, filter: 'blur(8px)' },
@@ -22,6 +14,8 @@ const sectionReveal = {
 };
 
 export default function Home() {
+  const carouselItems = [...cohortStartups, ...cohortStartups];
+
   return (
     <main style={{ background: 'var(--bg-primary)' }}>
       <Hero />
@@ -32,121 +26,176 @@ export default function Home() {
         whileInView={sectionReveal.whileInView}
         transition={sectionReveal.transition}
         viewport={sectionReveal.viewport}
-        style={{ borderBottom: '1px solid var(--border-color)' }}
       >
-        <div className="container" style={{ width: '100%' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-            <div>
-              <span className="section-label">Newsroom</span>
-              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)' }}>From <em>Our Ecosystem.</em></h2>
-            </div>
-            <Link to="/insights" className="btn-outline">View All</Link>
+        <div className="container">
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              gap: '1rem',
+              flexWrap: 'wrap',
+              marginBottom: '2rem',
+            }}
+          >
+            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', lineHeight: 1.05, maxWidth: '16ch' }}>
+              Startups in <em>Our Cohort.</em>
+            </h2>
+            <motion.div>
+              <Link to="/directory" className="btn-outline">
+                Full Directory
+              </Link>
+            </motion.div>
           </div>
-          <div style={{ padding: '1.25rem 0', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
-            <p className="text-muted" style={{ fontSize: '1rem', maxWidth: '52ch' }}>No news available, check back later.</p>
-          </div>
-        </div>
-      </motion.section>
 
-      <motion.section
-        className="section"
-        initial={sectionReveal.initial}
-        whileInView={sectionReveal.whileInView}
-        transition={sectionReveal.transition}
-        viewport={sectionReveal.viewport}
-        style={{ borderBottom: '1px solid var(--border-color)' }}
-      >
-        <div className="container" style={{ width: '100%' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-            <div>
-              <span className="section-label">Directory</span>
-              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)' }}>Startups in Our Cohort</h2>
-            </div>
-            <Link to="/directory" className="btn-outline">View Full Directory</Link>
-          </div>
-          <div style={{ display: 'grid', gap: '0' }}>
-            {startups.slice(0, 3).map((co) => (
-              <div
-                key={co.name}
-                className="cohort-preview-row"
-                style={{
-                  padding: '1.1rem 0',
-                  borderBottom: '1px solid var(--border-color)',
-                  display: 'grid',
-                  gridTemplateColumns: 'minmax(0, 1fr) auto',
-                  gap: '1rem 1.25rem',
-                  alignItems: 'start',
-                }}
-              >
-                <div style={{ minWidth: 0 }}>
-                  <h3 style={{ fontSize: '1.15rem', marginBottom: '0.35rem' }}>{co.name}</h3>
-                  <p className="text-muted" style={{ fontSize: '0.92rem', lineHeight: 1.55 }}>{co.desc}</p>
-                </div>
-                <Link
-                  to="/directory"
-                  className="cohort-preview-cta"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    fontSize: '0.8rem',
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                    color: 'var(--text-accent)',
-                    whiteSpace: 'nowrap',
-                    alignSelf: 'start',
-                    paddingTop: '0.2rem',
-                  }}
-                >
-                  View <ArrowRight size={14} />
+          <div className="home-carousel-shell">
+            <div className="home-carousel-track">
+              {carouselItems.map((co, i) => (
+                <Link key={`${co.id}-${i}`} to={`/directory#${co.id}`} className="home-carousel-item" aria-label={`${co.name} — open directory`}>
+                  <span className="home-carousel-logo" data-startup-logo={co.id}>
+                    <img
+                      src={co.logoSrc}
+                      alt=""
+                      style={{
+                        objectFit: co.logoObjectFit ?? 'cover',
+                        ...(co.logoPosition ? { objectPosition: co.logoPosition } : {}),
+                      }}
+                    />
+                  </span>
+                  <span className="home-carousel-name">{co.name}</span>
                 </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
-
-      <motion.section
-        className="section"
-        initial={sectionReveal.initial}
-        whileInView={sectionReveal.whileInView}
-        transition={sectionReveal.transition}
-        viewport={sectionReveal.viewport}
-        style={{ borderBottom: '1px solid var(--border-color)', textAlign: 'center' }}
-      >
-        <div className="container" style={{ width: '100%' }}>
-          <span className="section-label">Sponsors</span>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)', marginBottom: '1rem' }}>Support the Next Wave</h2>
-          <p className="text-muted" style={{ maxWidth: '560px', margin: '0 auto 2rem auto' }}>
-            Support founders pushing the frontier of science and engineering.
-          </p>
-          <Link to="/sponsors" className="btn-accent">Become a Sponsor</Link>
-        </div>
-      </motion.section>
-
-      <motion.section
-        className="section"
-        initial={sectionReveal.initial}
-        whileInView={sectionReveal.whileInView}
-        transition={sectionReveal.transition}
-        viewport={sectionReveal.viewport}
-      >
-        <div className="container" style={{ width: '100%' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-            <div>
-              <span className="section-label">About</span>
-              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)' }}>Meet the team behind Startup Incubator</h2>
+              ))}
             </div>
-            <Link to="/team" className="btn-outline">Full Roster</Link>
           </div>
-          <div className="grid-3">
-            {[1, 2, 3].map((id) => (
-              <div key={id} className="glass-card" style={{ padding: '1rem' }}>
-                <div style={{ width: '100%', aspectRatio: '1 / 1', borderRadius: '6px', background: 'var(--bg-tertiary)', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
-                  <img src="/default-profile.svg" alt="Default team profile placeholder" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                </div>
-              </div>
-            ))}
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="section home-section-alt"
+        initial={sectionReveal.initial}
+        whileInView={sectionReveal.whileInView}
+        transition={sectionReveal.transition}
+        viewport={sectionReveal.viewport}
+      >
+        <div className="container home-news-layout">
+          <aside className="home-news-rail" aria-hidden>
+            <motion.span className="home-rail-index" animate={{ opacity: [0.55, 1, 0.55] }} transition={{ duration: 4, repeat: Infinity }}>
+              01
+            </motion.span>
+            <div className="home-rail-line" />
+          </aside>
+          <div className="home-news-main">
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                gap: '1rem',
+                flexWrap: 'wrap',
+                marginBottom: '1.75rem',
+              }}
+            >
+              <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.75rem)', lineHeight: 1.05, maxWidth: '14ch' }}>
+                From <em>Our Ecosystem.</em>
+              </h2>
+              <motion.div>
+                <Link to="/insights" className="btn-outline">
+                  View All
+                </Link>
+              </motion.div>
+            </div>
+            <div className="home-news-body">
+              <motion.article className="home-news-card">
+                <span className="section-label">Example</span>
+                <h3 style={{ marginTop: '0.9rem', marginBottom: '0.65rem', fontSize: 'clamp(1.2rem, 2.6vw, 1.6rem)' }}>
+                  Lorem ipsum ecosystem update.
+                </h3>
+                <p className="text-muted" style={{ fontSize: '1rem', maxWidth: '60ch', lineHeight: 1.65 }}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum facilisis mauris ac metus pretium,
+                  vitae dapibus velit gravida. Integer feugiat at sapien eget semper.
+                </p>
+                <Link to="/insights" className="home-news-link">
+                  Read Sample <ArrowRight size={16} />
+                </Link>
+              </motion.article>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="home-sponsor-cta-wrap"
+        initial={{ opacity: 0, scale: 0.98 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.35 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="home-sponsor-cta">
+          <div className="home-sponsor-cta__sheen" aria-hidden />
+          <div className="home-sponsor-cta__pulse" aria-hidden />
+          <div className="container home-sponsor-cta__inner">
+            <div className="home-sponsor-cta__text">
+              <h2 style={{ fontSize: 'clamp(2rem, 4.5vw, 3.25rem)', lineHeight: 1.05, marginBottom: '1rem' }}>
+                Turn ideas into <em>momentum.</em>
+              </h2>
+              <p className="text-muted" style={{ fontSize: '1.05rem', lineHeight: 1.65, maxWidth: '44ch' }}>
+                Partner with high-agency student founders at UC San Diego through curated brand visibility, early access to
+                emerging teams, and hands-on engagement across events and programming.
+              </p>
+            </div>
+            <motion.div className="home-sponsor-cta__cta">
+              <Link to="/sponsors" className="btn-accent home-sponsor-cta__btn">
+                Become a Sponsor
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="section"
+        initial={sectionReveal.initial}
+        whileInView={sectionReveal.whileInView}
+        transition={sectionReveal.transition}
+        viewport={sectionReveal.viewport}
+      >
+        <div className="container">
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              gap: '1rem',
+              flexWrap: 'wrap',
+              marginBottom: '2.25rem',
+            }}
+          >
+            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.25rem)', lineHeight: 1.05, maxWidth: '18ch' }}>
+              Meet the team behind <em>Startup Incubator.</em>
+            </h2>
+            <motion.div>
+              <Link to="/team" className="btn-outline">
+                Learn More
+              </Link>
+            </motion.div>
+          </div>
+          <div className="home-about-kinetic">
+            <motion.div
+              className="home-about-kinetic__photo"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+            >
+              <img src={TEAM_PHOTO} alt="Startup Incubator participants at DataHacks 2026" />
+            </motion.div>
+            <div className="home-about-kinetic__copy">
+              <h3>Student-run. Builder-led. Community-first.</h3>
+              <p className="text-muted">
+                We create approachable entry points into entrepreneurship through workshops, socials, and real project
+                momentum. Learn by doing with peers who want to build.
+              </p>
+            </div>
           </div>
         </div>
       </motion.section>

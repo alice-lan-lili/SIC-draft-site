@@ -11,6 +11,7 @@ const navLinks = [
 ];
 
 const COMPACT_BREAKPOINT = 960;
+const PROVIDED_LOGO = '/brand/logo.png';
 
 export default function Navbar({ isHome }: { isHome?: boolean }) {
   const [theme, setTheme] = useState('dark');
@@ -95,11 +96,11 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
           }}
         >
           <img
-            src="/logo-sic.svg?v=3"
+            src={PROVIDED_LOGO}
             alt=""
             width={34}
             height={34}
-            style={{ display: 'block', flexShrink: 0 }}
+            style={{ display: 'block', flexShrink: 0, objectFit: 'cover', borderRadius: 4 }}
           />
           <span
             style={{
