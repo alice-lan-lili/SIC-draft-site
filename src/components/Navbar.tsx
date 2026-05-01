@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const navLinks = [
@@ -13,6 +13,8 @@ const navLinks = [
 export default function Navbar({ isHome }: { isHome?: boolean }) {
   const [theme, setTheme] = useState('dark');
   const [scrolled, setScrolled] = useState(false);
+  const [isCompact, setIsCompact] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -27,6 +29,17 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    const onResize = () => setIsCompact(window.innerWidth < 1120);
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname, isCompact]);
+
   const toggleTheme = () => {
     const next = theme === 'light' ? 'dark' : 'light';
     setTheme(next);
@@ -37,6 +50,7 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
   const isTransparent = isHome && !scrolled;
 
   return (
+    <>
     <nav
       style={{
         position: 'fixed',
@@ -45,20 +59,18 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
         right: 0,
         zIndex: 1000,
         padding: '0 5%',
-        height: '60px',
+        height: '64px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         background: isTransparent
           ? 'transparent'
           : theme === 'dark'
-            ? 'rgba(0,0,0,0.72)'
-            : 'rgba(255,255,255,0.82)',
-        backdropFilter: isTransparent ? 'none' : 'blur(20px) saturate(180%)',
-        WebkitBackdropFilter: isTransparent ? 'none' : 'blur(20px) saturate(180%)',
-        borderBottom: isTransparent
-          ? 'none'
-          : '1px solid var(--border-color)',
+            ? 'rgba(0,0,0,0.66)'
+            : 'rgba(255,255,255,0.74)',
+        backdropFilter: isTransparent ? 'none' : 'blur(14px) saturate(170%)',
+        WebkitBackdropFilter: isTransparent ? 'none' : 'blur(14px) saturate(170%)',
+        borderBottom: isTransparent ? 'none' : '1px solid var(--border-color)',
         transition: 'background 0.3s ease, border-color 0.3s ease',
       }}
     >
@@ -76,9 +88,9 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
       >
         <img
           src="/logo-sic.svg"
-          alt=""
-          width={40}
-          height={40}
+          alt="Startup Incubator logo"
+          width={34}
+          height={34}
           style={{ display: 'block', flexShrink: 0 }}
         />
         <span style={{
@@ -95,14 +107,13 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
 
       {/* Center nav links */}
       <div style={{
-        display: 'flex',
+        display: isCompact ? 'none' : 'flex',
         alignItems: 'center',
         gap: '2rem',
         position: 'absolute',
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 10,
-        pointerEvents: 'auto',
       }}>
         {navLinks.map(link => {
           const active = location.pathname === link.to;
@@ -128,7 +139,7 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
       </div>
 
       {/* Right actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
         <button
           onClick={toggleTheme}
           style={{
@@ -144,27 +155,90 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
         >
           {theme === 'light' ? <Moon size={17} /> : <Sun size={17} />}
         </button>
-        <Link
+        {!isCompact && <Link
           to="/signin"
           style={{
             fontFamily: 'var(--font-body)',
             fontWeight: 500,
             fontSize: '0.85rem',
             letterSpacing: '-0.01em',
-            color: '#FFFFFF',
-            background: 'var(--purple-mid)',
+            color: 'var(--btn-text)',
+            background: 'var(--btn-bg)',
             padding: '7px 18px',
-            borderRadius: '980px',
+            borderRadius: '5px',
             display: 'inline-flex',
             alignItems: 'center',
-            transition: 'opacity 0.15s ease',
+            border: '1px solid var(--border-strong)',
+            backdropFilter: 'blur(8px)',
+            transition: 'opacity 0.15s ease, background 0.2s ease',
           }}
           onMouseEnter={e => (e.currentTarget.style.opacity = '0.82')}
           onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
         >
           Sign In
-        </Link>
+        </Link>}
+        {isCompact && (
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label="Toggle navigation menu"
+            style={{
+              border: '1px solid var(--border-strong)',
+              background: 'rgba(255,255,255,0.08)',
+              color: isTransparent ? '#fff' : 'var(--text-primary)',
+              borderRadius: '5px',
+              width: '36px',
+              height: '36px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backdropFilter: 'blur(8px)',
+              cursor: 'pointer',
+            }}
+          >
+            {menuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        )}
       </div>
     </nav>
+    {isCompact && menuOpen && (
+      <div
+        style={{
+          position: 'fixed',
+          top: '72px',
+          right: '5%',
+          width: 'min(320px, 90vw)',
+          zIndex: 1001,
+          border: '1px solid var(--border-strong)',
+          borderRadius: '8px',
+          background: theme === 'dark' ? 'rgba(12, 12, 12, 0.88)' : 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(18px)',
+          WebkitBackdropFilter: 'blur(18px)',
+          padding: '0.5rem',
+        }}
+      >
+        {navLinks.map((link) => {
+          const active = location.pathname === link.to;
+          return (
+            <Link
+              key={link.to}
+              to={link.to}
+              style={{
+                display: 'block',
+                padding: '0.7rem 0.75rem',
+                borderRadius: '5px',
+                color: active ? 'var(--text-primary)' : 'var(--text-secondary)',
+                background: active ? 'rgba(255,255,255,0.08)' : 'transparent',
+              }}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
+        <Link to="/signin" className="btn-primary" style={{ width: '100%', marginTop: '0.35rem' }}>
+          Sign In
+        </Link>
+      </div>
+    )}
+    </>
   );
 }

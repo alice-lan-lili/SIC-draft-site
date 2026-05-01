@@ -1,169 +1,79 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, X, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const startups = [
   {
-    name: 'Signalor',
-    url: 'signalor.app',
-    sector: 'Data Intelligence',
-    stage: 'Seed',
-    desc: 'Quantify sentiment across hundreds of platforms to make better investments, improve strategic marketing, and understand shifts in consumer behavior before they happen.',
-    fullDesc: 'Signalor provides the intelligence layer to culture. By quantitatively observing granular sentiment data from across hundreds of platforms, the company enables investors and brands to make better decisions, improve strategic marketing, and understand shifts in consumer behavior before they happen.',
+    name: 'ssam.ai',
+    oneLiner: 'AI-first founder tools for rapid decision support and workflow acceleration.',
+    details: 'Building practical AI copilots to help startup teams operate faster with clearer prioritization.',
   },
   {
-    name: 'Icarus',
-    url: 'icarus.aero',
-    sector: 'Aerospace',
-    stage: 'Pre-Seed',
-    desc: 'Developing the next generation of sub-orbital launch vehicles with a focus on rapid reusability and lower-cost atmospheric testing.',
-    fullDesc: 'Icarus is developing the next generation of sub-orbital launch vehicles, prioritizing rapid reusability and significantly lowering the cost of atmospheric testing for aerospace engineering. Currently in late-stage testing with primary thruster systems.',
+    name: 'Revize',
+    oneLiner: 'A platform helping teams iterate quickly on strategy and execution.',
+    details: 'Focused on reducing revision loops and making product direction easier to communicate and execute.',
   },
   {
-    name: 'VoidTech',
-    url: 'voidtech.io',
-    sector: 'Orbital Manufacturing',
-    stage: 'Seed',
-    desc: 'Specialized orbital manufacturing modules enabling material scientists to produce fiber optics and alloys impossible to create under Earth\'s gravity.',
-    fullDesc: "VoidTech provides specialized orbital manufacturing modules, allowing material scientists to produce perfect fiber optics and alloys impossible to create under Earth's gravity. Seed funded and launching first payload in late 2026.",
+    name: 'Complexity',
+    oneLiner: 'Product infrastructure focused on simplifying hard technical coordination.',
+    details: 'Brings structure to complex build processes so teams can move from ambiguity to delivery.',
   },
   {
-    name: 'Nebula Systems',
-    url: 'nebula.systems',
-    sector: 'Deep Space',
-    stage: 'Pre-Seed',
-    desc: 'Autonomous deep-space navigation software leveraging novel optical tracking algorithms that dramatically reduce ground-station dependency.',
-    fullDesc: 'Nebula Systems builds autonomous deep-space navigation software leveraging novel optical tracking algorithms. Their software dramatically reduces the need for constant ground-station contact, enabling longer and more cost-efficient deep space missions.',
+    name: 'Unicircle',
+    oneLiner: 'Community-centric software for modern campus and startup ecosystems.',
+    details: 'Designed to strengthen high-intent connections between founders, collaborators, and opportunities.',
   },
   {
-    name: 'QuantumLeap',
-    url: 'quantumleap.ai',
-    sector: 'Biotech / Quantum',
-    stage: 'Series A',
-    desc: 'Quantum computing algorithms for rapid pharmaceutical drug discovery — shortening the discovery phase from years to weeks.',
-    fullDesc: 'Quantum computing algorithms customized for rapid pharmaceutical drug discovery. By simulating molecular interactions at a quantum level, QuantumLeap shortens the discovery phase from years to weeks, dramatically accelerating time-to-trial.',
+    name: 'Aesthetic',
+    oneLiner: 'Design-forward tooling for creators and product teams.',
+    details: 'Improves speed and consistency across product design workflows without sacrificing quality.',
   },
   {
-    name: 'AstroForge',
-    url: 'astroforge.space',
-    sector: 'Space Resources',
-    stage: 'Pre-Seed',
-    desc: 'Asteroid mining technologies targeting near-earth objects for rare-earth metals, with in-orbit extraction and refining modules.',
-    fullDesc: 'AstroForge is developing asteroid mining technologies targeting near-earth objects for rare-earth metals. We are developing the extraction modules necessary to refine materials directly in orbit, eliminating the need to return raw ore to Earth.',
+    name: 'Rialto',
+    oneLiner: 'Marketplace and operations rails for high-trust transactions.',
+    details: 'Developing the reliability and visibility layer needed for seamless high-value exchanges.',
+  },
+  {
+    name: 'UDOWN?',
+    oneLiner: 'A social planning layer built around intent and real-time action.',
+    details: 'Turning “maybe plans” into coordinated activity with clearer context and momentum.',
+  },
+  {
+    name: 'Protellect',
+    oneLiner: 'Protective intelligence workflows for modern teams and organizations.',
+    details: 'Creating operational tooling that helps teams identify risk and respond with confidence.',
   },
 ];
 
 export default function Directory() {
-  const [selected, setSelected] = useState<number | null>(null);
-
   return (
     <section className="section">
       <div className="container">
-
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '4rem', flexWrap: 'wrap', gap: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.4rem', flexWrap: 'wrap', gap: '1.2rem' }}>
           <div>
             <span className="section-label">Portfolio</span>
-            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
-              The<br /><em>Directory.</em>
-            </h1>
-            <p style={{ color: 'var(--text-secondary)', maxWidth: '480px', marginTop: '1rem', fontSize: '1rem', lineHeight: 1.65 }}>
-              Ventures currently incubating within our ecosystem. We exclusively back deep tech and hard engineering.
+            <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>Startups in Our Cohort</h1>
+            <p style={{ color: 'var(--text-secondary)', maxWidth: '640px', marginTop: '0.8rem', fontSize: '1rem', lineHeight: 1.65 }}>
+              Current ventures in Startup Incubator. We&apos;ll continue enriching these profiles as more founder details are finalized.
             </p>
           </div>
           <button className="btn-accent">Join the Cohort</button>
         </div>
 
-        {/* Grid */}
-        <div className="grid-2">
-          {startups.map((startup, idx) => (
-            <motion.div
-              key={idx}
-              layoutId={`card-${idx}`}
-              onClick={() => setSelected(idx)}
-              className="glass-card"
-              style={{ padding: '2.5rem', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
-              whileHover={{ borderColor: 'var(--border-strong)' } as never}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div>
-                  <motion.h3 layoutId={`title-${idx}`} style={{ fontSize: '1.5rem', marginBottom: '4px' }}>{startup.name}</motion.h3>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-secondary)', letterSpacing: '0.04em' }}>{startup.url}</span>
+        <div style={{ display: 'grid', gap: '0.3rem' }}>
+          {startups.map((startup) => (
+            <article key={startup.name} style={{ borderTop: '1px solid var(--border-color)', padding: '1.1rem 0' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                <div style={{ maxWidth: '72ch' }}>
+                  <h2 style={{ fontSize: '1.35rem', marginBottom: '0.25rem' }}>{startup.name}</h2>
+                  <p style={{ fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '0.2rem' }}>{startup.oneLiner}</p>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{startup.details}</p>
                 </div>
-                <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
-                  <span className="pill">{startup.sector}</span>
-                  <span className="pill">{startup.stage}</span>
-                </div>
+                <a href="#" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.76rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-accent)', whiteSpace: 'nowrap' }}>
+                  View Profile <ArrowRight size={14} />
+                </a>
               </div>
-
-              <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.65 }}>{startup.desc}</p>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--text-accent)', fontFamily: 'var(--font-mono)', marginTop: 'auto', letterSpacing: '0.06em' }}>
-                VIEW PROFILE <ArrowRight size={13} />
-              </div>
-            </motion.div>
+            </article>
           ))}
         </div>
-
-        {/* Modal */}
-        <AnimatePresence>
-          {selected !== null && (
-            <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setSelected(null)}
-                style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(12px)' }}
-              />
-              <motion.div
-                layoutId={`card-${selected}`}
-                style={{
-                  width: '90%',
-                  maxWidth: '640px',
-                  background: 'var(--bg-secondary)',
-                  border: '1px solid var(--border-color)',
-                  borderRadius: '16px',
-                  padding: '3rem',
-                  zIndex: 1001,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '2rem',
-                  position: 'relative',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div>
-                    <motion.h2 layoutId={`title-${selected}`} style={{ fontSize: '2rem', marginBottom: '6px' }}>
-                      {startups[selected].name}
-                    </motion.h2>
-                    <a
-                      href={`https://${startups[selected].url}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-accent)', letterSpacing: '0.04em' }}
-                    >
-                      {startups[selected].url} <ExternalLink size={12} />
-                    </a>
-                  </div>
-                  <button onClick={() => setSelected(null)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '4px' }}>
-                    <X size={22} />
-                  </button>
-                </div>
-
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <span className="pill">{startups[selected].sector}</span>
-                  <span className="pill">{startups[selected].stage}</span>
-                </div>
-
-                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.75, fontSize: '1rem' }}>{startups[selected].fullDesc}</p>
-
-                <button className="btn-primary" style={{ width: '100%', padding: '14px', borderRadius: '10px' }}>Contact Founders</button>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
-
       </div>
     </section>
   );

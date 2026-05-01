@@ -10,7 +10,7 @@
 
   --font-display: 'DM Serif Display', serif;
   --font-body: 'Inter', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-mono: 'Inter', sans-serif;
   --font-heading: var(--font-display);
 }
 
@@ -128,10 +128,10 @@ a:hover {
 }
 
 .section-label {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   color: var(--accent-gold);
   display: block;
   margin-bottom: 1rem;
@@ -140,12 +140,12 @@ a:hover {
 .pill {
   display: inline-block;
   padding: 3px 10px;
-  border-radius: 980px;
+  border-radius: 5px;
   background: rgba(139, 92, 246, 0.14);
   color: var(--text-accent);
   border: 1px solid rgba(139, 92, 246, 0.35);
   font-size: 0.68rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -155,20 +155,22 @@ button {
 }
 
 .btn-primary {
-  background: var(--btn-bg);
+  background: color-mix(in srgb, var(--btn-bg) 78%, transparent);
   color: var(--btn-text);
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 0.88rem;
   letter-spacing: -0.01em;
   padding: 11px 22px;
-  border-radius: 980px;
-  border: none;
+  border-radius: 5px;
+  border: 1px solid var(--border-strong);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .btn-primary:hover {
@@ -176,20 +178,22 @@ button {
 }
 
 .btn-accent {
-  background: var(--btn-accent-bg);
+  background: color-mix(in srgb, var(--btn-accent-bg) 82%, transparent);
   color: var(--btn-accent-text);
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 0.88rem;
   letter-spacing: -0.01em;
   padding: 11px 22px;
-  border-radius: 980px;
-  border: none;
+  border-radius: 5px;
+  border: 1px solid var(--border-strong);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .btn-accent:hover {
@@ -197,11 +201,11 @@ button {
 }
 
 .btn-outline {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.06);
   color: var(--text-primary);
   border: 1px solid var(--border-strong);
   padding: 10px 22px;
-  border-radius: 980px;
+  border-radius: 5px;
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 0.88rem;
@@ -212,6 +216,8 @@ button {
   justify-content: center;
   gap: 6px;
   transition: background 0.2s ease, border-color 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .btn-outline:hover {

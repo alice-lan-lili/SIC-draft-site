@@ -1,12 +1,6 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 
-const stats = [
-  { value: '24+', label: 'Companies' },
-  { value: '$4M+', label: 'Raised' },
-  { value: '50+', label: 'Mentors' },
-];
-
 export default function Hero({ onScroll }: { onScroll?: () => void }) {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const stars = useMemo(
@@ -165,16 +159,13 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
           style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}
         >
           <button
+            className="btn-primary"
             style={{
-              background: '#FFFFFF',
-              color: '#000000',
               fontFamily: 'var(--font-body)',
               fontWeight: 500,
               fontSize: '0.9rem',
               letterSpacing: '-0.01em',
               padding: '12px 28px',
-              borderRadius: '980px',
-              border: 'none',
               cursor: 'pointer',
             }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
@@ -184,18 +175,15 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
           </button>
           <button
             onClick={onScroll}
+            className="btn-outline"
             style={{
-              background: 'rgba(255,255,255,0.08)',
               color: '#FFFFFF',
               fontFamily: 'var(--font-body)',
               fontWeight: 400,
               fontSize: '0.9rem',
               letterSpacing: '-0.01em',
               padding: '12px 28px',
-              borderRadius: '980px',
-              border: '1px solid rgba(255,255,255,0.18)',
               cursor: 'pointer',
-              backdropFilter: 'blur(8px)',
             }}
             onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.14)')}
             onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
@@ -203,49 +191,6 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
             Explore Portfolio
           </button>
         </motion.div>
-      </motion.div>
-
-      {/* Stats row */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.9 }}
-        style={{
-          position: 'absolute',
-          bottom: '5.5rem',
-          left: 0,
-          width: '100%',
-          zIndex: 10,
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '4rem',
-          padding: '0 5%',
-        }}
-      >
-        {stats.map((s, i) => (
-          <div key={i} style={{ textAlign: 'center' }}>
-            <div style={{
-              fontSize: '1.5rem',
-              fontWeight: 600,
-              color: '#FFFFFF',
-              fontFamily: 'var(--font-body)',
-              letterSpacing: '-0.03em',
-              lineHeight: 1,
-              marginBottom: '4px',
-            }}>
-              {s.value}
-            </div>
-            <div style={{
-              fontSize: '0.65rem',
-              color: 'rgba(255,255,255,0.38)',
-              fontFamily: 'var(--font-mono)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-            }}>
-              {s.label}
-            </div>
-          </div>
-        ))}
       </motion.div>
 
       {/* Scroll indicator */}

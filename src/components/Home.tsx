@@ -4,15 +4,14 @@ import { ArrowRight } from 'lucide-react';
 import Hero from './Hero';
 
 const startups = [
-  { name: 'Signalor', url: 'SIGNALOR.APP', sector: 'Data Intelligence', desc: 'An intelligence layer for culture, quantifying sentiment shifts across the internet.' },
-  { name: 'Icarus', url: 'ICARUS.AERO', sector: 'Aerospace', desc: 'Sub-orbital launch systems focused on rapid reusability and affordable testing.' },
-  { name: 'VoidTech', url: 'VOIDTECH.IO', sector: 'Orbital Manufacturing', desc: "Materials manufacturing modules designed for low-gravity environments." },
-  { name: 'Nebula Systems', url: 'NEBULA.SYSTEMS', sector: 'Navigation', desc: 'Autonomous deep-space navigation powered by optical tracking algorithms.' },
-  { name: 'QuantumLeap', url: 'QUANTUMLEAP.AI', sector: 'Life Sciences', desc: 'Quantum-enabled compute workflows accelerating pharmaceutical discovery cycles.' },
-  { name: 'AstroForge', url: 'ASTROFORGE.SPACE', sector: 'Space Mining', desc: 'Extraction systems for near-earth objects and in-orbit materials refining.' },
-  { name: 'Kinetic Labs', url: 'KINETICLABS.IO', sector: 'Robotics', desc: 'Robotic control stacks for extreme-environment field operations.' },
-  { name: 'HelioGrid', url: 'HELIOGRID.ENERGY', sector: 'Energy', desc: 'Grid-scale optimization software for distributed renewable infrastructure.' },
-  { name: 'Cryptrace', url: 'CRYPTRACE.SECURITY', sector: 'Cybersecurity', desc: 'Threat detection and response systems for high-stakes technical organizations.' },
+  { name: 'ssam.ai', desc: 'AI-first founder tools for rapid decision support and workflow acceleration.' },
+  { name: 'Revize', desc: 'A platform helping teams iterate quickly on strategy and execution.' },
+  { name: 'Complexity', desc: 'Product infrastructure focused on simplifying hard technical coordination.' },
+  { name: 'Unicircle', desc: 'Community-centric software for modern campus and startup ecosystems.' },
+  { name: 'Aesthetic', desc: 'Design-forward tooling for creators and product teams.' },
+  { name: 'Rialto', desc: 'Marketplace and operations rails for high-trust transactions.' },
+  { name: 'UDOWN?', desc: 'A social planning layer built around intent and real-time action.' },
+  { name: 'Protellect', desc: 'Protective intelligence workflows for modern teams and organizations.' },
 ];
 
 const sectionReveal = {
@@ -36,14 +35,14 @@ export default function Home() {
         style={{ borderBottom: '1px solid var(--border-color)' }}
       >
         <div className="container" style={{ width: '100%' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
               <span className="section-label">Newsroom</span>
-              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)' }}>No News Available</h2>
+              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)' }}>From <em>Our Ecosystem.</em></h2>
             </div>
-            <Link to="/insights" className="btn-outline">News Archive</Link>
+            <Link to="/insights" className="btn-outline">View All</Link>
           </div>
-          <div className="glass-card" style={{ padding: '2rem' }}>
+          <div style={{ padding: '1.25rem 0', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
             <p className="text-muted" style={{ fontSize: '1rem' }}>No news available, check back later.</p>
           </div>
         </div>
@@ -58,23 +57,21 @@ export default function Home() {
         style={{ borderBottom: '1px solid var(--border-color)' }}
       >
         <div className="container" style={{ width: '100%' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
               <span className="section-label">Directory</span>
-              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)' }}>Startup Preview</h2>
+              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)' }}>Startups in Our Cohort</h2>
             </div>
-            <Link to="/directory" className="btn-outline">View All 9</Link>
+            <Link to="/directory" className="btn-outline">View Full Directory</Link>
           </div>
-          <div className="grid-3">
+          <div style={{ display: 'grid', gap: '0.75rem' }}>
             {startups.slice(0, 3).map((co) => (
-              <div key={co.name} className="glass-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' }}>
-                  <h3 style={{ fontSize: '1.2rem' }}>{co.name}</h3>
-                  <span className="pill">{co.sector}</span>
+              <div key={co.name} style={{ padding: '1rem 0', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.15rem', marginBottom: '0.2rem' }}>{co.name}</h3>
+                  <p className="text-muted" style={{ fontSize: '0.92rem', maxWidth: '62ch' }}>{co.desc}</p>
                 </div>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-secondary)', letterSpacing: '0.06em' }}>{co.url}</p>
-                <p className="text-muted" style={{ fontSize: '0.92rem' }}>{co.desc}</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: 'auto', fontFamily: 'var(--font-mono)', fontSize: '0.74rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-accent)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.76rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-accent)', whiteSpace: 'nowrap' }}>
                   View Profile <ArrowRight size={14} />
                 </div>
               </div>
@@ -117,18 +114,10 @@ export default function Home() {
             <Link to="/team" className="btn-outline">Full Roster</Link>
           </div>
           <div className="grid-3">
-            {[
-              { name: 'Alex Chen', role: 'Managing Director', img: '/frame1.png' },
-              { name: 'Sarah Jenkins', role: 'Venture Partner', img: '/frame2.png' },
-              { name: 'Michael Vance', role: 'EIR - Deep Tech', img: '/frame3.png' },
-            ].map((m) => (
-              <div key={m.name} className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-                <div style={{ width: '100%', aspectRatio: '1 / 1', borderRadius: '8px', background: 'var(--bg-tertiary)', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
-                  <img src={m.img} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '1.05rem', marginBottom: '3px' }}>{m.name}</h3>
-                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{m.role}</p>
+            {[1, 2, 3].map((id) => (
+              <div key={id} className="glass-card" style={{ padding: '1rem' }}>
+                <div style={{ width: '100%', aspectRatio: '1 / 1', borderRadius: '6px', background: 'var(--bg-tertiary)', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
+                  <img src="/default-profile.svg" alt="Default team profile placeholder" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
               </div>
             ))}
