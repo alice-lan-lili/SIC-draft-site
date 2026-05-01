@@ -1,66 +1,121 @@
 import { motion } from 'framer-motion';
+import PageHero from './PageHero';
+
+const sponsors = [
+  { name: 'Partner A', tier: 'Presenting' },
+  { name: 'Partner B', tier: 'Gold' },
+  { name: 'Partner C', tier: 'Gold' },
+  { name: 'Partner D', tier: 'Silver' },
+  { name: 'Partner E', tier: 'Silver' },
+  { name: 'Partner F', tier: 'Silver' },
+];
+
+const perks = [
+  { title: 'Deal Flow Access', desc: 'First look at our portfolio companies before they hit the broader market.' },
+  { title: 'Talent Pipeline', desc: "Direct access to UCSD's top engineering and business graduates." },
+  { title: 'Brand Visibility', desc: 'Prominent placement across events, digital channels, and our annual report.' },
+  { title: 'Advisory Role', desc: 'Shape program curriculum and mentor the next generation of founders.' },
+];
 
 export default function Sponsors() {
-  const sponsors = [
-    { name: "Alpha", size: 180, color: "#4B1BA7", delay: 0 },
-    { name: "Beta", size: 140, color: "#FCCC3C", delay: 0.2 },
-    { name: "Gamma", size: 220, color: "#2F0E7A", delay: 0.4 },
-    { name: "Delta", size: 160, color: "#555555", delay: 0.6 }
-  ];
-
   return (
-    <section className="section">
-      <div className="container">
-        
-        <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
-          <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Our Sponsors</h1>
-          <p className="text-muted" style={{ maxWidth: '600px', margin: '0 auto 2rem auto' }}>
-            The gravitational pull behind our startups. Partner with us to fuel the next generation of engineering breakthroughs.
-          </p>
-          <button className="btn-accent">Become a Sponsor</button>
-        </div>
-
-        <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', minHeight: '400px', padding: '2rem 0' }}>
-          {sponsors.map((item, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: item.delay }}
-            >
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <PageHero
+        eyebrow="Partners"
+        title={
+          <>
+            Build With
+            <br />
+            <em>Student Founders.</em>
+          </>
+        }
+        subtitle={'Our sponsors help students learn, build, connect, and launch through practical support and community access.'}
+      >
+        <motion.button className="btn-accent" type="button" whileTap={{ scale: 0.97 }}>
+          Become a Sponsor
+        </motion.button>
+      </PageHero>
+      <section className="section section-after-hero">
+        <div className="container">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '1px',
+              background: 'var(--border-color)',
+              border: '1px solid var(--border-color)',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              marginBottom: '5rem',
+            }}
+            className="sponsors-logo-grid"
+          >
+            {sponsors.map((s, i) => (
               <motion.div
-                animate={{ y: [0, -15, 0] }}
-                transition={{ repeat: Infinity, duration: 4 + idx, ease: "easeInOut" }}
-                whileHover={{ scale: 1.05, filter: 'grayscale(0%)', borderColor: item.color }}
+                key={i}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.06 }}
                 style={{
-                  width: `${item.size}px`,
-                  height: `${item.size}px`,
-                  borderRadius: '50%',
-                  border: '2px solid var(--border-color)',
-                  background: 'var(--bg-tertiary)',
+                  background: 'var(--bg-secondary)',
+                  padding: '3rem 2rem',
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  position: 'relative',
-                  overflow: 'hidden',
+                  gap: '0.5rem',
+                  minHeight: '140px',
                   cursor: 'pointer',
-                  filter: 'grayscale(100%)', // Saturated on hover
-                  transition: 'all 0.5s ease',
-                  boxShadow: 'inset 0 -20px 40px rgba(0,0,0,0.5)' // Gives a 3D planetary feel
                 }}
               >
-                <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '120%', height: '120%', background: `radial-gradient(circle at 30% 30%, ${item.color} 0%, transparent 60%)`, opacity: 0.4 }} />
-                
-                <span style={{ fontSize: '0.9rem', fontWeight: 600, letterSpacing: '2px', fontFamily: 'var(--font-mono)', zIndex: 2, textTransform: 'uppercase', color: 'var(--text-primary)' }}>
-                  {item.name}
+                <div
+                  style={{
+                    width: '80px',
+                    height: '32px',
+                    background: 'var(--border-strong)',
+                    borderRadius: '4px',
+                    opacity: 0.4,
+                  }}
+                />
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.65rem',
+                    color: 'var(--text-secondary)',
+                  }}
+                >
+                  {s.name} · {s.tier}
                 </span>
               </motion.div>
-            </motion.div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-      </div>
-    </section>
+          <div style={{ marginBottom: '2rem' }}>
+            <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', marginBottom: '3rem' }}>
+              Why Partner <em>With Us.</em>
+            </h2>
+            <div className="grid-2">
+              {perks.map((p, i) => (
+                <motion.div
+                  key={i}
+                  className="glass-card"
+                  style={{ padding: '2.5rem' }}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.06 }}
+                >
+                  <h3 style={{ fontSize: '1rem', marginBottom: '1rem', fontFamily: 'var(--font-body)', fontWeight: 600 }}>
+                    {p.title}
+                  </h3>
+                  <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, fontSize: '0.95rem' }}>{p.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

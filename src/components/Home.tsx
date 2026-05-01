@@ -1,440 +1,204 @@
-import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Hero from './Hero';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Activity, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import Hero from './Hero';
+import { cohortStartups } from '../data/cohort';
 
-function CosmicOverlay({ active }: { active: boolean }) {
-  const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
+const TEAM_PHOTO = '/brand/about-team.png';
 
-  return (
-    <AnimatePresence>
-      {active && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.3 } }}
-          style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 105, pointerEvents: 'none', mixBlendMode: 'screen' }}
-        >
-          {/* Hyper-dense high-speed star streaks (Warp Speed) */}
-          {Array.from({ length: 150 }).map((_, i) => {
-            const size = Math.random() * 2 + 1;
-            const duration = Math.random() * 0.2 + 0.4; // Very fast to fit 0.8s
-            const delay = Math.random() * 0.3;
-            return (
-              <motion.div
-                key={`hyper-star-${i}`}
-                initial={{ y: '120vh', opacity: 0, scaleY: 1 }}
-                animate={{ y: '-120vh', opacity: [0, 1, 1, 0], scaleY: [1, 20, 20, 1] }}
-                transition={{ duration, ease: "easeIn", delay }}
-                style={{
-                  position: 'absolute',
-                  left: `${Math.random() * 100}%`,
-                  width: `${size}px`,
-                  height: `${size * 4}px`,
-                  background: 'rgba(255,255,255,0.8)',
-                  boxShadow: `0 0 ${size * 4}px rgba(255,255,255,0.5)`,
-                  borderRadius: '10px'
-                }}
-              />
-            )
-          })}
-
-          {/* Massive atmospheric blast / nebula expansion - monochrome */}
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0, y: '50vh' }}
-            animate={{ scale: 4, opacity: [0, 0.4, 0], y: '-50vh' }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            style={{
-              position: 'absolute',
-              left: '30%',
-              width: '40vw',
-              height: '40vw',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 60%)',
-              filter: 'blur(60px)'
-            }}
-          />
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0, y: '80vh' }}
-            animate={{ scale: 5, opacity: [0, 0.3, 0], y: '-80vh' }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-            style={{
-              position: 'absolute',
-              right: '20%',
-              width: '50vw',
-              height: '50vw',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%)',
-              filter: 'blur(80px)'
-            }}
-          />
-
-          {/* Hyper-white flash simulating breaking atmosphere or warp threshold - Only in Light Mode */}
-          {isLightMode && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ duration: 0.4, times: [0, 0.4, 1], ease: "easeInOut", delay: 0.1 }}
-              style={{
-                position: 'absolute',
-                top: 0, left: 0, width: '100%', height: '100%',
-                background: '#ffffff',
-                mixBlendMode: 'overlay'
-              }}
-            />
-          )}
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
+const sectionReveal = {
+  initial: { opacity: 0, y: 42, filter: 'blur(8px)' },
+  whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  transition: { duration: 0.65 },
+  viewport: { once: true, amount: 0.2 as const },
+};
 
 export default function Home() {
-  const [slide, setSlide] = useState(-1);
-  const [isWarping, setIsWarping] = useState(false);
-
-  const isWarpingRef = useRef(isWarping);
-  const slideRef = useRef(slide);
-  const scrollCooldown = useRef(false);
-
-  useEffect(() => {
-    isWarpingRef.current = isWarping;
-    slideRef.current = slide;
-  }, [isWarping, slide]);
-
-  const handleLaunch = () => {
-    setIsWarping(true);
-    setSlide(0);
-    setTimeout(() => setIsWarping(false), 1000); // Overlay covers the 0.8s transition perfectly
-  };
-
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      if (slideRef.current === -1 || isWarpingRef.current) return;
-      
-      e.preventDefault(); 
-      
-      if (scrollCooldown.current) return;
-      
-      if (e.deltaY > 15) {
-        scrollCooldown.current = true;
-        setSlide(s => Math.min(s + 1, 4));
-        setTimeout(() => { scrollCooldown.current = false; }, 800); // 800ms cooldown for 0.8s transition
-      } else if (e.deltaY < -15) {
-        scrollCooldown.current = true;
-        setSlide(s => Math.max(s - 1, -1));
-        setTimeout(() => { scrollCooldown.current = false; }, 800);
-      }
-    };
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, []);
-
-  const slides = [
-    {
-      id: 'news',
-      content: (
-        <div style={{ height: '100%', padding: '6rem 5% 100px 5%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div className="container" style={{ width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
-              <div>
-                <h2 style={{ fontSize: '3rem', marginBottom: '1rem' }}>News</h2>
-                <p className="text-muted">Latest insights and ecosystem updates.</p>
-              </div>
-              <Link to="/insights" className="btn-outline">View News Gallery</Link>
-            </div>
-            <div className="grid-3">
-              <div className="glass-card" style={{ padding: '2rem' }}>
-                <span className="pill" style={{ marginBottom: '1rem' }}>UPDATE</span>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>Cohorts expanding to hardware engineering tracks</h3>
-                <p className="text-muted">Starting next cycle, we are dedicating resources specifically to physical product development.</p>
-              </div>
-              <div className="glass-card" style={{ padding: '2rem' }}>
-                <span className="pill" style={{ marginBottom: '1rem' }}>FOUNDER STORIES</span>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>Building deep tech inside a university ecosystem</h3>
-                <p className="text-muted">An interview with the founders of VoidTech on leveraging academic labs.</p>
-              </div>
-              <div className="glass-card" style={{ padding: '2rem' }}>
-                <span className="pill" style={{ marginBottom: '1rem' }}>ECOSYSTEM</span>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>The UCSD to Silicon Valley Pipeline</h3>
-                <p className="text-muted">Exploring the talent migration and investment influx into San Diego.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'directory',
-      content: (
-        <div style={{ height: '100%', padding: '6rem 5% 100px 5%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div className="container" style={{ width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
-              <div>
-                <h2 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Directory</h2>
-                <p className="text-muted">Our startup portfolio.</p>
-              </div>
-              <Link to="/directory" className="btn-outline">View Full Directory</Link>
-            </div>
-            <div className="grid-2">
-              {[
-                { 
-                  name: "Signalor", 
-                  link: "SIGNALOR.APP", 
-                  logo: "S",
-                  desc: "Signalor provides the intelligence layer to culture. Quantitatively observe granular sentiment data from across hundreds of platforms..."
-                },
-                { 
-                  name: "VoidTech", 
-                  link: "VOIDTECH.IO", 
-                  logo: "V",
-                  desc: "Specialized orbital manufacturing modules, allowing material scientists to produce perfect fiber optics and alloys impossible to create under Earth's gravity."
-                }
-              ].map((startup, idx) => (
-                <motion.div 
-                  key={idx}
-                  initial="rest"
-                  whileHover="hover"
-                  style={{ 
-                    background: 'var(--bg-tertiary)', 
-                    border: '1px solid var(--border-color)', 
-                    borderRadius: '8px',
-                    padding: '2.5rem', 
-                    cursor: 'pointer', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    gap: '1.5rem',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}
-                >
-                  <motion.div
-                    variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
-                    transition={{ duration: 0.3 }}
-                    style={{
-                      position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                      background: 'radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 50%)',
-                      pointerEvents: 'none'
-                    }}
-                  />
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', zIndex: 1 }}>
-                    <div style={{ 
-                      width: '60px', height: '60px', background: 'var(--border-color)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '1.5rem', fontWeight: 700, color: 'var(--purple)',
-                      fontFamily: 'var(--font-heading)', borderRadius: '12px'
-                    }}>
-                      {startup.logo}
-                    </div>
-                    <div>
-                      <h3 style={{ fontSize: '1.5rem', margin: 0, marginBottom: '4px' }}>{startup.name}</h3>
-                      <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', letterSpacing: '1px', fontFamily: 'var(--font-mono)' }}>
-                        {startup.link}
-                      </div>
-                    </div>
-                  </div>
-
-                  <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: '1rem', zIndex: 1 }}>{startup.desc}</p>
-                  
-                  <motion.div
-                    variants={{
-                      rest: { opacity: 0, height: 0, marginTop: 0 },
-                      hover: { opacity: 1, height: 'auto', marginTop: '0.5rem' }
-                    }}
-                    transition={{ duration: 0.3 }}
-                    style={{
-                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)',
-                      borderRadius: '6px', padding: '1rem', overflow: 'hidden', zIndex: 1
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--yellow)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', marginBottom: '8px' }}>
-                      <Activity size={12} /> Live Preview
-                    </div>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-                      [FILLER PREVIEW] Currently in stealth. Recent metrics show 240% MoM user acquisition in target demographics. Preparing for Series A raise in Q4.
-                    </p>
-                  </motion.div>
-
-                  <motion.div 
-                    variants={{ rest: { color: 'var(--text-secondary)' }, hover: { color: 'var(--purple)' } }}
-                    style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', letterSpacing: '2px', fontFamily: 'var(--font-mono)', marginTop: 'auto', textTransform: 'uppercase', zIndex: 1 }}
-                  >
-                    VIEW PROFILE <ArrowRight size={16} />
-                  </motion.div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'sponsors',
-      content: (
-        <div style={{ height: '100%', padding: '6rem 5% 100px 5%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div className="container" style={{ width: '100%', textAlign: 'center' }}>
-            <h2 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Sponsors</h2>
-            <p className="text-muted" style={{ maxWidth: '600px', margin: '0 auto 4rem auto' }}>
-              The gravitational pull behind our startups. Partner with us to fuel the next generation of engineering breakthroughs.
-            </p>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', marginBottom: '4rem', flexWrap: 'wrap' }}>
-               {['Alpha', 'Beta', 'Gamma', 'Delta'].map(s => (
-                  <div key={s} style={{ width: '100px', height: '100px', borderRadius: '50%', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontFamily: 'var(--font-mono)' }}>{s}</div>
-               ))}
-            </div>
-            <Link to="/sponsors" className="btn-accent">Become a Sponsor</Link>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'operations',
-      content: (
-        <div style={{ height: '100%', padding: '6rem 5% 100px 5%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div className="container" style={{ width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
-              <div>
-                <h2 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Operations and Events</h2>
-                <p className="text-muted">High-density innovation tracks and upcoming sessions.</p>
-              </div>
-              <Link to="/programs" className="btn-outline">View Full Calendar</Link>
-            </div>
-            <div className="grid-2">
-              <div className="glass-card" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Incubation Tracks</h3>
-                <p className="text-muted" style={{ marginBottom: '1.5rem', lineHeight: 1.6 }}>We accelerate deep tech ventures through rigorous, hands-on engineering sprints, dedicated mentorship from EIRs, and Tier-1 capital exposure.</p>
-                <Link to="/programs" className="text-accent" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', marginTop: 'auto' }}>Learn More &rarr;</Link>
-              </div>
-              <div className="glass-card" style={{ padding: '2.5rem', background: 'var(--purple)', color: 'var(--white)' }}>
-                <div style={{ fontSize: '0.8rem', letterSpacing: '1px', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', marginBottom: '0.5rem', color: 'rgba(255,255,255,0.7)' }}>Next Up</div>
-                <h3 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Deep Tech Workshop</h3>
-                <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '1.5rem' }}>Nov 02 &bull; 1:00 PM &bull; Computer Science Center</p>
-                <button className="btn-accent" style={{ background: 'var(--white)', color: 'var(--purple)' }}>RSVP Now</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'team',
-      content: (
-        <div style={{ height: '100%', padding: '6rem 5% 100px 5%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div className="container" style={{ width: '100%' }}>
-             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
-              <div>
-                <h2 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Team</h2>
-                <p className="text-muted">The minds empowering UCSD's brightest.</p>
-              </div>
-              <Link to="/team" className="btn-outline">View Team Roster</Link>
-            </div>
-            <div className="grid-3">
-              {[1,2,3].map(i => (
-                <div key={i} className="glass-card" style={{ padding: '2rem', textAlign: 'center' }}>
-                   <div style={{ width: '120px', height: '120px', borderRadius: '50%', background: 'var(--border-color)', margin: '0 auto 1.5rem auto' }}></div>
-                   <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Director {i}</h3>
-                   <p className="text-muted" style={{ fontSize: '0.9rem', fontFamily: 'var(--font-mono)' }}>Venture Partner</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    }
-  ];
+  const carouselItems = [...cohortStartups, ...cohortStartups];
 
   return (
-    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden', position: 'relative', background: 'var(--bg-primary)' }}>
-      
-      <CosmicOverlay active={isWarping} />
+    <main style={{ background: 'var(--bg-primary)' }}>
+      <Hero />
 
-      <AnimatePresence initial={false}>
-        {slide === -1 && (
-          <motion.div
-            initial={{ y: '-100vh', opacity: 0.5 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: '-100vh', opacity: 0.5 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 100 }}
-          >
-            <Hero onLaunch={handleLaunch} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {slides.map((s, idx) => {
-        const zIndex = idx; 
-        const y = idx > slide ? '100vh' : '0vh';
-
-        return (
-          <motion.div
-            key={s.id}
-            initial={false}
-            animate={{ y }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      <motion.section
+        className="section"
+        initial={sectionReveal.initial}
+        whileInView={sectionReveal.whileInView}
+        transition={sectionReveal.transition}
+        viewport={sectionReveal.viewport}
+      >
+        <div className="container">
+          <div
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              zIndex,
-              background: 'var(--bg-primary)',
-              willChange: 'transform'
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              gap: '1rem',
+              flexWrap: 'wrap',
+              marginBottom: '2rem',
             }}
           >
-            {s.content}
-          </motion.div>
-        );
-      })}
+            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', lineHeight: 1.05, maxWidth: '16ch' }}>
+              Startups in <em>Our Cohort.</em>
+            </h2>
+            <motion.div>
+              <Link to="/directory" className="btn-outline">
+                Full Directory
+              </Link>
+            </motion.div>
+          </div>
 
-      <AnimatePresence>
-        {slide >= 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            style={{ 
-              position: 'absolute', 
-              bottom: 0, 
-              left: 0, 
-              width: '100%', 
-              padding: '2rem 5%', 
-              background: 'rgba(5, 5, 5, 0.8)',
-              backdropFilter: 'blur(10px)',
-              borderTop: '1px solid var(--border-color)',
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center',
-              zIndex: 200,
-              color: '#fff'
+          <div className="home-carousel-shell">
+            <div className="home-carousel-track">
+              {carouselItems.map((co, i) => (
+                <Link key={`${co.id}-${i}`} to={`/directory#${co.id}`} className="home-carousel-item" aria-label={`${co.name} — open directory`}>
+                  <span className="home-carousel-logo" data-startup-logo={co.id}>
+                    <img
+                      src={co.logoSrc}
+                      alt=""
+                      style={{
+                        objectFit: co.logoObjectFit ?? 'cover',
+                        ...(co.logoPosition ? { objectPosition: co.logoPosition } : {}),
+                      }}
+                    />
+                  </span>
+                  <span className="home-carousel-name">{co.name}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="section home-section-alt"
+        initial={sectionReveal.initial}
+        whileInView={sectionReveal.whileInView}
+        transition={sectionReveal.transition}
+        viewport={sectionReveal.viewport}
+      >
+        <div className="container home-news-layout">
+          <aside className="home-news-rail" aria-hidden>
+            <motion.span className="home-rail-index" animate={{ opacity: [0.55, 1, 0.55] }} transition={{ duration: 4, repeat: Infinity }}>
+              01
+            </motion.span>
+            <div className="home-rail-line" />
+          </aside>
+          <div className="home-news-main">
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                gap: '1rem',
+                flexWrap: 'wrap',
+                marginBottom: '1.75rem',
+              }}
+            >
+              <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.75rem)', lineHeight: 1.05, maxWidth: '14ch' }}>
+                From <em>Our Ecosystem.</em>
+              </h2>
+              <motion.div>
+                <Link to="/insights" className="btn-outline">
+                  View All
+                </Link>
+              </motion.div>
+            </div>
+            <div className="home-news-body">
+              <motion.article className="home-news-card">
+                <span className="section-label">Example</span>
+                <h3 style={{ marginTop: '0.9rem', marginBottom: '0.65rem', fontSize: 'clamp(1.2rem, 2.6vw, 1.6rem)' }}>
+                  Lorem ipsum ecosystem update.
+                </h3>
+                <p className="text-muted" style={{ fontSize: '1rem', maxWidth: '60ch', lineHeight: 1.65 }}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum facilisis mauris ac metus pretium,
+                  vitae dapibus velit gravida. Integer feugiat at sapien eget semper.
+                </p>
+                <Link to="/insights" className="home-news-link">
+                  Read Sample <ArrowRight size={16} />
+                </Link>
+              </motion.article>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="home-sponsor-cta-wrap"
+        initial={{ opacity: 0, scale: 0.98 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.35 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="home-sponsor-cta">
+          <div className="home-sponsor-cta__sheen" aria-hidden />
+          <div className="home-sponsor-cta__pulse" aria-hidden />
+          <div className="container home-sponsor-cta__inner">
+            <div className="home-sponsor-cta__text">
+              <h2 style={{ fontSize: 'clamp(2rem, 4.5vw, 3.25rem)', lineHeight: 1.05, marginBottom: '1rem' }}>
+                Turn ideas into <em>momentum.</em>
+              </h2>
+              <p className="text-muted" style={{ fontSize: '1.05rem', lineHeight: 1.65, maxWidth: '44ch' }}>
+                Partner with high-agency student founders at UC San Diego through curated brand visibility, early access to
+                emerging teams, and hands-on engagement across events and programming.
+              </p>
+            </div>
+            <motion.div className="home-sponsor-cta__cta">
+              <Link to="/sponsors" className="btn-accent home-sponsor-cta__btn">
+                Become a Sponsor
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="section"
+        initial={sectionReveal.initial}
+        whileInView={sectionReveal.whileInView}
+        transition={sectionReveal.transition}
+        viewport={sectionReveal.viewport}
+      >
+        <div className="container">
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              gap: '1rem',
+              flexWrap: 'wrap',
+              marginBottom: '2.25rem',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-              <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>&copy; 2026 Startup Incubator UCSD</div>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                {slides.map((_, idx) => (
-                  <div key={idx} style={{ 
-                    width: '6px', height: '6px', borderRadius: '50%', 
-                    background: slide === idx ? 'var(--yellow)' : 'rgba(255,255,255,0.2)',
-                    transition: 'background 0.3s'
-                  }} />
-                ))}
-              </div>
+            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.25rem)', lineHeight: 1.05, maxWidth: '18ch' }}>
+              Meet the team behind <em>Startup Incubator.</em>
+            </h2>
+            <motion.div>
+              <Link to="/team" className="btn-outline">
+                Learn More
+              </Link>
+            </motion.div>
+          </div>
+          <div className="home-about-kinetic">
+            <motion.div
+              className="home-about-kinetic__photo"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+            >
+              <img src={TEAM_PHOTO} alt="Startup Incubator participants at DataHacks 2026" />
+            </motion.div>
+            <div className="home-about-kinetic__copy">
+              <h3>Student-run. Builder-led. Community-first.</h3>
+              <p className="text-muted">
+                We create approachable entry points into entrepreneurship through workshops, socials, and real project
+                momentum. Learn by doing with peers who want to build.
+              </p>
             </div>
-            
-            {/* Socials & Contact */}
-            <div style={{ display: 'flex', gap: '1.5rem' }}>
-              <a href="#" style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', textDecoration: 'none' }}>Twitter</a>
-              <a href="#" style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', textDecoration: 'none' }}>LinkedIn</a>
-              <a href="#" style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', textDecoration: 'none' }}>Contact</a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
-    </div>
+          </div>
+        </div>
+      </motion.section>
+    </main>
   );
 }

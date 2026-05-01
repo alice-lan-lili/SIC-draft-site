@@ -8,8 +8,10 @@ export default function Layout() {
   return (
     <>
       <Navbar isHome={isHome} />
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <Outlet />
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingTop: isHome ? 0 : '64px' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+          <Outlet />
+        </div>
         
         {!isHome && (
           <footer className="section" style={{ marginTop: 'auto', padding: '4rem 5%', borderTop: '1px solid var(--border-color)', background: 'var(--bg-primary)' }}>
@@ -17,7 +19,7 @@ export default function Layout() {
               <div>
                 <h2 style={{ fontSize: '1rem', margin: 0, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-heading)' }}>Startup Incubator UCSD</h2>
                 <p className="text-muted" style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>
-                  &copy; 2026. Project Liftoff.
+                  &copy; 2026. Turn ideas into momentum.
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '2rem' }}>

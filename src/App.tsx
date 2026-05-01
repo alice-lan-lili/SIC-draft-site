@@ -14,24 +14,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="directory" element={
-            <div style={{ paddingTop: '100px' }}><Directory /></div>
-          } />
-          <Route path="programs" element={
-            <div style={{ paddingTop: '100px' }}><Programs /></div>
-          } />
-          <Route path="insights" element={
-            <div style={{ paddingTop: '100px' }}><Insights /></div>
-          } />
-          <Route path="sponsors" element={
-            <div style={{ paddingTop: '100px' }}><Sponsors /></div>
-          } />
-          <Route path="team" element={
-            <div style={{ paddingTop: '100px' }}><Team /></div>
-          } />
-          <Route path="signin" element={
-            <div style={{ paddingTop: '100px' }}><SignIn /></div>
-          } />
+          <Route path="directory" element={<Directory />} />
+          <Route path="programs" element={<Programs />} />
+          <Route path="insights" element={<Insights />} />
+          <Route path="sponsors" element={<Sponsors />} />
+          <Route path="team" element={<Team />} />
+          <Route path="signin" element={<SignIn />} />
         </Route>
       </Routes>
     </BrowserRouter>
