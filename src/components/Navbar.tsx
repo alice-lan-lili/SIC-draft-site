@@ -87,7 +87,7 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
         }}
       >
         <img
-          src="/logo-sic.svg"
+          src="/favicon.svg"
           alt="Startup Incubator logo"
           width={34}
           height={34}

@@ -42,8 +42,21 @@ export default function Home() {
             </div>
             <Link to="/insights" className="btn-outline">View All</Link>
           </div>
-          <div style={{ padding: '1.25rem 0', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
-            <p className="text-muted" style={{ fontSize: '1rem' }}>No news available, check back later.</p>
+          <div className="grid-3">
+            {[
+              { cat: 'Update', title: 'Cohorts expanding to hardware engineering tracks', desc: 'Starting next cycle, dedicated resources will support physical product development alongside software ventures.', date: 'Apr 2026' },
+              { cat: 'Founder Story', title: 'Building deep tech inside a university ecosystem', desc: 'The founders of VoidTech on leveraging UCSD\'s engineering labs and faculty networks to accelerate their R&D.', date: 'Mar 2026' },
+              { cat: 'Ecosystem', title: 'The UCSD to Silicon Valley pipeline', desc: 'Mapping the talent migration and early-stage investment flowing from San Diego into the broader tech ecosystem.', date: 'Feb 2026' },
+            ].map((item, i) => (
+              <div key={i} className="glass-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', cursor: 'pointer' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span className="pill">{item.cat}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-secondary)' }}>{item.date}</span>
+                </div>
+                <h3 style={{ fontSize: '1.05rem', lineHeight: 1.35 }}>{item.title}</h3>
+                <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginTop: 'auto' }}>{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </motion.section>

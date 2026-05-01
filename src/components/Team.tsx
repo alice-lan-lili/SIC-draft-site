@@ -1,57 +1,78 @@
 import { motion } from 'framer-motion';
 
-export default function Team() {
-  const members = [
-    { name: "Alex Chen", role: "Managing Director" },
-    { name: "Sarah Jenkins", role: "Venture Partner" },
-    { name: "Michael Vance", role: "EIR - Deep Tech" },
-    { name: "Elena Rostova", role: "Head of Operations" }
-  ];
+const leadership = [
+  { name: 'Alex Chen', role: 'Managing Director', img: '/frame1.png' },
+  { name: 'Sarah Jenkins', role: 'Venture Partner', img: '/frame2.png' },
+  { name: 'Michael Vance', role: 'EIR — Deep Tech', img: '/frame3.png' },
+  { name: 'Elena Rostova', role: 'Head of Operations', img: '/frame4.png' },
+];
 
+export default function Team() {
   return (
     <section className="section">
       <div className="container">
-        
-        <h1 style={{ fontSize: '3rem', marginBottom: '3rem', textAlign: 'center' }}>The Team</h1>
-        
-        <div className="grid-2" style={{ marginBottom: '5rem' }}>
+
+        {/* Header */}
+        <div style={{ marginBottom: '5rem' }}>
+          <span className="section-label">About Us</span>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', maxWidth: '640px' }}>
+            The People Behind<br /><em>the Mission.</em>
+          </h1>
+        </div>
+
+        {/* Mission / Vision */}
+        <div className="grid-2" style={{ marginBottom: '6rem' }}>
           <div className="glass-card" style={{ padding: '3rem' }}>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--text-accent)' }}>Mission</h2>
-            <p className="text-muted" style={{ fontSize: '1.1rem', lineHeight: 1.6 }}>
-              To empower UCSD's brightest minds to build generation-defining companies. We believe the next era of technological leaps will come from hard engineering and rigorous academic research translated into scalable ventures.
+            <span className="section-label">Mission</span>
+            <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              To empower UCSD's brightest minds to build generation-defining companies. We believe the next era of technological leaps will come from rigorous academic research translated into scalable ventures.
             </p>
           </div>
           <div className="glass-card" style={{ padding: '3rem' }}>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--text-accent)' }}>Vision</h2>
-            <p className="text-muted" style={{ fontSize: '1.1rem', lineHeight: 1.6 }}>
-              Creating the ultimate launchpad where academic innovation meets venture velocity. By bridging the gap between the laboratory and Silicon Valley, we ensure that groundbreaking ideas don't stay theoretical.
+            <span className="section-label">Vision</span>
+            <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+              Creating the ultimate launchpad where academic innovation meets venture velocity — bridging the gap between the laboratory and Silicon Valley so that groundbreaking ideas don't stay theoretical.
             </p>
           </div>
         </div>
 
-        <h2 style={{ fontSize: '2rem', marginBottom: '2rem', textAlign: 'center' }}>Leadership</h2>
-        <div className="grid-4">
-          {members.map((m, i) => (
-             <motion.div 
+        {/* Leadership */}
+        <div>
+          <span className="section-label">Leadership</span>
+          <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', marginBottom: '3rem' }}>Who We Are.</h2>
+          <div className="grid-4">
+            {leadership.map((m, i) => (
+              <motion.div
                 key={i}
-                whileHover={{ y: -5 }}
-                className="glass-card" 
-                style={{ padding: '2.5rem 1.5rem', textAlign: 'center' }}
-             >
-                <div style={{ 
-                  width: '100px', 
-                  height: '100px', 
-                  borderRadius: '50%', 
-                  background: 'var(--bg-secondary)', 
+                className="glass-card"
+                style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+              >
+                <div style={{
+                  width: '100%',
+                  aspectRatio: '1 / 1',
+                  borderRadius: '8px',
+                  background: 'var(--bg-tertiary)',
+                  overflow: 'hidden',
                   border: '1px solid var(--border-color)',
-                  margin: '0 auto 1.5rem auto' 
-                }}></div>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>{m.name}</h3>
-                <p style={{ color: 'var(--text-accent)', fontSize: '0.85rem', fontFamily: 'var(--font-mono)', textTransform: 'uppercase' }}>
-                  {m.role}
-                </p>
-             </motion.div>
-          ))}
+                }}>
+                  <img
+                    src={m.img}
+                    alt={m.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    onError={e => { e.currentTarget.style.display = 'none'; }}
+                  />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1rem', fontFamily: 'var(--font-body)', fontWeight: 600, marginBottom: '4px' }}>{m.name}</h3>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{m.role}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
       </div>
