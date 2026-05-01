@@ -1064,12 +1064,18 @@ button {
 .home-about-kinetic__copy h3 {
   font-size: clamp(1.5rem, 3vw, 2.1rem);
   margin-bottom: 0.9rem;
+  max-width: 38ch;
+  line-height: 1.22;
+}
+
+.home-about-kinetic__copy {
+  max-width: 38ch;
 }
 
 .home-about-kinetic__copy p {
   font-size: 1rem;
   line-height: 1.72;
-  max-width: 42ch;
+  max-width: 38ch;
   padding-right: clamp(1.5rem, 4vw, 5rem);
 }
 
