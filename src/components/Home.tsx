@@ -149,7 +149,11 @@ export default function Home() {
               <img src={TEAM_PHOTO} alt="Startup Incubator participants at DataHacks 2026" />
             </motion.div>
             <div className="home-about-kinetic__copy">
-              <h3>Student-run. Builder-led. Community-first.</h3>
+              <h3>
+                Student-run. Builder-led.
+                <br />
+                Community-first.
+              </h3>
               <p className="text-muted">
                 Help UC San Diego students explore entrepreneurship by turning curiosity into actionable startup skills,
                 supportive peer connections, and real-world learning.
