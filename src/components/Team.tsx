@@ -1,14 +1,33 @@
 import { motion } from 'framer-motion';
 import PageHero from './PageHero';
 
-const leadership = [
-  { name: 'Alex Chen', role: 'Managing Director' },
-  { name: 'Sarah Jenkins', role: 'Venture Partner' },
-  { name: 'Michael Vance', role: 'EIR — Deep Tech' },
-  { name: 'Elena Rostova', role: 'Head of Operations' },
+const departments = [
+  {
+    name: 'Exec',
+    members: ['Lorem Ipsum', 'Dolor Sit', 'Amet Consectetur'],
+  },
+  {
+    name: 'Marketing',
+    members: ['Adipiscing Elit', 'Sed Do', 'Eiusmod Tempor'],
+  },
+  {
+    name: 'Growth',
+    members: ['Incididunt Ut', 'Labore Et', 'Dolore Magna'],
+  },
+  {
+    name: 'Events',
+    members: ['Aliqua Enim', 'Minim Veniam', 'Quis Nostrud'],
+  },
+  {
+    name: 'Finance',
+    members: ['Exercitation Ullamco', 'Laboris Nisi', 'Ut Aliquip'],
+  },
+  {
+    name: 'Operations',
+    members: ['Ex Ea', 'Commodo Consequat', 'Duis Aute'],
+  },
 ];
 
-const PROFILE = '/default-profile.svg';
 const TEAM_PHOTO = '/brand/about-team.png';
 
 export default function Team() {
@@ -98,26 +117,26 @@ export default function Team() {
               Who We Are.
             </motion.h2>
             <div className="team-grid">
-              {leadership.map((m, i) => (
+              {departments.map((group, i) => (
                 <motion.article
-                  key={m.name}
+                  key={group.name}
                   className="team-card"
                   initial={{ opacity: 0, y: 22 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: i * 0.06 }}
                 >
-                  <motion.div
-                    className="team-photo"
-                    transition={{ type: 'spring', stiffness: 320, damping: 22 }}
-                  >
-                    <img src={PROFILE} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                  </motion.div>
                   <div>
-                    <h3 style={{ fontSize: '1.05rem', fontFamily: 'var(--font-body)', fontWeight: 600, marginBottom: '6px' }}>
-                      {m.name}
+                    <h3 style={{ fontSize: '1.05rem', fontFamily: 'var(--font-body)', fontWeight: 600, marginBottom: '0.65rem' }}>
+                      {group.name}
                     </h3>
-                    <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', letterSpacing: '0.02em' }}>{m.role}</p>
+                    <div style={{ display: 'grid', gap: '0.35rem' }}>
+                      {group.members.map((member) => (
+                        <p key={member} style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                          {member}
+                        </p>
+                      ))}
+                    </div>
                   </div>
                 </motion.article>
               ))}

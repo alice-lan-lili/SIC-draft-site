@@ -186,7 +186,7 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
           </button>
 
           {!isCompact && (
-            <Link to="/signin" className="btn-primary" style={{ padding: '8px 16px', fontSize: '0.82rem' }}>
+            <Link to="/signin" className="btn-primary nav-signin-btn" style={{ padding: '8px 16px', fontSize: '0.82rem' }}>
               Sign In
             </Link>
           )}
@@ -268,7 +268,7 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
                 </Link>
               );
             })}
-            <Link to="/signin" className="btn-primary" style={{ width: '100%', marginTop: '0.35rem' }}>
+            <Link to="/signin" className="btn-primary nav-signin-btn" style={{ width: '100%', marginTop: '0.35rem' }}>
               Sign In
             </Link>
           </div>

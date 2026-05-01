@@ -1,21 +1,34 @@
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import PageHero from './PageHero';
 
-const pillars = [
-  { n: '01', title: 'Learn', desc: 'Workshops that turn entrepreneurship concepts into usable tools and clear next steps.' },
-  { n: '02', title: 'Build', desc: 'Weekly momentum to iterate ideas, validate assumptions, and prototype with support.' },
-  { n: '03', title: 'Connect', desc: 'Meet founders, mentors, and peers who are serious about building together.' },
-  { n: '04', title: 'Launch', desc: 'Pitch nights and showcases that make progress visible and actionable.' },
+const outline = [
+  { n: '01', title: 'Orientation Week', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Teams set goals, define problem space, and map first milestones.' },
+  { n: '02', title: 'Build Sprint', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Founders iterate quickly through customer interviews, prototyping, and weekly reviews.' },
+  { n: '03', title: 'Mentor Tracks', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Operators and mentors run targeted sessions for product, GTM, and fundraising readiness.' },
+  { n: '04', title: 'Demo Prep and Showcase', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Teams finalize narrative, metrics, and presentations for community and sponsor demo night.' },
 ];
 
 const events = [
-  { month: 'May', day: '14', time: '6:00 PM', title: 'Founder Mixer', loc: 'Design & Innovation Building' },
-  { month: 'Jun', day: '02', time: '1:00 PM', title: 'Deep Tech Workshop', loc: 'Computer Science Center' },
-  { month: 'Jun', day: '20', time: '6:30 PM', title: 'Pitch Night & Dinner', loc: 'Rady School of Management' },
-  { month: 'Jul', day: '10', time: '9:00 AM', title: 'Tier-1 VC Demo Day', loc: 'Downtown San Diego' },
+  { date: 'May 14, 2026', time: '6:00 PM', title: 'Lorem Ipsum Session', loc: 'Design & Innovation Building', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+  { date: 'Jun 02, 2026', time: '1:00 PM', title: 'Dolor Sit Workshop', loc: 'Computer Science Center', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.' },
+  { date: 'Jun 20, 2026', time: '6:30 PM', title: 'Amet Founder Forum', loc: 'Rady School of Management', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.' },
+  { date: 'Jul 10, 2026', time: '9:00 AM', title: 'Consectetur Demo Review', loc: 'Downtown San Diego', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.' },
 ];
 
 export default function Programs() {
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<(typeof events)[number] | null>(null);
+  const calendarDays = useMemo(
+    () => [
+      { date: 'May 14, 2026', events: [events[0]] },
+      { date: 'Jun 02, 2026', events: [events[1]] },
+      { date: 'Jun 20, 2026', events: [events[2]] },
+      { date: 'Jul 10, 2026', events: [events[3]] },
+    ],
+    []
+  );
+
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <PageHero
@@ -35,34 +48,84 @@ export default function Programs() {
       </PageHero>
       <section className="section section-after-hero" style={{ flex: 1 }}>
         <div className="container">
-          <div style={{ marginBottom: '5rem' }}>
+          <div style={{ marginBottom: '4rem' }}>
             <h2 style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', marginBottom: '1.5rem' }}>How it works</h2>
-            <div className="grid-4" style={{ marginTop: '0' }}>
-              {pillars.map((p, i) => (
+            <div className="program-outline">
+              {outline.map((step, i) => (
                 <motion.div
-                  key={i}
-                  className="glass-card"
-                  style={{ padding: '2rem', height: '100%' }}
-                  initial={{ opacity: 0, y: 24 }}
+                  key={step.n}
+                  className="program-outline__row"
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: i * 0.07 }}
                 >
-                  <motion.span
-                    style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--text-secondary)', letterSpacing: '0.1em' }}
-                    animate={{ opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 3 + i * 0.2, repeat: Infinity }}
-                  >
-                    {p.n}
-                  </motion.span>
-                  <h3 style={{ fontSize: '1rem', margin: '0.75rem 0 0.6rem' }}>{p.title}</h3>
-                  <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{p.desc}</p>
+                  <span className="program-outline__index">{step.n}</span>
+                  <div>
+                    <h3 style={{ fontSize: '1.05rem', marginBottom: '0.45rem' }}>{step.title}</h3>
+                    <p className="text-muted" style={{ fontSize: '0.92rem', lineHeight: 1.65 }}>{step.desc}</p>
+                  </div>
                 </motion.div>
               ))}
             </div>
           </div>
 
-          <div>
+          {calendarOpen ? (
+            <div className="program-calendar">
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '1.25rem',
+                  flexWrap: 'wrap',
+                  gap: '0.75rem',
+                }}
+              >
+                <h2 style={{ fontSize: 'clamp(1.55rem, 2.8vw, 2.1rem)' }}>Calendar View</h2>
+                <button className="btn-outline" type="button" onClick={() => setCalendarOpen(false)}>
+                  Back to Programs
+                </button>
+              </div>
+              <div className="program-calendar__grid">
+                {calendarDays.map((day) => (
+                  <div key={day.date} className="program-calendar__day">
+                    <h3 style={{ fontSize: '0.95rem', marginBottom: '0.8rem', fontFamily: 'var(--font-body)', fontWeight: 600 }}>
+                      {day.date}
+                    </h3>
+                    <div style={{ display: 'grid', gap: '0.55rem' }}>
+                      {day.events.map((event) => (
+                        <button
+                          key={event.title}
+                          className="program-calendar__event"
+                          type="button"
+                          onClick={() => setSelectedEvent(event)}
+                        >
+                          <strong>{event.title}</strong>
+                          <span>{event.time} · {event.loc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {selectedEvent && (
+                <div className="program-calendar__overlay" role="dialog" aria-modal="true">
+                  <div className="program-calendar__modal">
+                    <h3 style={{ marginBottom: '0.5rem' }}>{selectedEvent.title}</h3>
+                    <p className="text-muted" style={{ marginBottom: '0.4rem' }}>{selectedEvent.date}</p>
+                    <p className="text-muted" style={{ marginBottom: '0.85rem' }}>{selectedEvent.time} · {selectedEvent.loc}</p>
+                    <p style={{ fontSize: '0.92rem', lineHeight: 1.65 }}>{selectedEvent.details}</p>
+                    <button className="btn-outline" type="button" style={{ marginTop: '1rem' }} onClick={() => setSelectedEvent(null)}>
+                      Close
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div>
             <div
               style={{
                 display: 'flex',
@@ -78,9 +141,9 @@ export default function Programs() {
                   Events <em>&amp; Sessions.</em>
                 </h2>
               </div>
-              <motion.button className="btn-outline" type="button" whileTap={{ scale: 0.98 }}>
+              <button className="btn-outline" type="button" onClick={() => setCalendarOpen(true)}>
                 View Full Schedule
-              </motion.button>
+              </button>
             </div>
 
             <div
@@ -96,7 +159,7 @@ export default function Programs() {
             >
               {events.map((ev, i) => (
                 <motion.div
-                  key={i}
+                  key={ev.title}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -112,34 +175,21 @@ export default function Programs() {
                   transition={{ delay: i * 0.05 }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                    <div style={{ textAlign: 'center', minWidth: '40px' }}>
-                      <div
-                        style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.6rem',
-                          color: 'var(--text-accent)',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.06em',
-                        }}
-                      >
-                        {ev.month}
-                      </div>
-                      <div style={{ fontSize: '1.4rem', fontFamily: 'var(--font-display)', lineHeight: 1 }}>{ev.day}</div>
-                    </div>
                     <div>
                       <h3 style={{ fontSize: '1rem', fontFamily: 'var(--font-body)', fontWeight: 500, marginBottom: '4px' }}>{ev.title}</h3>
                       <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
-                        {ev.time} · {ev.loc}
+                        {ev.date} · {ev.time} · {ev.loc}
                       </span>
                     </div>
                   </div>
-                  <motion.button className="btn-outline" style={{ padding: '7px 20px', fontSize: '0.8rem', flexShrink: 0 }} type="button" whileTap={{ scale: 0.96 }}>
+                  <button className="btn-outline" style={{ padding: '7px 20px', fontSize: '0.8rem', flexShrink: 0 }} type="button">
                     RSVP
-                  </motion.button>
+                  </button>
                 </motion.div>
               ))}
             </div>
           </div>
+          )}
         </div>
       </section>
     </div>

@@ -192,8 +192,8 @@ export default function Home() {
             <div className="home-about-kinetic__copy">
               <h3>Student-run. Builder-led. Community-first.</h3>
               <p className="text-muted">
-                We create approachable entry points into entrepreneurship through workshops, socials, and real project
-                momentum. Learn by doing with peers who want to build.
+                Help UC San Diego students explore entrepreneurship by turning curiosity into actionable startup skills,
+                supportive peer connections, and real-world learning.
               </p>
             </div>
           </div>
