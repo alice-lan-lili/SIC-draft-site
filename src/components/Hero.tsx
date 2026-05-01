@@ -200,8 +200,8 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
           transition={{ duration: 0.7, delay: 0.38 }}
           style={{
             fontFamily: 'var(--font-heading)',
-            fontSize: 'clamp(3.5rem, 9vw, 8rem)',
-            fontWeight: 400,
+            fontSize: 'clamp(2.75rem, 6.5vw, 6.1rem)',
+            fontWeight: 300,
             lineHeight: 1.0,
             color: '#FFFFFF',
             marginBottom: '1.75rem',
