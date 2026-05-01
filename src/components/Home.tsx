@@ -28,30 +28,19 @@ export default function Home() {
         viewport={sectionReveal.viewport}
       >
         <div className="container">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              gap: '1rem',
-              flexWrap: 'wrap',
-              marginBottom: '2rem',
-            }}
-          >
-            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', lineHeight: 1.05, maxWidth: '16ch' }}>
+          <div className="home-heading-stack">
+            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', lineHeight: 1.05, maxWidth: '24ch' }}>
               Startups in <em>Our Cohort.</em>
             </h2>
-            <motion.div>
-              <Link to="/directory" className="btn-outline">
-                Full Directory
-              </Link>
-            </motion.div>
+            <Link to="/directory" className="home-inline-link">
+              Full Directory
+            </Link>
           </div>
 
           <div className="home-carousel-shell">
             <div className="home-carousel-track">
               {carouselItems.map((co, i) => (
-                <Link key={`${co.id}-${i}`} to={`/directory#${co.id}`} className="home-carousel-item" aria-label={`${co.name} — open directory`}>
+                <Link key={`${co.id}-${i}`} to={`/directory#${co.id}`} className="home-carousel-item" aria-label={`${co.name} - open directory`}>
                   <span className="home-carousel-logo" data-startup-logo={co.id}>
                     <img
                       src={co.logoSrc}
@@ -77,48 +66,29 @@ export default function Home() {
         transition={sectionReveal.transition}
         viewport={sectionReveal.viewport}
       >
-        <div className="container home-news-layout">
-          <aside className="home-news-rail" aria-hidden>
-            <motion.span className="home-rail-index" animate={{ opacity: [0.55, 1, 0.55] }} transition={{ duration: 4, repeat: Infinity }}>
-              01
-            </motion.span>
-            <div className="home-rail-line" />
-          </aside>
-          <div className="home-news-main">
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-                gap: '1rem',
-                flexWrap: 'wrap',
-                marginBottom: '1.75rem',
-              }}
-            >
-              <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.75rem)', lineHeight: 1.05, maxWidth: '14ch' }}>
-                From <em>Our Ecosystem.</em>
-              </h2>
-              <motion.div>
-                <Link to="/insights" className="btn-outline">
-                  View All
-                </Link>
-              </motion.div>
-            </div>
-            <div className="home-news-body">
-              <motion.article className="home-news-card">
-                <span className="section-label">Example</span>
-                <h3 style={{ marginTop: '0.9rem', marginBottom: '0.65rem', fontSize: 'clamp(1.2rem, 2.6vw, 1.6rem)' }}>
-                  Lorem ipsum ecosystem update.
-                </h3>
-                <p className="text-muted" style={{ fontSize: '1rem', maxWidth: '60ch', lineHeight: 1.65 }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum facilisis mauris ac metus pretium,
-                  vitae dapibus velit gravida. Integer feugiat at sapien eget semper.
-                </p>
-                <Link to="/insights" className="home-news-link">
-                  Read Sample <ArrowRight size={16} />
-                </Link>
-              </motion.article>
-            </div>
+        <div className="container">
+          <div className="home-heading-stack" style={{ marginBottom: '1.75rem' }}>
+            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.75rem)', lineHeight: 1.05, maxWidth: '22ch' }}>
+              From <em>Our Ecosystem.</em>
+            </h2>
+            <Link to="/insights" className="home-inline-link">
+              View All
+            </Link>
+          </div>
+          <div className="home-news-body">
+            <motion.article className="home-news-card">
+              <span className="section-label">Example</span>
+              <h3 style={{ marginTop: '0.9rem', marginBottom: '0.65rem', fontSize: 'clamp(1.2rem, 2.6vw, 1.6rem)' }}>
+                Lorem ipsum ecosystem update.
+              </h3>
+              <p className="text-muted" style={{ fontSize: '1rem', maxWidth: '60ch', lineHeight: 1.65 }}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum facilisis mauris ac metus pretium,
+                vitae dapibus velit gravida. Integer feugiat at sapien eget semper.
+              </p>
+              <Link to="/insights" className="home-news-link">
+                Read Sample <ArrowRight size={16} />
+              </Link>
+            </motion.article>
           </div>
         </div>
       </motion.section>
@@ -160,24 +130,13 @@ export default function Home() {
         viewport={sectionReveal.viewport}
       >
         <div className="container">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              gap: '1rem',
-              flexWrap: 'wrap',
-              marginBottom: '2.25rem',
-            }}
-          >
-            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.25rem)', lineHeight: 1.05, maxWidth: '18ch' }}>
+          <div className="home-heading-stack" style={{ marginBottom: '2.25rem' }}>
+            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.25rem)', lineHeight: 1.05, maxWidth: '26ch' }}>
               Meet the team behind <em>Startup Incubator.</em>
             </h2>
-            <motion.div>
-              <Link to="/team" className="btn-outline">
-                Learn More
-              </Link>
-            </motion.div>
+            <Link to="/team" className="home-inline-link">
+              Learn More
+            </Link>
           </div>
           <div className="home-about-kinetic">
             <motion.div

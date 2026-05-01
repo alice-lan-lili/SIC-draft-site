@@ -25,7 +25,7 @@ export default function Directory() {
             <em>Our Cohort.</em>
           </>
         }
-        subtitle="Logos, one-liners, founders, and direct links—everything you need to explore what teams are shipping."
+        subtitle="Logos, one-liners, founders, and direct links-everything you need to explore what teams are shipping."
       />
       <section className="section section-after-hero" style={{ flex: 1 }}>
         <div className="container">

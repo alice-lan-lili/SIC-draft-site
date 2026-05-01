@@ -109,7 +109,7 @@ export default function Team() {
 
           <div>
             <motion.h2
-              style={{ fontSize: 'clamp(1.75rem, 3vw, 2.75rem)', marginBottom: '2.5rem', maxWidth: '18ch' }}
+              style={{ fontSize: 'clamp(1.75rem, 3vw, 2.75rem)', marginBottom: '2.5rem', maxWidth: '26ch' }}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}

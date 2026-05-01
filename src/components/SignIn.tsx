@@ -8,7 +8,7 @@ export default function SignIn() {
         eyebrow="Portal"
         size="compact"
         title={<em>Welcome back.</em>}
-        subtitle="Sign in to the founder portal — office hours, resources, and cohort updates."
+        subtitle="Sign in to the founder portal - office hours, resources, and cohort updates."
       />
       <section
         className="section section-after-hero section-signin"

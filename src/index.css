@@ -308,6 +308,26 @@ button {
   align-items: start;
 }
 
+.home-heading-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.home-inline-link {
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.home-inline-link:hover {
+  color: var(--text-primary);
+}
+
 .home-news-rail {
   display: flex;
   flex-direction: column;
@@ -484,7 +504,7 @@ button {
   display: block;
 }
 
-/* Aesthetic SVG is light-on-transparent — contrast tile so it reads in light + dark themes */
+/* Aesthetic SVG is light-on-transparent - contrast tile so it reads in light + dark themes */
 .home-carousel-logo[data-startup-logo='aesthetic'] {
   background: #141414;
   border-color: rgba(255, 255, 255, 0.14);
@@ -639,6 +659,34 @@ button {
     radial-gradient(ellipse 80% 120% at 12% 40%, rgba(109, 40, 217, 0.2), transparent 55%),
     radial-gradient(ellipse 70% 100% at 88% 30%, rgba(77, 163, 255, 0.12), transparent 50%),
     var(--bg-primary);
+  overflow: hidden;
+}
+
+.home-sponsor-cta::before {
+  content: '';
+  position: absolute;
+  inset: -20% -10%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 42% 34% at 18% 32%, rgba(109, 40, 217, 0.17), transparent 74%),
+    radial-gradient(ellipse 36% 28% at 82% 30%, rgba(77, 163, 255, 0.14), transparent 74%),
+    radial-gradient(ellipse 50% 38% at 50% 90%, rgba(252, 204, 60, 0.08), transparent 78%);
+  filter: blur(18px);
+  animation: section-aura-drift 18s cubic-bezier(0.42, 0, 0.2, 1) infinite alternate;
+}
+
+.home-sponsor-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--bg-primary) 0%,
+    rgba(0, 0, 0, 0) 16%,
+    rgba(0, 0, 0, 0) 84%,
+    var(--bg-primary) 100%
+  );
 }
 
 :root[data-theme="light"] .home-sponsor-cta {
@@ -726,6 +774,35 @@ button {
     var(--bg-primary);
 }
 
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: -18% -8%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 44% 34% at 16% 20%, rgba(109, 40, 217, 0.16), transparent 72%),
+    radial-gradient(ellipse 38% 30% at 86% 24%, rgba(77, 163, 255, 0.12), transparent 74%),
+    radial-gradient(ellipse 56% 44% at 54% 94%, rgba(252, 204, 60, 0.08), transparent 76%);
+  filter: blur(18px);
+  animation: section-aura-drift 19s cubic-bezier(0.42, 0, 0.2, 1) infinite alternate;
+}
+
+.page-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--bg-primary) 0%,
+    rgba(0, 0, 0, 0) 15%,
+    rgba(0, 0, 0, 0) 85%,
+    var(--bg-primary) 100%
+  );
+}
+
 :root[data-theme="light"] .page-hero {
   background:
     radial-gradient(ellipse 100% 80% at 50% -20%, rgba(191, 143, 26, 0.13), transparent),
@@ -746,6 +823,25 @@ button {
 
 :root[data-theme='light'] .page-hero__grid {
   opacity: 0;
+}
+
+@keyframes section-aura-drift {
+  0% {
+    transform: translate3d(-8%, -5%, 0) scale(0.94);
+    opacity: 0.24;
+  }
+  30% {
+    transform: translate3d(4%, 5%, 0) scale(1.06);
+    opacity: 0.4;
+  }
+  65% {
+    transform: translate3d(11%, -4%, 0) scale(1.16);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate3d(-5%, 7%, 0) scale(1.02);
+    opacity: 0.22;
+  }
 }
 
 .page-hero__mesh {
@@ -807,7 +903,7 @@ button {
 }
 
 .page-hero__copy {
-  max-width: 720px;
+  max-width: 960px;
 }
 
 .page-hero__eyebrow {
@@ -905,6 +1001,10 @@ button {
 }
 
 @media (max-width: 900px) {
+  .page-hero__copy {
+    max-width: 100%;
+  }
+
   .home-cohort-feature {
     grid-template-columns: 1fr;
   }
@@ -970,7 +1070,7 @@ button {
   font-size: 1rem;
   line-height: 1.72;
   max-width: 42ch;
-  padding-right: clamp(0.5rem, 2vw, 2rem);
+  padding-right: clamp(1.5rem, 4vw, 5rem);
 }
 
 .nav-signin-btn:hover {

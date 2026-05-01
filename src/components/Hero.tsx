@@ -88,7 +88,7 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
         }}
       />
 
-      {/* Fine dust — visible grain + parallax */}
+      {/* Fine dust - visible grain + parallax */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 5, pointerEvents: 'none' }}>
         {dust.map((s) => {
           const parallax = 5 + s.depth * 12;
@@ -117,7 +117,7 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
         })}
       </div>
 
-      {/* Brighter stars — above vignette so they stay vivid */}
+      {/* Brighter stars - above vignette so they stay vivid */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 6, pointerEvents: 'none' }}>
         {stars.map((s) => {
           const parallax = 12 + s.depth * 40;

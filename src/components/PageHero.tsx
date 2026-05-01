@@ -10,7 +10,7 @@ import {
 
 export type PageHeroProps = {
   eyebrow?: string;
-  /** Main heading — include <em> for accent lines */
+  /** Main heading - include <em> for accent lines */
   title: ReactNode;
   subtitle?: string;
   /** Larger default, smaller for auth-style pages */
