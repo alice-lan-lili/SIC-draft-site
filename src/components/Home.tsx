@@ -42,21 +42,8 @@ export default function Home() {
             </div>
             <Link to="/insights" className="btn-outline">View All</Link>
           </div>
-          <div className="grid-3">
-            {[
-              { cat: 'Update', title: 'Cohorts expanding to hardware engineering tracks', desc: 'Starting next cycle, dedicated resources will support physical product development alongside software ventures.', date: 'Apr 2026' },
-              { cat: 'Founder Story', title: 'Building deep tech inside a university ecosystem', desc: 'The founders of VoidTech on leveraging UCSD\'s engineering labs and faculty networks to accelerate their R&D.', date: 'Mar 2026' },
-              { cat: 'Ecosystem', title: 'The UCSD to Silicon Valley pipeline', desc: 'Mapping the talent migration and early-stage investment flowing from San Diego into the broader tech ecosystem.', date: 'Feb 2026' },
-            ].map((item, i) => (
-              <div key={i} className="glass-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', cursor: 'pointer' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span className="pill">{item.cat}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--text-secondary)' }}>{item.date}</span>
-                </div>
-                <h3 style={{ fontSize: '1.05rem', lineHeight: 1.35 }}>{item.title}</h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginTop: 'auto' }}>{item.desc}</p>
-              </div>
-            ))}
+          <div style={{ padding: '1.25rem 0', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+            <p className="text-muted" style={{ fontSize: '1rem', maxWidth: '52ch' }}>No news available, check back later.</p>
           </div>
         </div>
       </motion.section>
@@ -77,16 +64,42 @@ export default function Home() {
             </div>
             <Link to="/directory" className="btn-outline">View Full Directory</Link>
           </div>
-          <div style={{ display: 'grid', gap: '0.75rem' }}>
+          <div style={{ display: 'grid', gap: '0' }}>
             {startups.slice(0, 3).map((co) => (
-              <div key={co.name} style={{ padding: '1rem 0', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
-                <div>
-                  <h3 style={{ fontSize: '1.15rem', marginBottom: '0.2rem' }}>{co.name}</h3>
-                  <p className="text-muted" style={{ fontSize: '0.92rem', maxWidth: '62ch' }}>{co.desc}</p>
+              <div
+                key={co.name}
+                className="cohort-preview-row"
+                style={{
+                  padding: '1.1rem 0',
+                  borderBottom: '1px solid var(--border-color)',
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(0, 1fr) auto',
+                  gap: '1rem 1.25rem',
+                  alignItems: 'start',
+                }}
+              >
+                <div style={{ minWidth: 0 }}>
+                  <h3 style={{ fontSize: '1.15rem', marginBottom: '0.35rem' }}>{co.name}</h3>
+                  <p className="text-muted" style={{ fontSize: '0.92rem', lineHeight: 1.55 }}>{co.desc}</p>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.76rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-accent)', whiteSpace: 'nowrap' }}>
-                  View Profile <ArrowRight size={14} />
-                </div>
+                <Link
+                  to="/directory"
+                  className="cohort-preview-cta"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    fontSize: '0.8rem',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    color: 'var(--text-accent)',
+                    whiteSpace: 'nowrap',
+                    alignSelf: 'start',
+                    paddingTop: '0.2rem',
+                  }}
+                >
+                  View <ArrowRight size={14} />
+                </Link>
               </div>
             ))}
           </div>

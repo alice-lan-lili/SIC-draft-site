@@ -103,7 +103,7 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.25 }}
           style={{
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-body)',
             fontSize: '0.68rem',
             letterSpacing: '0.14em',
             textTransform: 'uppercase',
@@ -216,7 +216,7 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
         }}
       >
         <span style={{
-          fontFamily: 'var(--font-mono)',
+          fontFamily: 'var(--font-body)',
           fontSize: '0.6rem',
           letterSpacing: '0.14em',
           textTransform: 'uppercase',

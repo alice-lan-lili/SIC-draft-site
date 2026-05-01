@@ -155,8 +155,8 @@ button {
 }
 
 .btn-primary {
-  background: color-mix(in srgb, var(--btn-bg) 78%, transparent);
-  color: var(--btn-text);
+  background: rgba(245, 245, 247, 0.82);
+  color: #000000;
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 0.88rem;
@@ -178,8 +178,8 @@ button {
 }
 
 .btn-accent {
-  background: color-mix(in srgb, var(--btn-accent-bg) 82%, transparent);
-  color: var(--btn-accent-text);
+  background: rgba(109, 40, 217, 0.88);
+  color: #ffffff;
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 0.88rem;
@@ -231,4 +231,38 @@ button {
 
 .text-muted {
   color: var(--text-secondary);
+}
+
+:root[data-theme="light"] .btn-primary {
+  background: rgba(29, 29, 31, 0.9);
+  color: #ffffff;
+}
+
+:root[data-theme="light"] .btn-outline {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+:root[data-theme="light"] .btn-accent {
+  background: rgba(75, 27, 167, 0.9);
+}
+
+@media (max-width: 640px) {
+  .cohort-preview-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cohort-preview-cta {
+    justify-self: start;
+    padding-top: 0 !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .directory-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .directory-row-cta {
+    justify-self: start;
+  }
 }

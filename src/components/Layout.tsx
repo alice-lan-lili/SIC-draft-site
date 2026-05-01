@@ -8,7 +8,7 @@ export default function Layout() {
   return (
     <>
       <Navbar isHome={isHome} />
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingTop: isHome ? 0 : '64px' }}>
         <Outlet />
         
         {!isHome && (

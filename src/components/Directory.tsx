@@ -1,5 +1,8 @@
 import { ArrowRight } from 'lucide-react';
 
+const COHORT_NOTION_URL =
+  'https://www.notion.so/Startup-Incubator-3534ff5b4e7d8232a49481c00f44b783';
+
 const startups = [
   {
     name: 'ssam.ai',
@@ -61,14 +64,39 @@ export default function Directory() {
         <div style={{ display: 'grid', gap: '0.3rem' }}>
           {startups.map((startup) => (
             <article key={startup.name} style={{ borderTop: '1px solid var(--border-color)', padding: '1.1rem 0' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                <div style={{ maxWidth: '72ch' }}>
+              <div
+                className="directory-row"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(0, 1fr) auto',
+                  gap: '1rem 1.25rem',
+                  alignItems: 'start',
+                }}
+              >
+                <div style={{ minWidth: 0, maxWidth: '72ch' }}>
                   <h2 style={{ fontSize: '1.35rem', marginBottom: '0.25rem' }}>{startup.name}</h2>
                   <p style={{ fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '0.2rem' }}>{startup.oneLiner}</p>
                   <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{startup.details}</p>
                 </div>
-                <a href="#" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.76rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-accent)', whiteSpace: 'nowrap' }}>
-                  View Profile <ArrowRight size={14} />
+                <a
+                  href={COHORT_NOTION_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="directory-row-cta"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.45rem',
+                    fontSize: '0.78rem',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    color: 'var(--text-accent)',
+                    whiteSpace: 'nowrap',
+                    alignSelf: 'start',
+                    paddingTop: '0.15rem',
+                  }}
+                >
+                  Notion <ArrowRight size={14} />
                 </a>
               </div>
             </article>
