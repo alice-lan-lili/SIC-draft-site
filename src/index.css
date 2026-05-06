@@ -1873,9 +1873,9 @@ button {
   border-color: rgba(253, 245, 230, 0.55) !important;
 }
 
-/* Poster CTAs + moodboard sharp corners — dark UI only */
-:root[data-theme='dark'] .hero-cta-row--poster .btn-primary,
-:root[data-theme='dark'] .hero-cta-row--poster .btn-outline {
+/* Poster CTAs + moodboard sharp corners — keep identical across themes */
+.hero-cta-row--poster .btn-primary,
+.hero-cta-row--poster .btn-outline {
   border-radius: 0 !important;
 }
 
@@ -2297,12 +2297,7 @@ button {
 :root[data-theme='light'] .page-hero__eyebrow,
 :root[data-theme='light'] .page-hero__title,
 :root[data-theme='light'] .page-hero__subtitle,
-:root[data-theme='light'] .page-hero em,
-:root[data-theme='light'] .hero-kicker,
-:root[data-theme='light'] .hero-title-poster,
-:root[data-theme='light'] .hero-title-poster em,
-:root[data-theme='light'] .hero-eyebrow,
-:root[data-theme='light'] .hero-lede {
+:root[data-theme='light'] .page-hero em {
   color: #000000 !important;
 }
 
