@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import PageHero from './PageHero';
+import BackedByCarousel from './BackedByCarousel';
 
 const sponsors = [
   { name: 'Partner A', tier: 'Presenting' },
@@ -21,34 +22,43 @@ export default function Sponsors() {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <PageHero
-        eyebrow="Partners"
+        eyebrow={<span className="text-accent">Partners</span>}
         title={
           <>
             Build With
             <br />
-            <em>Student Founders.</em>
+            <em>Student Founders</em>
           </>
         }
-        subtitle={'Our sponsors help students learn, build, connect, and launch through practical support and community access.'}
+        subtitle={
+          'Sponsors and investors help students learn, build, connect, and launch through funding, practical support, and community access.'
+        }
       >
-        <motion.button className="btn-accent" type="button" whileTap={{ scale: 0.97 }}>
-          Become a Sponsor
-        </motion.button>
+        <p style={{ margin: 0 }}>
+          <a href="mailto:startupincubator@ucsd.edu" className="home-inline-link">
+            Contact us
+          </a>
+        </p>
       </PageHero>
       <section className="section section-after-hero">
         <div className="container">
+          <div className="home-heading-stack" style={{ marginBottom: '0.85rem' }}>
+            <p className="section-label">Alumni backers</p>
+            <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', margin: 0, lineHeight: 1.15 }}>
+              Previously backed by
+            </h2>
+          </div>
+          <BackedByCarousel style={{ marginBottom: '3.25rem' }} />
+
+          <h2 style={{ fontSize: 'clamp(1.35rem, 2.5vw, 1.85rem)', marginBottom: '1.25rem' }}>Current partners</h2>
           <div
+            className="sponsors-logo-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '1px',
-              background: 'var(--border-color)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '16px',
-              overflow: 'hidden',
+              gap: '1rem',
               marginBottom: '5rem',
             }}
-            className="sponsors-logo-grid"
           >
             {sponsors.map((s, i) => (
               <motion.div
@@ -57,8 +67,8 @@ export default function Sponsors() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.06 }}
+                className="page-outline-card"
                 style={{
-                  background: 'var(--bg-secondary)',
                   padding: '3rem 2rem',
                   display: 'flex',
                   flexDirection: 'column',
@@ -66,7 +76,7 @@ export default function Sponsors() {
                   justifyContent: 'center',
                   gap: '0.5rem',
                   minHeight: '140px',
-                  cursor: 'pointer',
+                  cursor: 'default',
                 }}
               >
                 <div
@@ -75,7 +85,7 @@ export default function Sponsors() {
                     height: '32px',
                     background: 'var(--border-strong)',
                     borderRadius: '4px',
-                    opacity: 0.4,
+                    opacity: 0.35,
                   }}
                 />
                 <span
@@ -93,7 +103,7 @@ export default function Sponsors() {
 
           <div style={{ marginBottom: '2rem' }}>
             <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', marginBottom: '3rem' }}>
-              Why Partner <em>With Us.</em>
+              Why Partner <em>With Us</em>
             </h2>
             <div className="grid-2">
               {perks.map((p, i) => (

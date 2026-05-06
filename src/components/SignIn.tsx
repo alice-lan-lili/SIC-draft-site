@@ -5,9 +5,12 @@ export default function SignIn() {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
       <PageHero
-        eyebrow="Portal"
+        background="meteors-distant"
+        eyebrow={<span className="text-accent">Portal</span>}
         size="compact"
-        title={<em>Welcome back.</em>}
+        backgroundImage="/heroes/signin-hero.svg"
+        backgroundPosition="center 36%"
+        title={<em>Welcome back</em>}
         subtitle="Sign in to the founder portal - office hours, resources, and cohort updates."
       />
       <section
@@ -62,7 +65,7 @@ export default function SignIn() {
                     outline: 'none',
                   }}
                   onFocus={(e) => {
-                    e.target.style.borderColor = 'var(--purple-mid)';
+                    e.target.style.borderColor = 'var(--text-accent)';
                   }}
                   onBlur={(e) => {
                     e.target.style.borderColor = 'var(--border-color)';
@@ -101,7 +104,7 @@ export default function SignIn() {
                     outline: 'none',
                   }}
                   onFocus={(e) => {
-                    e.target.style.borderColor = 'var(--purple-mid)';
+                    e.target.style.borderColor = 'var(--text-accent)';
                   }}
                   onBlur={(e) => {
                     e.target.style.borderColor = 'var(--border-color)';
@@ -117,7 +120,7 @@ export default function SignIn() {
             <div style={{ textAlign: 'center', marginTop: '0.75rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.25rem' }}>
               <p className="text-muted" style={{ fontSize: '0.82rem', lineHeight: 1.5 }}>
                 Don&apos;t have an account?{' '}
-                <a href="#" style={{ color: 'var(--purple-mid)', textDecoration: 'none', fontWeight: 600 }}>
+                <a href="#" style={{ color: 'var(--text-accent)', textDecoration: 'none', fontWeight: 600 }}>
                   Apply to join
                 </a>
               </p>

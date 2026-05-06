@@ -1,20 +1,25 @@
 import { type ReactNode, useRef } from 'react';
 import {
   motion,
-  useMotionTemplate,
   useMotionValue,
   useReducedMotion,
   useSpring,
   useTransform,
 } from 'framer-motion';
+import HeroSection, { type HeroBackground } from './HeroSection';
 
 export type PageHeroProps = {
-  eyebrow?: string;
+  eyebrow?: ReactNode;
   /** Main heading - include <em> for accent lines */
   title: ReactNode;
   subtitle?: string;
   /** Larger default, smaller for auth-style pages */
   size?: 'default' | 'compact';
+  /** Optional hero photo, defaults to homepage rocket */
+  backgroundImage?: string;
+  backgroundPosition?: string;
+  /** Optional animated SVG background from HeroSection */
+  background?: HeroBackground;
   children?: ReactNode;
 };
 
@@ -26,11 +31,10 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 22, filter: 'blur(12px)' },
+  hidden: { opacity: 0, y: 22 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
@@ -40,6 +44,9 @@ export default function PageHero({
   title,
   subtitle,
   size = 'default',
+  backgroundImage = '/rocket_bg.png',
+  backgroundPosition = 'center center',
+  background,
   children,
 }: PageHeroProps) {
   const reduce = useReducedMotion();
@@ -47,12 +54,8 @@ export default function PageHero({
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
 
-  const bx = useSpring(useTransform(mx, [0, 1], [28, -28]), { stiffness: 38, damping: 24 });
-  const by = useSpring(useTransform(my, [0, 1], [22, -22]), { stiffness: 38, damping: 24 });
-  const b2x = useSpring(useTransform(mx, [0, 1], [-22, 22]), { stiffness: 28, damping: 22 });
-  const b2y = useSpring(useTransform(my, [0, 1], [18, -18]), { stiffness: 28, damping: 22 });
-  const rotateZ = useTransform(mx, [0, 1], [-4, 4]);
-  const meshTransform = useMotionTemplate`translate(${bx}px, ${by}px) rotate(${rotateZ}deg)`;
+  const photoX = useSpring(useTransform(mx, [0, 1], [20, -20]), { stiffness: 38, damping: 24 });
+  const photoY = useSpring(useTransform(my, [0, 1], [14, -14]), { stiffness: 38, damping: 24 });
 
   function onMouseMove(e: React.MouseEvent<HTMLElement>) {
     if (reduce || !wrapRef.current) return;
@@ -68,51 +71,31 @@ export default function PageHero({
   }
 
   const minH = size === 'compact' ? 'min(260px, 42vh)' : 'clamp(300px, 42vw, 480px)';
-
-  return (
+  const hasAnimatedBackground = Boolean(background);
+  const heroContent = (
     <motion.header
       ref={wrapRef}
-      className="page-hero"
-      style={{ minHeight: minH }}
+      className={`page-hero${hasAnimatedBackground ? ' page-hero--animated' : ''}`}
+      style={{ minHeight: minH, ...(hasAnimatedBackground ? { background: 'transparent' } : {}) }}
       initial={false}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
+      onMouseMove={hasAnimatedBackground ? undefined : onMouseMove}
+      onMouseLeave={hasAnimatedBackground ? undefined : onMouseLeave}
     >
-      <div className="page-hero__grid" aria-hidden />
-      <motion.div
-        className="page-hero__mesh"
-        style={reduce ? { transform: 'none' } : { transform: meshTransform }}
-      >
-        <motion.div
-          className="page-hero__blob page-hero__blob--violet"
-          animate={
-            reduce
-              ? undefined
-              : { opacity: [0.35, 0.62, 0.35], scale: [1, 1.06, 1] }
-          }
-          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="page-hero__blob page-hero__blob--blue"
-          style={{ x: b2x, y: b2y }}
-          animate={reduce ? undefined : { opacity: [0.28, 0.5, 0.28] }}
-          transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-        />
-        <motion.div
-          className="page-hero__blob page-hero__blob--gold"
-          animate={reduce ? undefined : { opacity: [0.2, 0.38, 0.2] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
-        />
-      </motion.div>
-
-      {!reduce && (
-        <motion.span
-          className="page-hero__orbit"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 52, repeat: Infinity, ease: 'linear' }}
-          aria-hidden
-        />
+      {!hasAnimatedBackground && (
+        <>
+          <motion.div
+            className="page-hero__photo"
+            aria-hidden
+            style={
+              reduce
+                ? { backgroundImage: `url(${backgroundImage})`, backgroundPosition }
+                : { x: photoX, y: photoY, backgroundImage: `url(${backgroundImage})`, backgroundPosition }
+            }
+          />
+          <div className="page-hero__photo-overlay" aria-hidden />
+        </>
       )}
+      {!hasAnimatedBackground && <div className="page-hero__grain" aria-hidden />}
 
       <div className="container page-hero__inner">
         <motion.div
@@ -143,4 +126,8 @@ export default function PageHero({
       </div>
     </motion.header>
   );
+
+  if (!background) return heroContent;
+
+  return <HeroSection background={background}>{heroContent}</HeroSection>;
 }

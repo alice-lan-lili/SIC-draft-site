@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { motion, useReducedMotion } from 'framer-motion';
 
 function mulberry32(seed: number) {
   return function () {
@@ -39,6 +38,7 @@ function buildStars(count: number, seed: number): Star[] {
 }
 
 export default function Hero({ onScroll }: { onScroll?: () => void }) {
+  const reduce = useReducedMotion();
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const stars = useMemo(() => buildStars(200, 20260201), []);
   const dust = useMemo(() => buildStars(85, 20260202), []);
@@ -48,59 +48,98 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
     const ny = (e.clientY / window.innerHeight - 0.5) * 2;
     setMouse({ x: nx, y: ny });
   };
+  const handleExplore = () => {
+    const target = document.getElementById('home-cohort-section');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+  const sunParallax = reduce ? { x: 0, y: 0 } : { x: mouse.x * 14, y: mouse.y * 10 };
 
   return (
     <div
+      className="hero-root hero-root--page-blend"
       style={{
         position: 'relative',
         width: '100%',
         height: '100vh',
         overflow: 'hidden',
-        background: '#000',
+        background: 'linear-gradient(165deg, var(--poster-navy) 0%, #060a10 45%, var(--poster-navy-mid) 100%)',
       }}
       onMouseMove={handleMouseMove}
     >
       <motion.div
-        animate={{ x: mouse.x * -24, y: mouse.y * -16, rotateY: mouse.x * 2.2, rotateX: mouse.y * -1.8, scale: 1.08 }}
-        transition={{ type: 'spring', stiffness: 45, damping: 20 }}
+        animate={{
+          x: mouse.x * -28,
+          y: mouse.y * -18,
+          rotateY: mouse.x * 2.4,
+          rotateX: mouse.y * -2,
+          scale: 1.06,
+        }}
+        transition={{ type: 'spring', stiffness: 42, damping: 20 }}
+        aria-hidden
         style={{
           position: 'absolute',
           inset: 0,
           backgroundImage: 'url(/rocket_bg.png)',
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: 0.4,
+          backgroundPosition: 'center bottom',
+          imageRendering: 'auto',
+          opacity: 0.36,
           zIndex: 1,
           transformStyle: 'preserve-3d',
         }}
       />
+
+      <motion.div
+        className="hero-poster-sun"
+        style={{ x: sunParallax.x, y: sunParallax.y }}
+        animate={reduce ? undefined : { scale: [1, 1.05, 1], opacity: [0.88, 1, 0.88] }}
+        transition={{
+          x: { type: 'spring', stiffness: 38, damping: 22 },
+          y: { type: 'spring', stiffness: 38, damping: 22 },
+          scale: { duration: 11, repeat: Infinity, ease: 'easeInOut' },
+          opacity: { duration: 11, repeat: Infinity, ease: 'easeInOut' },
+        }}
+      />
+
+      <div className="hero-poster-horizon" aria-hidden />
+
       <div className="hero-loop-overlay" aria-hidden />
 
-      {/* Tone down photo so hero copy / stars stay legible */}
       <div
         aria-hidden
         style={{
           position: 'absolute',
           inset: 0,
           zIndex: 2,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.12) 0%, transparent 42%, transparent 62%, rgba(0,0,0,0.35) 100%)',
+          background:
+            'linear-gradient(to bottom, rgba(13,21,32,0.35) 0%, transparent 38%, transparent 58%, rgba(6,10,16,0.55) 100%)',
           pointerEvents: 'none',
         }}
       />
 
-      {/* Fine dust - visible grain + parallax */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 5, pointerEvents: 'none' }}>
         {dust.map((s) => {
           const parallax = 5 + s.depth * 12;
           return (
             <motion.div
               key={`d-${s.id}`}
-              animate={{
-                opacity: [0.2, 0.55, 0.2],
-                x: [0, s.driftX * 0.45, 0],
-                y: [0, s.driftY * 0.38, 0],
+              animate={
+                reduce
+                  ? undefined
+                  : {
+                      opacity: [0.18, 0.48, 0.18],
+                      x: [0, s.driftX * 0.45, 0],
+                      y: [0, s.driftY * 0.38, 0],
+                    }
+              }
+              transition={{
+                duration: s.duration * 1.35,
+                repeat: reduce ? 0 : Infinity,
+                ease: 'easeInOut',
+                delay: s.delay,
               }}
-              transition={{ duration: s.duration * 1.35, repeat: Infinity, ease: 'easeInOut', delay: s.delay }}
               style={{
                 position: 'absolute',
                 left: `${s.left}%`,
@@ -108,8 +147,8 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
                 width: s.size * 0.62,
                 height: s.size * 0.62,
                 borderRadius: '50%',
-                background: 'rgba(255,255,255,0.9)',
-                boxShadow: `0 0 ${2 + s.depth * 4}px rgba(255,255,255,${0.35 + s.depth * 0.35})`,
+                background: 'rgba(253,245,230,0.65)',
+                boxShadow: `0 0 ${2 + s.depth * 4}px rgba(253,245,230,${0.25 + s.depth * 0.3})`,
                 transform: `translate3d(${mouse.x * parallax}px, ${mouse.y * (parallax * 0.88)}px, 0)`,
               }}
             />
@@ -117,22 +156,30 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
         })}
       </div>
 
-      {/* Brighter stars - above vignette so they stay vivid */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 6, pointerEvents: 'none' }}>
         {stars.map((s) => {
           const parallax = 12 + s.depth * 40;
-          const twinkleLo = 0.45 + s.depth * 0.22;
-          const twinkleHi = 0.88 + s.depth * 0.11;
+          const twinkleLo = 0.38 + s.depth * 0.22;
+          const twinkleHi = 0.82 + s.depth * 0.14;
           const glow = 3 + s.depth * 22;
-          const glowAlpha = 0.52 + s.depth * 0.44;
+          const glowAlpha = 0.48 + s.depth * 0.42;
           return (
             <motion.div
               key={s.id}
-              animate={{
-                opacity: [twinkleLo, twinkleHi, twinkleLo],
-                scale: [1, 1.12 + s.depth * 0.18, 1],
+              animate={
+                reduce
+                  ? undefined
+                  : {
+                      opacity: [twinkleLo, twinkleHi, twinkleLo],
+                      scale: [1, 1.12 + s.depth * 0.18, 1],
+                    }
+              }
+              transition={{
+                duration: s.duration,
+                repeat: reduce ? 0 : Infinity,
+                ease: 'easeInOut',
+                delay: s.delay,
               }}
-              transition={{ duration: s.duration, repeat: Infinity, ease: 'easeInOut', delay: s.delay }}
               style={{
                 position: 'absolute',
                 left: `${s.left}%`,
@@ -140,10 +187,11 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
                 width: s.size,
                 height: s.size,
                 borderRadius: '50%',
-                background: 'radial-gradient(circle at 30% 30%, rgba(255,250,235,1), rgba(255,255,255,0.88) 40%, rgba(200,215,255,0.65) 100%)',
+                background:
+                  'radial-gradient(circle at 30% 30%, rgba(255,250,235,1), rgba(253,245,230,0.9) 42%, rgba(180,205,230,0.45) 100%)',
                 boxShadow: `
-                  0 0 ${glow * 0.45}px rgba(255,255,255,${glowAlpha * 0.9}),
-                  0 0 ${glow}px rgba(164,189,255,${glowAlpha * 0.55})`,
+                  0 0 ${glow * 0.45}px rgba(253,245,230,${glowAlpha * 0.85}),
+                  0 0 ${glow}px rgba(91,143,185,${glowAlpha * 0.35})`,
                 transform: `translate3d(${mouse.x * parallax}px, ${mouse.y * (parallax * 0.82)}px, 0)`,
               }}
             />
@@ -151,21 +199,23 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
         })}
       </div>
 
-      {/* Vignette under stars (dims photo only), stronger at bottom */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.02) 35%, rgba(0,0,0,0.45) 78%, rgba(0,0,0,0.88) 100%)',
+          background:
+            'linear-gradient(to bottom, rgba(6,10,16,0.2) 0%, rgba(6,10,16,0.02) 38%, rgba(6,10,16,0.55) 72%, rgba(6,10,16,0.94) 100%)',
           zIndex: 4,
           pointerEvents: 'none',
         }}
       />
 
+      {!reduce && <div className="hero-grain" aria-hidden />}
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.55 }}
         style={{
           position: 'relative',
           zIndex: 10,
@@ -173,102 +223,58 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           textAlign: 'center',
-          padding: '0 5%',
+          padding: 'clamp(88px, 12vh, 132px) 5% 0',
         }}
       >
         <motion.p
-          initial={{ opacity: 0, y: 12 }}
+          className="hero-eyebrow"
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.68rem',
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.45)',
-            marginBottom: '2.25rem',
-          }}
+          transition={{ duration: 0.55, delay: 0.12 }}
         >
           Startup Incubator · UC San Diego
         </motion.p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 18 }}
+        <motion.div
+          initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.38 }}
-          style={{
-            fontFamily: 'var(--font-heading)',
-            fontSize: 'clamp(2.75rem, 6.5vw, 6.1rem)',
-            fontWeight: 300,
-            lineHeight: 1.0,
-            color: '#FFFFFF',
-            marginBottom: '1.75rem',
-            maxWidth: '860px',
-          }}
+          transition={{ duration: 0.65, delay: 0.22 }}
         >
-          Prepare for<br />
-          <em>Liftoff.</em>
-        </motion.h1>
+          <span className="hero-kicker">PROJECT</span>
+          <h1 className="hero-title-poster">
+            <em>LIFTOFF</em>
+          </h1>
+        </motion.div>
 
         <motion.p
+          className="hero-lede"
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.52 }}
-          style={{
-            fontSize: '1.05rem',
-            fontWeight: 300,
-            color: 'rgba(255,255,255,0.65)',
-            maxWidth: '480px',
-            lineHeight: 1.65,
-            marginBottom: '3rem',
-            letterSpacing: '-0.01em',
-          }}
+          transition={{ duration: 0.65, delay: 0.38 }}
         >
-          Welcome to the largest network of entrepreneurs, builders, and founders at UC San Diego.
+          The largest startup network at UC San Diego. We don&apos;t expect greatness, we build greatness within you.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.64 }}
-          className="hero-cta-row"
+          transition={{ duration: 0.65, delay: 0.48 }}
+          className="hero-cta-row hero-cta-row--poster"
           style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}
         >
-          <button
-            type="button"
-            className="btn-primary btn-burst"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontWeight: 500,
-              fontSize: '0.9rem',
-              letterSpacing: '-0.01em',
-              padding: '12px 28px',
-              cursor: 'pointer',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-          >
+          <button type="button" className="btn-primary btn-primary--cta-alt btn-burst" style={{ fontWeight: 600, padding: '13px 30px', cursor: 'pointer' }}>
             Apply Now
           </button>
-          <Link
-            to="/directory"
+          <button
+            type="button"
+            onClick={handleExplore}
             className="btn-outline btn-burst"
-            style={{
-              color: '#FFFFFF',
-              fontFamily: 'var(--font-body)',
-              fontWeight: 400,
-              fontSize: '0.9rem',
-              letterSpacing: '-0.01em',
-              padding: '12px 28px',
-              cursor: 'pointer',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.14)')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
+            style={{ fontWeight: 500, padding: '13px 30px', cursor: 'pointer' }}
           >
-            Explore Directory
-          </Link>
+            Explore
+          </button>
         </motion.div>
       </motion.div>
 
@@ -277,7 +283,7 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
         onClick={onScroll}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 1.1 }}
+        transition={{ duration: 0.7, delay: 0.95 }}
         style={{
           position: 'absolute',
           bottom: '1.5rem',
@@ -297,21 +303,21 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
         <span
           style={{
             fontFamily: 'var(--font-body)',
-            fontSize: '0.6rem',
-            letterSpacing: '0.14em',
+            fontSize: '0.58rem',
+            letterSpacing: '0.2em',
             textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.28)',
+            color: 'rgba(253, 245, 230, 0.32)',
           }}
         >
           Scroll
         </span>
         <motion.div
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+          animate={reduce ? undefined : { y: [0, 5, 0] }}
+          transition={{ duration: 1.6, repeat: reduce ? 0 : Infinity, ease: 'easeInOut' }}
           style={{
             width: '1px',
             height: '28px',
-            background: 'linear-gradient(to bottom, rgba(255,255,255,0.35), transparent)',
+            background: 'linear-gradient(to bottom, rgba(253,245,230,0.4), transparent)',
           }}
         />
       </motion.button>

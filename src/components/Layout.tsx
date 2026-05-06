@@ -1,19 +1,20 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 
 export default function Layout() {
-  const location = useLocation();
-  const isHome = location.pathname === '/';
 
   return (
     <>
-      <Navbar isHome={isHome} />
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingTop: isHome ? 0 : '64px' }}>
+      <Navbar />
+      <div
+        className="layout-shell"
+        style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingTop: 0 }}
+      >
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
           <Outlet />
         </div>
         
-        <footer className="section" style={{ marginTop: 'auto', padding: '3rem 5%', background: 'var(--bg-primary)' }}>
+        <footer id="site-footer" className="section" style={{ marginTop: 'auto', padding: '3rem 5%', background: 'var(--bg-primary)' }}>
           <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
             <div>
               <h2 style={{ fontSize: '1rem', margin: 0, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-heading)' }}>Startup Incubator UCSD</h2>

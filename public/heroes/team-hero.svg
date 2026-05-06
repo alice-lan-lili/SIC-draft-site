@@ -1,0 +1,26 @@
+<svg width="1920" height="960" viewBox="0 0 1920 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1920" y2="960">
+      <stop offset="0" stop-color="#16243F"/>
+      <stop offset="0.55" stop-color="#22385A"/>
+      <stop offset="1" stop-color="#0E1628"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="960" fill="url(#bg)"/>
+  <g opacity="0.85">
+    <circle cx="280" cy="214" r="210" fill="#6C8FB7"/>
+    <circle cx="510" cy="142" r="118" fill="#E0AE62"/>
+    <circle cx="650" cy="276" r="176" fill="#42638F"/>
+    <circle cx="1490" cy="166" r="184" fill="#D58C44"/>
+    <circle cx="1670" cy="310" r="138" fill="#7FA8D4"/>
+  </g>
+  <g opacity="0.56">
+    <path d="M0 740C302 640 598 648 910 760C1174 854 1504 910 1920 780V960H0V740Z" fill="#1E2D47"/>
+    <path d="M0 808C286 730 576 736 868 824C1142 906 1496 944 1920 856V960H0V808Z" fill="#C27A2A" fill-opacity="0.8"/>
+  </g>
+  <g opacity="0.82" fill="#F7ECDD">
+    <path d="M770 134L782 160L810 165L788 182L792 210L770 194L748 210L752 182L730 165L758 160L770 134Z"/>
+    <path d="M1152 102L1162 124L1188 128L1168 144L1172 168L1152 154L1132 168L1136 144L1116 128L1142 124L1152 102Z"/>
+    <path d="M1362 242L1370 260L1390 264L1374 278L1378 298L1362 286L1346 298L1350 278L1334 264L1354 260L1362 242Z"/>
+  </g>
+</svg>

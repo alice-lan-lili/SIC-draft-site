@@ -15,12 +15,15 @@ export default function Insights() {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <PageHero
-        eyebrow="Insights"
+        background="aurora-bottom"
+        eyebrow={<span className="text-accent">Insights</span>}
+        backgroundImage="/heroes/insights-hero.svg"
+        backgroundPosition="center 35%"
         title={
           <>
             From
             <br />
-            <em>Our Ecosystem.</em>
+            <em>Our Founders</em>
           </>
         }
         subtitle="Portfolio updates, founder stories, and perspectives on the San Diego innovation ecosystem."
@@ -31,18 +34,15 @@ export default function Insights() {
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '1px',
-              background: 'var(--border-color)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '14px',
-              overflow: 'hidden',
+              gap: '1rem',
               marginBottom: '5rem',
             }}
           >
             {posts.map((post, i) => (
               <motion.article
                 key={i}
-                style={{ background: 'var(--bg-secondary)', padding: '2.5rem', cursor: 'pointer' }}
+                className="page-outline-card program-event-card insights-post-card"
+                style={{ padding: '2.5rem', cursor: 'pointer' }}
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -66,20 +66,15 @@ export default function Insights() {
                       {post.desc}
                     </p>
                   </div>
-                  <motion.div
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.75rem',
-                      color: 'var(--text-accent)',
-                      letterSpacing: '0.06em',
-                      textTransform: 'uppercase',
-                      flexShrink: 0,
-                      paddingTop: '0.25rem',
-                    }}
+                  <motion.button
+                    type="button"
+                    className="insights-read-cta"
                     initial={{ opacity: 0.75, x: 0 }}
+                    whileHover={{ x: 2 }}
+                    whileTap={{ scale: 0.97 }}
                   >
                     Read →
-                  </motion.div>
+                  </motion.button>
                 </div>
               </motion.article>
             ))}
@@ -95,7 +90,7 @@ export default function Insights() {
           >
             <span className="insights-newsletter__glow" aria-hidden />
             <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', marginBottom: '1rem', position: 'relative' }}>
-              Subscribe to <em>The Pipeline.</em>
+              Subscribe to <em>The Pipeline</em>
             </h2>
             <p
               style={{
@@ -130,14 +125,19 @@ export default function Insights() {
                   background: 'var(--bg-tertiary)',
                   border: '1px solid var(--border-strong)',
                   color: 'var(--text-primary)',
-                  borderRadius: '980px',
+                  borderRadius: 0,
                   fontFamily: 'var(--font-body)',
                   fontSize: '0.9rem',
                   outline: 'none',
                   transition: 'border-color 0.2s',
                 }}
               />
-              <motion.button className="btn-accent" style={{ flexShrink: 0 }} type="button" whileTap={{ scale: 0.96 }}>
+              <motion.button
+                className="btn-primary btn-primary--cta-alt btn-burst"
+                style={{ flexShrink: 0, fontWeight: 600, padding: '13px 30px', borderRadius: 0 }}
+                type="button"
+                whileTap={{ scale: 0.96 }}
+              >
                 Subscribe
               </motion.button>
             </div>
