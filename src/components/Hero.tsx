@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 function mulberry32(seed: number) {
@@ -22,6 +22,20 @@ type Star = {
   driftY: number;
 };
 
+const KICKER_TEXT = 'PROJECT';
+const TITLE_TEXT = 'LIFTOFF';
+const LEDE_TEXT = "The largest startup network at UC San Diego. We don't expect greatness, we build greatness within you.";
+const EXPERIENCE_MS = 4200;
+
+function clamp01(value: number) {
+  return Math.max(0, Math.min(1, value));
+}
+
+function getTypewriterLength(elapsedMs: number, startMs: number, durationMs: number, textLength: number) {
+  const progress = clamp01((elapsedMs - startMs) / durationMs);
+  return Math.floor(progress * textLength);
+}
+
 function buildStars(count: number, seed: number): Star[] {
   const rnd = mulberry32(seed);
   return Array.from({ length: count }, (_, id) => ({
@@ -40,8 +54,39 @@ function buildStars(count: number, seed: number): Star[] {
 export default function Hero({ onScroll }: { onScroll?: () => void }) {
   const reduce = useReducedMotion();
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const [hasScrollReveal, setHasScrollReveal] = useState(false);
+  const [revealElapsedMs, setRevealElapsedMs] = useState(reduce ? EXPERIENCE_MS : 0);
   const stars = useMemo(() => buildStars(200, 20260201), []);
   const dust = useMemo(() => buildStars(85, 20260202), []);
+
+  useEffect(() => {
+    if (reduce) {
+      setHasScrollReveal(true);
+      return;
+    }
+    const timer = window.setTimeout(() => setHasScrollReveal(true), 40);
+    return () => window.clearTimeout(timer);
+  }, [reduce]);
+
+  useEffect(() => {
+    if (!hasScrollReveal || reduce) {
+      if (reduce) setRevealElapsedMs(EXPERIENCE_MS);
+      return;
+    }
+    const startedAt = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const elapsed = now - startedAt;
+      if (elapsed >= EXPERIENCE_MS) {
+        setRevealElapsedMs(EXPERIENCE_MS);
+        return;
+      }
+      setRevealElapsedMs(elapsed);
+      raf = window.requestAnimationFrame(tick);
+    };
+    raf = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(raf);
+  }, [hasScrollReveal, reduce]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const nx = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -55,10 +100,26 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
     }
   };
   const sunParallax = reduce ? { x: 0, y: 0 } : { x: mouse.x * 14, y: mouse.y * 10 };
+  const heroReady = hasScrollReveal || reduce;
+  const typedKicker = heroReady
+    ? KICKER_TEXT.slice(0, getTypewriterLength(revealElapsedMs, 650, 700, KICKER_TEXT.length))
+    : '';
+  const typedTitle = heroReady
+    ? TITLE_TEXT.slice(0, getTypewriterLength(revealElapsedMs, 1300, 1200, TITLE_TEXT.length))
+    : '';
+  const showActions = heroReady && revealElapsedMs >= 3500;
+  const showScrollCue = heroReady && revealElapsedMs >= 1800;
 
   return (
-    <div
+    <motion.div
       className="hero-root hero-root--page-blend"
+      initial={false}
+      animate={
+        heroReady
+          ? { opacity: 1, scale: 1, y: 0 }
+          : { opacity: 0.08, scale: 0.96, y: 26 }
+      }
+      transition={{ duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
       style={{
         position: 'relative',
         width: '100%',
@@ -69,14 +130,8 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
       onMouseMove={handleMouseMove}
     >
       <motion.div
-        animate={{
-          x: mouse.x * -28,
-          y: mouse.y * -18,
-          rotateY: mouse.x * 2.4,
-          rotateX: mouse.y * -2,
-          scale: 1.06,
-        }}
-        transition={{ type: 'spring', stiffness: 42, damping: 20 }}
+        animate={{ x: 0, y: 0, rotateY: 0, rotateX: 0, scale: 1.06 }}
+        transition={{ duration: 0 }}
         aria-hidden
         style={{
           position: 'absolute',
@@ -159,10 +214,16 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
       <div style={{ position: 'absolute', inset: 0, zIndex: 6, pointerEvents: 'none' }}>
         {stars.map((s) => {
           const parallax = 12 + s.depth * 40;
+          const cursorLeft = (mouse.x + 1) * 50;
+          const cursorTop = (mouse.y + 1) * 50;
+          const dist = Math.hypot(s.left - cursorLeft, s.top - cursorTop);
+          const hoverBoost = reduce ? 0 : Math.pow(clamp01(1 - dist / 26), 0.75);
           const twinkleLo = 0.38 + s.depth * 0.22;
           const twinkleHi = 0.82 + s.depth * 0.14;
-          const glow = 3 + s.depth * 22;
-          const glowAlpha = 0.48 + s.depth * 0.42;
+          const boostedLo = Math.min(1, twinkleLo + hoverBoost * 0.34);
+          const boostedHi = Math.min(1, twinkleHi + hoverBoost * 0.42);
+          const glow = 3 + s.depth * 22 + hoverBoost * 40;
+          const glowAlpha = Math.min(1, 0.48 + s.depth * 0.42 + hoverBoost * 0.55);
           return (
             <motion.div
               key={s.id}
@@ -170,8 +231,8 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
                 reduce
                   ? undefined
                   : {
-                      opacity: [twinkleLo, twinkleHi, twinkleLo],
-                      scale: [1, 1.12 + s.depth * 0.18, 1],
+                      opacity: [boostedLo, boostedHi, boostedLo],
+                      scale: [1, 1.12 + s.depth * 0.18 + hoverBoost * 0.45, 1],
                     }
               }
               transition={{
@@ -213,9 +274,9 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
       {!reduce && <div className="hero-grain" aria-hidden />}
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.55 }}
+        initial={false}
+        animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0.1, y: 18 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         style={{
           position: 'relative',
           zIndex: 10,
@@ -230,37 +291,37 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
       >
         <motion.p
           className="hero-eyebrow"
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.12 }}
+          initial={false}
+          animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+          transition={{ duration: 0.5, delay: heroReady ? 0.2 : 0 }}
         >
           Startup Incubator · UC San Diego
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.22 }}
+          initial={false}
+          animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ duration: 0.65, delay: heroReady ? 0.45 : 0 }}
         >
-          <span className="hero-kicker">PROJECT</span>
+          <span className="hero-kicker">{typedKicker}</span>
           <h1 className="hero-title-poster">
-            <em>LIFTOFF</em>
+            <em>{typedTitle || '\u00A0'}</em>
           </h1>
         </motion.div>
 
         <motion.p
           className="hero-lede"
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.38 }}
+          initial={false}
+          animate={heroReady && revealElapsedMs >= 2400 ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+          transition={{ duration: 0.6, delay: heroReady ? 0.75 : 0 }}
         >
-          The largest startup network at UC San Diego. We don&apos;t expect greatness, we build greatness within you.
+          {LEDE_TEXT}
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.48 }}
+          initial={false}
+          animate={showActions ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="hero-cta-row hero-cta-row--poster"
           style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}
         >
@@ -281,9 +342,9 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
       <motion.button
         type="button"
         onClick={onScroll}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.95 }}
+        initial={false}
+        animate={showScrollCue ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         style={{
           position: 'absolute',
           bottom: '1.5rem',
@@ -321,6 +382,6 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
           }}
         />
       </motion.button>
-    </div>
+    </motion.div>
   );
 }
