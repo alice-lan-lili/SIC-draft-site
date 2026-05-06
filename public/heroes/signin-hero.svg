@@ -1,0 +1,27 @@
+<svg width="1920" height="960" viewBox="0 0 1920 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="960" y1="0" x2="960" y2="960">
+      <stop offset="0" stop-color="#091426"/>
+      <stop offset="1" stop-color="#01040A"/>
+    </linearGradient>
+    <radialGradient id="portal" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1440 210) rotate(145.4) scale(440 290)">
+      <stop stop-color="#E6B261" stop-opacity="0.52"/>
+      <stop offset="1" stop-color="#E6B261" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1920" height="960" fill="url(#bg)"/>
+  <rect width="1920" height="960" fill="url(#portal)"/>
+  <g opacity="0.5" stroke="#C8D8EE" stroke-width="3">
+    <ellipse cx="1210" cy="340" rx="440" ry="160"/>
+    <ellipse cx="1210" cy="340" rx="380" ry="134"/>
+    <ellipse cx="1210" cy="340" rx="312" ry="106"/>
+  </g>
+  <path d="M0 780C260 698 510 684 736 706C964 730 1174 806 1402 822C1642 840 1788 812 1920 770V960H0V780Z" fill="#1A2840"/>
+  <g fill="#F5E7D3" opacity="0.78">
+    <circle cx="180" cy="180" r="2"/>
+    <circle cx="346" cy="126" r="1.8"/>
+    <circle cx="540" cy="220" r="1.6"/>
+    <circle cx="820" cy="160" r="1.6"/>
+    <circle cx="1624" cy="164" r="2.2"/>
+  </g>
+</svg>

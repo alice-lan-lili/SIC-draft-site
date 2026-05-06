@@ -3,7 +3,7 @@ import PageHero from './PageHero';
 import { StartupLinks } from './StartupLinks';
 import { cohortStartups, formatFoundersLine } from '../data/cohort';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Directory() {
   const location = useLocation();
@@ -17,106 +17,96 @@ export default function Directory() {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <PageHero
-        eyebrow="Portfolio"
+        background="aurora-centered"
+        eyebrow={<span style={{ color: '#f0c978' }}>Directory</span>}
+        backgroundImage="/heroes/directory-hero.svg"
+        backgroundPosition="center 30%"
         title={
           <>
             Startups in
             <br />
-            <em>Our Cohort.</em>
+            <em>Our Cohort</em>
           </>
         }
-        subtitle="Logos, one-liners, founders, and direct links-everything you need to explore what teams are shipping."
+        subtitle="Learn more about our startups."
       />
-      <section className="section section-after-hero" style={{ flex: 1 }}>
+
+      <section className="directory-dashboard-section section section-after-hero">
         <div className="container">
-          <div style={{ display: 'grid', gap: 0 }}>
-            {cohortStartups.map((startup, i) => (
-              <motion.article
-                key={startup.id}
-                id={startup.id}
-                className="directory-card-shell"
-                style={{ borderTop: '1px solid var(--border-color)', padding: '1.35rem 0' }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.45, delay: Math.min(i * 0.04, 0.35) }}
-              >
-                <div
-                  className="directory-row"
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '88px minmax(0, 1fr)',
-                    gap: '1.25rem 1.5rem',
-                    alignItems: 'start',
-                  }}
-                >
-                  <motion.div
-                    className={startup.id === 'aesthetic' ? 'directory-logo-mark directory-logo-mark--aesthetic' : 'directory-logo-mark'}
-                    data-startup-logo={startup.id}
-                    style={{
-                      width: 88,
-                      height: 88,
-                      borderRadius: 6,
-                      border: '1px solid var(--border-color)',
-                      background: 'var(--bg-secondary)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      padding: startup.logoObjectFit === 'contain' ? 8 : 0,
-                    }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+          <div className="directory-dashboard__panel">
+            <div className="directory-grid-wrap">
+              <div className="directory-grid" role="list" aria-label="Cohort startups">
+                {cohortStartups.map((startup, i) => (
+                  <motion.article
+                    key={startup.id}
+                    id={startup.id}
+                    className="directory-grid__card"
+                    role="listitem"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{ duration: 0.35, delay: Math.min(i * 0.04, 0.24) }}
                   >
-                    <img
-                      src={startup.logoSrc}
-                      alt=""
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: startup.logoObjectFit ?? 'cover',
-                        objectPosition: startup.logoPosition ?? 'center',
-                      }}
-                    />
-                  </motion.div>
-                  <div style={{ minWidth: 0 }}>
-                    <h2 style={{ fontSize: '1.35rem', marginBottom: '0.35rem' }}>{startup.name}</h2>
-                    <p
-                      style={{
-                        fontSize: '0.98rem',
-                        color: 'var(--text-primary)',
-                        marginBottom: '0.55rem',
-                        fontWeight: 500,
-                      }}
-                    >
-                      {startup.tagline}
-                    </p>
-                    <div style={{ marginBottom: '0.65rem' }}>
-                      <StartupLinks website={startup.links.website} app={startup.links.app} compact />
-                    </div>
-                    {formatFoundersLine(startup.founders) && (
-                      <p
-                        className="directory-founders"
-                        style={{
-                          fontSize: '0.88rem',
-                          color: 'var(--text-secondary)',
-                          marginBottom: '0.5rem',
-                          lineHeight: 1.5,
-                        }}
+                    <div className="directory-grid__card-head">
+                      <div
+                        className={
+                          startup.id === 'aesthetic'
+                            ? 'directory-grid__logo directory-grid__logo--aesthetic'
+                            : 'directory-grid__logo'
+                        }
+                        data-startup-logo={startup.id}
                       >
-                        <span
-                          style={{ color: 'var(--text-primary)', fontWeight: 600, fontFamily: 'var(--font-body)' }}
-                        >
-                          Founders{' '}
-                        </span>
+                        <img
+                          src={startup.logoSrc}
+                          alt=""
+                          style={{
+                            objectPosition: startup.logoPosition ?? 'center',
+                          }}
+                        />
+                      </div>
+                      <h3 className="directory-grid__name">{startup.name}</h3>
+                    </div>
+
+                    {formatFoundersLine(startup.founders) ? (
+                      <p className="directory-grid__founders">
+                        <span className="directory-grid__founders-label">Founders</span>
                         {formatFoundersLine(startup.founders)}
                       </p>
-                    )}
-                    <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.65 }}>
-                      {startup.summary}
-                    </p>
+                    ) : null}
+
+                    {startup.summary ? <p className="directory-grid__summary">{startup.summary}</p> : null}
+
+                    <div className="directory-grid__links">
+                      <StartupLinks website={startup.links.website} app={startup.links.app} compact />
+                    </div>
+                  </motion.article>
+                ))}
+                <motion.article
+                  className="directory-grid__card directory-grid__card--cta"
+                  role="listitem"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ duration: 0.35, delay: 0.26 }}
+                >
+                  <div className="directory-grid__card-head">
+                    <div className="directory-grid__logo directory-grid__logo--cta" aria-hidden>
+                      +
+                    </div>
+                    <h3 className="directory-grid__name">Add Your Startup</h3>
                   </div>
-                </div>
-              </motion.article>
-            ))}
+                  <p className="directory-grid__tagline">Building something at UCSD?</p>
+                  <p className="directory-grid__summary">
+                    Join the next cohort and get support on product, growth, and fundraising.
+                  </p>
+                  <div className="directory-grid__links">
+                    <Link to="/signin" className="btn-primary btn-primary--cta-alt btn-burst directory-grid__cta-btn">
+                      Apply Now
+                    </Link>
+                  </div>
+                </motion.article>
+              </div>
+            </div>
           </div>
         </div>
       </section>

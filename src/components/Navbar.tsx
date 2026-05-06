@@ -6,14 +6,13 @@ const navLinks = [
   { to: '/directory', label: 'Directory' },
   { to: '/insights', label: 'Insights' },
   { to: '/programs', label: 'Programs' },
-  { to: '/sponsors', label: 'Sponsors' },
   { to: '/team', label: 'Team' },
 ];
 
 const COMPACT_BREAKPOINT = 960;
 const PROVIDED_LOGO = '/brand/logo.png';
 
-export default function Navbar({ isHome }: { isHome?: boolean }) {
+export default function Navbar() {
   const [theme, setTheme] = useState('dark');
   const [scrolled, setScrolled] = useState(false);
   const [isCompact, setIsCompact] = useState(false);
@@ -57,11 +56,13 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
     localStorage.setItem('theme', next);
   };
 
-  const isTransparent = isHome && !scrolled;
+  const isTransparent = !scrolled;
+  const navClass = `site-nav${isTransparent ? ' site-nav--transparent' : ''}`;
 
   return (
     <>
       <nav
+        className={navClass}
         style={{
           position: 'fixed',
           top: 0,
@@ -81,12 +82,15 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
               : 'rgba(255,255,255,0.74)',
           backdropFilter: isTransparent ? 'none' : 'blur(14px) saturate(170%)',
           WebkitBackdropFilter: isTransparent ? 'none' : 'blur(14px) saturate(170%)',
-          borderBottom: isTransparent ? 'none' : '1px solid var(--border-color)',
-          transition: 'background 0.3s ease, border-color 0.3s ease',
+          borderTop: 'none',
+          borderBottom: 'none',
+          boxShadow: 'none',
+          transition: 'background 0.3s ease',
         }}
       >
         <Link
           to="/"
+          className="site-nav__brand"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -103,12 +107,11 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
             style={{ display: 'block', flexShrink: 0, objectFit: 'cover', borderRadius: 4 }}
           />
           <span
+            className="site-nav__brand-text"
             style={{
-              fontFamily: 'var(--font-body)',
               fontWeight: 600,
               fontSize: 'clamp(0.78rem, 1.8vw, 0.88rem)',
               letterSpacing: '-0.01em',
-              color: isTransparent ? '#FFFFFF' : 'var(--text-primary)',
               lineHeight: 1.15,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
@@ -125,7 +128,7 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 'clamp(1rem, 2vw, 1.75rem)',
+              gap: 'clamp(0.75rem, 1.5vw, 1.5rem)',
               justifySelf: 'center',
               whiteSpace: 'nowrap',
             }}
@@ -136,19 +139,7 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
                 <Link
                   key={link.to}
                   to={link.to}
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '0.85rem',
-                    fontWeight: active ? 500 : 400,
-                    letterSpacing: '-0.01em',
-                    color: isTransparent
-                      ? active
-                        ? '#FFFFFF'
-                        : 'rgba(255,255,255,0.6)'
-                      : active
-                        ? 'var(--text-primary)'
-                        : 'var(--text-secondary)',
-                  }}
+                  className={`site-nav__link${active ? ' site-nav__link--active' : ''}`}
                 >
                   {link.label}
                 </Link>
@@ -168,9 +159,9 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
           <button
             type="button"
             onClick={toggleTheme}
+            className="site-nav__icon-btn site-nav__theme"
+            aria-label={theme === 'light' ? 'Use dark theme' : 'Use light theme'}
             style={{
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid var(--border-strong)',
               borderRadius: '5px',
               cursor: 'pointer',
               display: 'inline-flex',
@@ -178,7 +169,6 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
               justifyContent: 'center',
               width: '36px',
               height: '36px',
-              color: isTransparent ? 'rgba(255,255,255,0.75)' : 'var(--text-secondary)',
               backdropFilter: 'blur(8px)',
             }}
           >
@@ -186,7 +176,11 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
           </button>
 
           {!isCompact && (
-            <Link to="/signin" className="btn-primary nav-signin-btn" style={{ padding: '8px 16px', fontSize: '0.82rem' }}>
+            <Link
+              to="/signin"
+              className="btn-primary btn-primary--cta-alt btn-burst nav-signin-btn"
+              style={{ padding: '8px 16px', fontSize: '0.82rem' }}
+            >
               Sign In
             </Link>
           )}
@@ -197,10 +191,8 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
               onClick={() => setMenuOpen((v) => !v)}
               aria-expanded={menuOpen}
               aria-label="Menu"
+              className="site-nav__icon-btn site-nav__menu"
               style={{
-                border: '1px solid var(--border-strong)',
-                background: 'rgba(255,255,255,0.08)',
-                color: isTransparent ? '#fff' : 'var(--text-primary)',
                 borderRadius: '5px',
                 width: '36px',
                 height: '36px',
@@ -236,11 +228,13 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
             style={{
               position: 'fixed',
               top: '72px',
-              left: '5%',
-              right: '5%',
+              left: 'auto',
+              right: 'clamp(16px, 5%, 48px)',
+              width: 'min(400px, calc(100vw - clamp(32px, 10%, 64px)))',
+              maxWidth: '400px',
               zIndex: 1002,
               border: '1px solid var(--border-strong)',
-              borderRadius: '8px',
+              borderRadius: '0',
               background: theme === 'dark' ? 'rgba(12, 12, 12, 0.92)' : 'rgba(255, 255, 255, 0.94)',
               backdropFilter: 'blur(18px)',
               WebkitBackdropFilter: 'blur(18px)',
@@ -255,20 +249,26 @@ export default function Navbar({ isHome }: { isHome?: boolean }) {
                 <Link
                   key={link.to}
                   to={link.to}
+                  className={`site-nav__drawer-link${active ? ' site-nav__drawer-link--active' : ''}`}
                   style={{
                     display: 'block',
                     padding: '0.75rem 0.85rem',
-                    borderRadius: '5px',
+                    borderRadius: '0',
                     color: active ? 'var(--text-primary)' : 'var(--text-secondary)',
                     background: active ? 'rgba(255,255,255,0.06)' : 'transparent',
                     fontSize: '0.95rem',
+                    whiteSpace: 'normal',
                   }}
                 >
                   {link.label}
                 </Link>
               );
             })}
-            <Link to="/signin" className="btn-primary nav-signin-btn" style={{ width: '100%', marginTop: '0.35rem' }}>
+            <Link
+              to="/signin"
+              className="btn-primary btn-primary--cta-alt btn-burst nav-signin-btn"
+              style={{ width: '100%', marginTop: '0.35rem' }}
+            >
               Sign In
             </Link>
           </div>

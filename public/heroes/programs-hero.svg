@@ -1,0 +1,26 @@
+<svg width="1920" height="960" viewBox="0 0 1920 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="960" y1="0" x2="960" y2="960">
+      <stop offset="0" stop-color="#08111F"/>
+      <stop offset="1" stop-color="#02050B"/>
+    </linearGradient>
+    <linearGradient id="trail" x1="760" y1="220" x2="1130" y2="900">
+      <stop stop-color="#FDE6C6"/>
+      <stop offset="1" stop-color="#E68F2D"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="960" fill="url(#bg)"/>
+  <ellipse cx="1510" cy="160" rx="390" ry="200" fill="#315284" fill-opacity="0.35"/>
+  <path d="M0 760C214 690 438 660 656 680C894 702 1124 804 1338 820C1570 838 1748 804 1920 760V960H0V760Z" fill="#D67E16"/>
+  <path d="M0 820C214 758 428 740 632 752C850 766 1118 856 1364 878C1588 898 1768 874 1920 840V960H0V820Z" fill="#F39A2E" fill-opacity="0.84"/>
+  <g opacity="0.92">
+    <path d="M960 230L1008 430L1050 840L994 860L918 454L900 250Z" fill="url(#trail)"/>
+    <path d="M860 320L896 468L922 744L878 756L830 500L816 338Z" fill="#F6CA90"/>
+    <path d="M1086 292L1128 452L1186 792L1138 808L1066 484L1048 324Z" fill="#F3B369"/>
+  </g>
+  <g opacity="0.62" stroke="#E8D6B8" stroke-width="4">
+    <path d="M1120 120C1410 130 1650 260 1900 470"/>
+    <path d="M1120 160C1370 176 1608 296 1864 500"/>
+    <path d="M1120 204C1332 224 1546 330 1778 520"/>
+  </g>
+</svg>

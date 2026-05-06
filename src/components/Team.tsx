@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import PageHero from './PageHero';
 
 const departments = [
   {
-    name: 'Exec',
+    name: 'Board',
     members: ['Lorem Ipsum', 'Dolor Sit', 'Amet Consectetur'],
   },
   {
@@ -29,72 +30,65 @@ const departments = [
 ];
 
 const TEAM_PHOTO = '/brand/about-team.png';
+const missionVisionPanels = [
+  {
+    key: 'mission',
+    title: 'Mission',
+    summary:
+      'We help UC San Diego students explore entrepreneurship by turning curiosity into actionable startup skills, supportive peer connections, and real-world learning.',
+  },
+  {
+    key: 'vision',
+    title: 'Vision',
+    summary:
+      'A campus where any student, regardless of major or experience, feels confident taking the first step toward building something that matters.',
+  },
+];
 
 export default function Team() {
+  const [activeTeam, setActiveTeam] = useState(departments[0].name);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const activeGroup = departments.find((group) => group.name === activeTeam) ?? departments[0];
+
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <PageHero
-        eyebrow="Team"
+        background="aurora-original"
+        eyebrow={<span style={{ color: '#f0c978' }}>Team</span>}
+        backgroundImage="/heroes/team-hero.svg"
+        backgroundPosition="center 30%"
         title={
           <>
             The People Behind
             <br />
-            <em>the Mission.</em>
+            <em>the Mission</em>
           </>
         }
-        subtitle="Operators, mentors, and partners accelerating UCSD ventures from lab to launch."
+        subtitle="We are a student-run community at UC San Diego that makes entrepreneurship approachable through events, socials, and hands-on workshops where students ideate, meet builders, and learn the business world by doing."
       />
-      <section className="section section-after-hero">
+      <section className="section section-after-hero section-team-page">
         <div className="container">
-          <motion.div
-            className="glass-card"
-            style={{ padding: 'clamp(1.75rem, 4vw, 2.6rem)', marginBottom: 'clamp(2rem, 5vw, 3rem)' }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 style={{ fontSize: '1.35rem', marginBottom: '0.9rem', fontFamily: 'var(--font-body)', fontWeight: 600 }}>What we are</h2>
-            <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', lineHeight: 1.7 }}>
-              A student-run community at UC San Diego that makes entrepreneurship approachable through events, socials, and
-              hands-on workshops where students ideate, meet builders, and learn the business world by doing.
-            </p>
-          </motion.div>
-
-          <div className="team-split" style={{ marginBottom: 'clamp(3rem, 8vw, 6rem)' }}>
-            <motion.div
-              className="glass-card"
-              style={{ padding: 'clamp(1.75rem, 4vw, 3rem)' }}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h2 style={{ fontSize: '1.35rem', marginBottom: '1rem', fontFamily: 'var(--font-body)', fontWeight: 600 }}>Mission</h2>
-              <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-                Help UC San Diego students explore entrepreneurship by turning curiosity into actionable startup skills,
-                supportive peer connections, and real-world learning.
-              </p>
-            </motion.div>
-            <motion.div
-              className="glass-card"
-              style={{ padding: 'clamp(1.75rem, 4vw, 3rem)' }}
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.08 }}
-            >
-              <h2 style={{ fontSize: '1.35rem', marginBottom: '1rem', fontFamily: 'var(--font-body)', fontWeight: 600 }}>Vision</h2>
-              <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-                A campus where any student, regardless of major or experience, feels confident taking the first step toward
-                building something that matters.
-              </p>
-            </motion.div>
+          <div className="team-mv-grid" style={{ marginBottom: 'clamp(4.5rem, 10vw, 7.5rem)' }}>
+            {missionVisionPanels.map((panel, i) => (
+              <motion.article
+                key={panel.key}
+                className="team-mv-panel"
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+              >
+                <h2 className="team-mv-panel__title">
+                  Our <em>{panel.title}</em>
+                </h2>
+                <p className="team-mv-panel__summary">{panel.summary}</p>
+              </motion.article>
+            ))}
           </div>
 
           <motion.div
             className="glass-card"
-            style={{ marginBottom: 'clamp(3rem, 7vw, 5rem)', overflow: 'hidden' }}
+            style={{ marginBottom: 'clamp(4.5rem, 9vw, 7rem)', overflow: 'hidden' }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -114,33 +108,55 @@ export default function Team() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
-              Who We Are.
+              Who We <em>Are</em>
             </motion.h2>
-            <div className="team-grid">
-              {departments.map((group, i) => (
-                <motion.article
+            <button
+              type="button"
+              className="team-filter-toggle"
+              aria-expanded={filtersOpen}
+              aria-controls="team-filter-bar"
+              onClick={() => setFiltersOpen((open) => !open)}
+            >
+              Filter Team
+            </button>
+            <div
+              id="team-filter-bar"
+              className={`team-filter-bar${filtersOpen ? ' team-filter-bar--open' : ''}`}
+              role="tablist"
+              aria-label="Team filters"
+            >
+              {departments.map((group) => (
+                <button
                   key={group.name}
-                  className="team-card"
-                  initial={{ opacity: 0, y: 22 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.45, delay: i * 0.06 }}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTeam === group.name}
+                  className={`team-filter-btn${activeTeam === group.name ? ' team-filter-btn--active' : ''}`}
+                  onClick={() => {
+                    setActiveTeam(group.name);
+                    setFiltersOpen(false);
+                  }}
                 >
-                  <div>
-                    <h3 style={{ fontSize: '1.05rem', fontFamily: 'var(--font-body)', fontWeight: 600, marginBottom: '0.65rem' }}>
-                      {group.name}
-                    </h3>
-                    <div style={{ display: 'grid', gap: '0.35rem' }}>
-                      {group.members.map((member) => (
-                        <p key={member} style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                          {member}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                </motion.article>
+                  {group.name}
+                </button>
               ))}
             </div>
+            <motion.div
+              key={activeGroup.name}
+              className="team-headshot-grid"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {activeGroup.members.map((member) => (
+                <article key={`${activeGroup.name}-${member}`} className="team-headshot-card">
+                  <div className="team-headshot-placeholder" aria-hidden>
+                    <span>Photo</span>
+                  </div>
+                  <p>{member}</p>
+                </article>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>

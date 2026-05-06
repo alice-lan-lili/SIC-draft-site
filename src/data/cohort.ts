@@ -33,15 +33,15 @@ export const cohortStartups: CohortStartup[] = [
     tagline: 'Our mission: effortless, deeply personalized learning.',
     summary:
       'Multimodal AI that helps people understand, organize, and apply knowledge in one seamless platform. Built to turn information into clarity, and clarity into action.',
-    founders: ['Maya Ortiz', 'Devon Shah'],
+    founders: ['David Seo'],
     links: { website: 'https://ssam.ai' },
   },
   {
     id: 'revize',
-    name: 'Revise',
+    name: 'Revize',
     logoSrc: '/startups/revize.png',
     tagline: 'Measure what moves, revise what matters.',
-    summary: '',
+    summary: 'Measure what moves, revise what matters.',
     founders: ['Abhay Korlapati'],
     links: { website: 'https://revize.io' },
   },
