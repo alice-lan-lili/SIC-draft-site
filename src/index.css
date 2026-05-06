@@ -1529,12 +1529,9 @@ button {
 }
 
 .directory-grid__card--cta {
-  border-style: solid;
-  border-color: color-mix(in srgb, var(--gold-300) 58%, var(--border-color) 42%);
+  border: none;
   background: linear-gradient(160deg, color-mix(in srgb, var(--bg-secondary) 78%, var(--gold-300) 22%), color-mix(in srgb, var(--bg-secondary) 90%, var(--poster-slate) 10%));
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--gold-300) 36%, transparent 64%) inset,
-    0 12px 30px rgba(28, 42, 68, 0.28);
+  box-shadow: none;
 }
 
 .directory-grid__logo--cta {
@@ -1550,6 +1547,14 @@ button {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 600;
+}
+
+.directory-grid__cta-btn:hover,
+.directory-grid__cta-btn:active {
+  transform: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  border-color: transparent !important;
 }
 
 .directory-grid__links {
