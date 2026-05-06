@@ -18,7 +18,7 @@ export default function Directory() {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <PageHero
         background="aurora-centered"
-        eyebrow={<span style={{ color: '#f0c978' }}>Directory</span>}
+        eyebrow={<span className="text-accent">Directory</span>}
         backgroundImage="/heroes/directory-hero.svg"
         backgroundPosition="center 30%"
         title={

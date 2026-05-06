@@ -22,7 +22,7 @@ export default function Sponsors() {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <PageHero
-        eyebrow="Partners"
+        eyebrow={<span className="text-accent">Partners</span>}
         title={
           <>
             Build With

@@ -6,7 +6,7 @@ export default function SignIn() {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
       <PageHero
         background="meteors-distant"
-        eyebrow="Portal"
+        eyebrow={<span className="text-accent">Portal</span>}
         size="compact"
         backgroundImage="/heroes/signin-hero.svg"
         backgroundPosition="center 36%"

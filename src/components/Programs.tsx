@@ -70,7 +70,7 @@ export default function Programs() {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <PageHero
         background="meteors-original"
-        eyebrow={<span style={{ color: '#f0c978' }}>Programs</span>}
+        eyebrow={<span className="text-accent">Programs</span>}
         backgroundImage="/heroes/programs-hero.svg"
         backgroundPosition="center 28%"
         title={

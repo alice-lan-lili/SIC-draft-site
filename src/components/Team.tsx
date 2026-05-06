@@ -54,7 +54,7 @@ export default function Team() {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <PageHero
         background="aurora-original"
-        eyebrow={<span style={{ color: '#f0c978' }}>Team</span>}
+        eyebrow={<span className="text-accent">Team</span>}
         backgroundImage="/heroes/team-hero.svg"
         backgroundPosition="center 30%"
         title={

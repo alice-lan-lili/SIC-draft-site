@@ -16,7 +16,7 @@ export default function Insights() {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <PageHero
         background="aurora-bottom"
-        eyebrow={<span style={{ color: '#f0c978' }}>Insights</span>}
+        eyebrow={<span className="text-accent">Insights</span>}
         backgroundImage="/heroes/insights-hero.svg"
         backgroundPosition="center 35%"
         title={
