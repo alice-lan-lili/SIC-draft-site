@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import Hero from './Hero';
+import BackedByCarousel from './BackedByCarousel';
 import { cohortStartups } from '../data/cohort';
 
 const TEAM_PHOTO = '/brand/about-team.png';
@@ -14,14 +15,16 @@ const sectionReveal = {
 };
 
 export default function Home() {
+  const location = useLocation();
   const carouselItems = [...cohortStartups, ...cohortStartups];
 
   return (
-    <main style={{ background: 'var(--bg-primary)' }}>
-      <Hero />
+    <main>
+      <Hero key={location.key || 'home-hero'} />
 
       <motion.section
-        className="section"
+        id="home-cohort-section"
+        className="section section-home-after-hero"
         initial={sectionReveal.initial}
         whileInView={sectionReveal.whileInView}
         transition={sectionReveal.transition}
@@ -30,7 +33,7 @@ export default function Home() {
         <div className="container">
           <div className="home-heading-stack">
             <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', lineHeight: 1.05, maxWidth: '24ch' }}>
-              Startups in <em>Our Cohort.</em>
+              Startups in <em>Our Cohort</em>
             </h2>
             <Link to="/directory" className="home-inline-link">
               Full Directory
@@ -46,7 +49,6 @@ export default function Home() {
                       src={co.logoSrc}
                       alt=""
                       style={{
-                        objectFit: co.logoObjectFit ?? 'cover',
                         ...(co.logoPosition ? { objectPosition: co.logoPosition } : {}),
                       }}
                     />
@@ -60,7 +62,7 @@ export default function Home() {
       </motion.section>
 
       <motion.section
-        className="section home-section-alt"
+        className="section"
         initial={sectionReveal.initial}
         whileInView={sectionReveal.whileInView}
         transition={sectionReveal.transition}
@@ -69,7 +71,7 @@ export default function Home() {
         <div className="container">
           <div className="home-heading-stack" style={{ marginBottom: '1.75rem' }}>
             <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.75rem)', lineHeight: 1.05, maxWidth: '22ch' }}>
-              From <em>Our Ecosystem.</em>
+              From <em>Our Founders</em>
             </h2>
             <Link to="/insights" className="home-inline-link">
               View All
@@ -77,48 +79,43 @@ export default function Home() {
           </div>
           <div className="home-news-body">
             <motion.article className="home-news-card">
-              <span className="section-label">Example</span>
               <h3 style={{ marginTop: '0.9rem', marginBottom: '0.65rem', fontSize: 'clamp(1.2rem, 2.6vw, 1.6rem)' }}>
-                Lorem ipsum ecosystem update.
+                Founder Updates Coming Soon
               </h3>
               <p className="text-muted" style={{ fontSize: '1rem', maxWidth: '60ch', lineHeight: 1.65 }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum facilisis mauris ac metus pretium,
-                vitae dapibus velit gravida. Integer feugiat at sapien eget semper.
+                We will publish founder spotlights, lessons learned, and milestone recaps here once this cycle begins.
               </p>
-              <Link to="/insights" className="home-news-link">
-                Read Sample <ArrowRight size={16} />
-              </Link>
             </motion.article>
           </div>
         </div>
       </motion.section>
 
       <motion.section
-        className="home-sponsor-cta-wrap"
-        initial={{ opacity: 0, scale: 0.98 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.35 }}
-        transition={{ duration: 0.6 }}
+        className="section"
+        initial={sectionReveal.initial}
+        whileInView={sectionReveal.whileInView}
+        transition={sectionReveal.transition}
+        viewport={sectionReveal.viewport}
       >
-        <div className="home-sponsor-cta">
-          <div className="home-sponsor-cta__sheen" aria-hidden />
-          <div className="home-sponsor-cta__pulse" aria-hidden />
-          <div className="container home-sponsor-cta__inner">
-            <div className="home-sponsor-cta__text">
-              <h2 style={{ fontSize: 'clamp(2rem, 4.5vw, 3.25rem)', lineHeight: 1.05, marginBottom: '1rem' }}>
-                Turn ideas into <em>momentum.</em>
-              </h2>
-              <p className="text-muted" style={{ fontSize: '1.05rem', lineHeight: 1.65, maxWidth: '44ch' }}>
-                Partner with high-agency student founders at UC San Diego through curated brand visibility, early access to
-                emerging teams, and hands-on engagement across events and programming.
+        <div className="container">
+          <div className="home-sponsor-intro">
+            <div className="home-sponsor-intro__main">
+              <div className="home-heading-stack">
+                <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', lineHeight: 1.05, maxWidth: '24ch' }}>
+                  <em>Partnerships</em>
+                </h2>
+                <a href="#site-footer" className="home-inline-link">
+                  Contact Us
+                </a>
+              </div>
+              <p className="text-muted home-sponsor-intro__blurb" style={{ fontSize: '1.05rem', lineHeight: 1.68 }}>
+                Startup Incubator is backed by leading sponsors and investors who want to meet serious student builders. Sponsors fund
+                workshops, demo nights, and flagship events. Investors plug in through curated team intros and touchpoints across our
+                pipeline. If that sounds like you, reach out anytime.
               </p>
             </div>
-            <motion.div className="home-sponsor-cta__cta">
-              <Link to="/sponsors" className="btn-accent home-sponsor-cta__btn">
-                Become a Sponsor
-              </Link>
-            </motion.div>
           </div>
+          <BackedByCarousel ariaLabel="Partner logos coming soon" placeholderText="Partner" />
         </div>
       </motion.section>
 
@@ -132,7 +129,7 @@ export default function Home() {
         <div className="container">
           <div className="home-heading-stack" style={{ marginBottom: '2.25rem' }}>
             <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.25rem)', lineHeight: 1.05, maxWidth: '26ch' }}>
-              Meet the team behind <em>Startup Incubator.</em>
+              Meet the team behind <em>Startup Incubator</em>
             </h2>
             <Link to="/team" className="home-inline-link">
               Learn More
@@ -155,7 +152,7 @@ export default function Home() {
                 Community-first.
               </h3>
               <p className="text-muted">
-                Help UC San Diego students explore entrepreneurship by turning curiosity into actionable startup skills,
+                We help UC San Diego students explore entrepreneurship by turning curiosity into actionable startup skills,
                 supportive peer connections, and real-world learning.
               </p>
             </div>
