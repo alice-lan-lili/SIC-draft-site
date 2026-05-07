@@ -35,8 +35,8 @@
   --shape-blue: rgba(86, 162, 236, 0.14);
   --shape-gold: rgba(201, 149, 45, 0.16);
   --shape-slate: rgba(74, 106, 146, 0.14);
-  --page-max-width: 1380px;
-  --page-gutter: clamp(20px, 4vw, 72px);
+  --page-max-width: 1320px;
+  --page-gutter: clamp(26px, 6vw, 104px);
 }
 
 :root[data-theme="dark"] {
@@ -501,7 +501,7 @@ a:hover {
 }
 
 .section {
-  padding: 84px var(--page-gutter);
+  padding: 64px 120px;
   position: relative;
   overflow: clip;
 }
@@ -568,7 +568,7 @@ a:hover {
 }
 
 .section-home-after-hero {
-  padding-top: 120px;
+  padding-top: 64px;
 }
 
 .container {
@@ -1990,7 +1990,7 @@ button {
 
 /* Inner page heroes — synthwave / space-poster moodboard (blends into page bg) */
 .section-after-hero {
-  padding-top: 24px;
+  padding-top: 64px;
 }
 
 .page-hero {
@@ -2468,7 +2468,8 @@ button {
 .home-about-kinetic {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  gap: clamp(1rem, 3vw, 2rem);
+  row-gap: 48px;
+  column-gap: 64px;
   align-items: center;
 }
 
@@ -2825,8 +2826,8 @@ button {
 }
 
 .section-team-page {
-  padding-top: clamp(5.5rem, 10vw, 8.5rem);
-  padding-bottom: clamp(6rem, 11vw, 9rem);
+  padding-top: 64px;
+  padding-bottom: 64px;
 }
 
 .team-filter-bar {
