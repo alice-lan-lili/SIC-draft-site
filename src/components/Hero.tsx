@@ -286,7 +286,7 @@ export default function Hero({ onScroll }: { onScroll?: () => void }) {
           alignItems: 'center',
           justifyContent: 'flex-start',
           textAlign: 'center',
-          padding: 'clamp(88px, 12vh, 132px) 5% 0',
+          padding: 'clamp(108px, 15vh, 160px) var(--page-gutter) 0',
         }}
       >
         <motion.p

@@ -17,7 +17,7 @@ export default function SignIn() {
         className="section section-after-hero section-signin"
         style={{ flex: 1, paddingBottom: '4rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 5%', maxWidth: '520px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 var(--page-gutter)', maxWidth: '520px', margin: '0 auto' }}>
           <motion.div
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}

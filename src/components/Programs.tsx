@@ -3,10 +3,30 @@ import { motion } from 'framer-motion';
 import PageHero from './PageHero';
 
 const outline = [
-  { n: '01', title: 'Orientation Week', desc: 'Teams set goals, define problem space, and map first milestones.' },
-  { n: '02', title: 'Build Sprint', desc: 'Founders iterate quickly through customer interviews, prototyping, and weekly reviews.' },
-  { n: '03', title: 'Mentor Tracks', desc: 'Operators and mentors run targeted sessions for product, GTM, and fundraising readiness.' },
-  { n: '04', title: 'Demo Prep and Showcase', desc: 'Teams finalize narrative, metrics, and presentations for community and sponsor demo night.' },
+  {
+    n: '01',
+    label: 'Weeks 1-2',
+    title: 'Orientation Week',
+    desc: 'Teams set goals, define problem space, and map first milestones.',
+  },
+  {
+    n: '02',
+    label: 'Weeks 3-5',
+    title: 'Build Sprint',
+    desc: 'Founders iterate quickly through customer interviews, prototyping, and weekly reviews.',
+  },
+  {
+    n: '03',
+    label: 'Weeks 6-8',
+    title: 'Mentor Tracks',
+    desc: 'Operators and mentors run targeted sessions for product, GTM, and fundraising readiness.',
+  },
+  {
+    n: '04',
+    label: 'Weeks 9-10',
+    title: 'Demo Prep and Showcase',
+    desc: 'Teams finalize narrative, metrics, and presentations for community and sponsor demo night.',
+  },
 ];
 
 const events = [
@@ -102,13 +122,16 @@ export default function Programs() {
                 <motion.div
                   key={step.n}
                   className="program-outline__row"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  whileHover={{ y: -4, scale: 1.012 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.55, delay: i * 0.16, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.52, delay: i * 0.14, ease: [0.22, 1, 0.36, 1] }}
+                  tabIndex={0}
                 >
-                  <span className="program-outline__index">{step.n}</span>
+                  <div className="program-outline__meta">
+                    <span className="program-outline__index">{step.n}</span>
+                    <span className="program-outline__phase">{step.label}</span>
+                  </div>
                   <div className="program-outline__body">
                     <h3 className="program-outline__title">{step.title}</h3>
                     <p className="program-outline__desc text-muted">{step.desc}</p>

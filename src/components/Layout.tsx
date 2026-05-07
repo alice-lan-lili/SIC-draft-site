@@ -14,7 +14,7 @@ export default function Layout() {
           <Outlet />
         </div>
         
-        <footer id="site-footer" className="section" style={{ marginTop: 'auto', padding: '3rem 5%', background: 'var(--bg-primary)' }}>
+        <footer id="site-footer" className="section" style={{ marginTop: 'auto', padding: '3rem var(--page-gutter)', background: 'var(--bg-primary)' }}>
           <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
             <div>
               <h2 style={{ fontSize: '1rem', margin: 0, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-heading)' }}>Startup Incubator UCSD</h2>

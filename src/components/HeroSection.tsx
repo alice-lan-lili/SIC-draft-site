@@ -41,7 +41,11 @@ export default function HeroSection({
       className={`hero-section relative overflow-hidden bg-black ${className}`.trim()}
       style={{ position: 'relative', overflow: 'hidden', background: '#000' }}
     >
-      <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }} aria-hidden>
+      <div
+        className="hero-section__bg"
+        style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}
+        aria-hidden
+      >
         <Background />
       </div>
       <div className="relative z-10" style={{ position: 'relative', zIndex: 10 }}>
