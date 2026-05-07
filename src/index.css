@@ -1541,6 +1541,19 @@ button {
   padding: 3px;
 }
 
+/* Some logos have more internal whitespace; reduce padding so they fill the circle more. */
+.home-carousel-logo[data-startup-logo='complexity'] img,
+.home-carousel-logo[data-startup-logo='revize'] img,
+.directory-grid__logo[data-startup-logo='complexity'] img,
+.directory-grid__logo[data-startup-logo='revize'] img {
+  padding: 1px;
+}
+
+.home-carousel-logo[data-startup-logo='ssam'] img,
+.directory-grid__logo[data-startup-logo='ssam'] img {
+  padding: 2px;
+}
+
 :root[data-theme='dark'] .directory-grid__logo--aesthetic,
 :root[data-theme='dark'] .directory-grid__logo[data-startup-logo='aesthetic'] {
   border-color: rgba(255, 255, 255, 0.14);
