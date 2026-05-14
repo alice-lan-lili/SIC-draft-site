@@ -112,7 +112,12 @@ export default function SignIn() {
                 />
               </motion.div>
 
-              <motion.button type="submit" className="btn-accent" style={{ marginTop: '0.35rem', width: '100%', justifyContent: 'center' }} whileTap={{ scale: 0.97 }}>
+              <motion.button
+                type="submit"
+                className="btn-accent"
+                style={{ marginTop: '0.35rem', width: '100%', justifyContent: 'center' }}
+                whileTap={{ scale: 0.97 }}
+              >
                 Authenticate
               </motion.button>
             </form>

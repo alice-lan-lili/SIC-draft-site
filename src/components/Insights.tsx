@@ -16,7 +16,7 @@ export default function Insights() {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <PageHero
         background="aurora-bottom"
-        eyebrow={<span className="text-accent">Insights</span>}
+        eyebrow={<span className="text-accent">Blog</span>}
         backgroundImage="/heroes/insights-hero.svg"
         backgroundPosition="center 35%"
         title={
@@ -82,7 +82,7 @@ export default function Insights() {
 
           <motion.div
             className="insights-newsletter"
-            style={{ padding: 'clamp(2.5rem, 6vw, 4rem)', textAlign: 'center', position: 'relative', overflow: 'hidden', borderRadius: '16px' }}
+            style={{ padding: 'clamp(2.5rem, 6vw, 4rem)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -117,19 +117,17 @@ export default function Insights() {
             >
               <motion.input
                 type="email"
+                className="insights-newsletter__email"
                 placeholder="your@email.com"
-                whileFocus={{ scale: 1.02, borderColor: 'var(--text-accent)' }}
+                whileFocus={{ scale: 1.02 }}
                 style={{
                   flex: '1 1 220px',
                   padding: '11px 18px',
                   background: 'var(--bg-tertiary)',
-                  border: '1px solid var(--border-strong)',
                   color: 'var(--text-primary)',
-                  borderRadius: 0,
                   fontFamily: 'var(--font-body)',
                   fontSize: '0.9rem',
                   outline: 'none',
-                  transition: 'border-color 0.2s',
                 }}
               />
               <motion.button

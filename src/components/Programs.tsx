@@ -1,52 +1,19 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import PageHero from './PageHero';
-
-const outline = [
-  {
-    n: '01',
-    label: 'Weeks 1-2',
-    title: 'Orientation Week',
-    desc: 'Teams set goals, define problem space, and map first milestones.',
-  },
-  {
-    n: '02',
-    label: 'Weeks 3-5',
-    title: 'Build Sprint',
-    desc: 'Founders iterate quickly through customer interviews, prototyping, and weekly reviews.',
-  },
-  {
-    n: '03',
-    label: 'Weeks 6-8',
-    title: 'Mentor Tracks',
-    desc: 'Operators and mentors run targeted sessions for product, GTM, and fundraising readiness.',
-  },
-  {
-    n: '04',
-    label: 'Weeks 9-10',
-    title: 'Demo Prep and Showcase',
-    desc: 'Teams finalize narrative, metrics, and presentations for community and sponsor demo night.',
-  },
-];
-
-const events = [
-  { date: 'May 14, 2026', time: '6:00 PM', title: 'Lorem Ipsum Session', loc: 'Design & Innovation Building', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
-  { date: 'Jun 02, 2026', time: '1:00 PM', title: 'Dolor Sit Workshop', loc: 'Computer Science Center', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.' },
-  { date: 'Jun 20, 2026', time: '6:30 PM', title: 'Amet Founder Forum', loc: 'Rady School of Management', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.' },
-  { date: 'Jul 10, 2026', time: '9:00 AM', title: 'Consectetur Demo Review', loc: 'Downtown San Diego', details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.' },
-];
+import { PROGRAM_EVENTS, type ProgramEvent } from '../data/programEvents';
 
 const CALENDAR_YEAR = 2026;
 const CALENDAR_MONTH = 5; // June (0-indexed)
 const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-type ProgramEvent = (typeof events)[number];
 
 export default function Programs() {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<ProgramEvent | null>(null);
   const now = useMemo(() => new Date(), []);
   const upcomingEvents = useMemo(
-    () => events.filter((event) => new Date(event.date).getTime() >= now.getTime()),
+    () => PROGRAM_EVENTS.filter((event) => new Date(event.date).getTime() >= now.getTime()),
     [now]
   );
   const monthLabel = useMemo(
@@ -63,7 +30,7 @@ export default function Programs() {
     const daysInMonth = new Date(CALENDAR_YEAR, CALENDAR_MONTH + 1, 0).getDate();
     const eventMap = new Map<number, ProgramEvent[]>();
 
-    events.forEach((event) => {
+    PROGRAM_EVENTS.forEach((event) => {
       const d = new Date(event.date);
       if (d.getFullYear() === CALENDAR_YEAR && d.getMonth() === CALENDAR_MONTH) {
         const day = d.getDate();
@@ -95,52 +62,17 @@ export default function Programs() {
         backgroundPosition="center 28%"
         title={
           <>
-            Built for
-            <br />
-            <em>Technical Founders</em>
+            Programs and <em>events.</em>
           </>
         }
         subtitle="Clear, practical programming designed for students who want to move from curiosity to execution."
       >
-        <motion.button
-          className="btn-primary btn-primary--cta-alt btn-burst"
-          style={{ fontWeight: 600, padding: '13px 30px', cursor: 'pointer', borderRadius: 0 }}
-          type="button"
-          whileTap={{ scale: 0.97 }}
-        >
-          Apply Now
-        </motion.button>
+        <Link to="/get-involved" className="btn-primary btn-primary--cta-alt btn-burst" style={{ fontWeight: 600, padding: '13px 30px', borderRadius: 0 }}>
+          Club roles
+        </Link>
       </PageHero>
       <section className="section section-after-hero" style={{ flex: 1 }}>
         <div className="container">
-          <div style={{ marginBottom: '4rem' }}>
-            <h2 style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', marginBottom: '1.5rem' }}>
-              How it <em>Works</em>
-            </h2>
-            <div className="program-outline">
-              {outline.map((step, i) => (
-                <motion.div
-                  key={step.n}
-                  className="program-outline__row"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.52, delay: i * 0.14, ease: [0.22, 1, 0.36, 1] }}
-                  tabIndex={0}
-                >
-                  <div className="program-outline__meta">
-                    <span className="program-outline__index">{step.n}</span>
-                    <span className="program-outline__phase">{step.label}</span>
-                  </div>
-                  <div className="program-outline__body">
-                    <h3 className="program-outline__title">{step.title}</h3>
-                    <p className="program-outline__desc text-muted">{step.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
           {calendarOpen ? (
             <div className="program-calendar">
               <div
@@ -155,7 +87,7 @@ export default function Programs() {
               >
                 <h2 style={{ fontSize: 'clamp(1.55rem, 2.8vw, 2.1rem)' }}>{monthLabel}</h2>
                 <button className="home-inline-link program-schedule-link-btn" type="button" onClick={() => setCalendarOpen(false)}>
-                  Back to Programs
+                  Back
                 </button>
               </div>
               <div className="program-calendar__weekdays" aria-hidden>
@@ -178,7 +110,7 @@ export default function Programs() {
                           <div style={{ display: 'grid', gap: '0.4rem' }}>
                             {cell.events.map((event) => (
                               <button
-                                key={event.title}
+                                key={event.id}
                                 className="program-calendar__event-chip"
                                 type="button"
                                 onClick={() => setSelectedEvent(event)}
@@ -213,7 +145,7 @@ export default function Programs() {
             <div>
             <div style={{ marginBottom: '2rem' }}>
               <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', marginBottom: '0.65rem' }}>
-                Events <em>&amp; Sessions</em>
+                Upcoming <em>Events</em>
               </h2>
               <button className="home-inline-link program-schedule-link-btn" type="button" onClick={() => setCalendarOpen(true)}>
                 View Full Schedule
@@ -235,7 +167,7 @@ export default function Programs() {
               ) : (
                 upcomingEvents.map((ev, i) => (
                 <motion.div
-                  key={ev.title}
+                  key={ev.id}
                   className="page-outline-card program-event-card"
                   style={{
                     display: 'flex',

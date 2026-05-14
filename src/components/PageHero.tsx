@@ -15,6 +15,8 @@ export type PageHeroProps = {
   subtitle?: string;
   /** Larger default, smaller for auth-style pages */
   size?: 'default' | 'compact';
+  /** When set, hero block is at least one viewport tall (good with animated SVG backgrounds). */
+  fillViewport?: boolean;
   /** Optional hero photo, defaults to homepage rocket */
   backgroundImage?: string;
   backgroundPosition?: string;
@@ -44,7 +46,8 @@ export default function PageHero({
   title,
   subtitle,
   size = 'default',
-  backgroundImage = '/rocket_bg.png',
+  fillViewport = false,
+  backgroundImage = '/brand/about-team.png',
   backgroundPosition = 'center center',
   background,
   children,
@@ -70,30 +73,39 @@ export default function PageHero({
     my.set(0.5);
   }
 
-  const minH = size === 'compact' ? 'min(260px, 42vh)' : 'clamp(300px, 42vw, 480px)';
   const hasAnimatedBackground = Boolean(background);
-  const heroContent = (
+  const minH =
+    size === 'compact'
+      ? 'min(260px, 42vh)'
+      : fillViewport
+        ? 'min(100dvh, 100vh)'
+        : 'clamp(300px, 42vw, 480px)';
+
+  const heroHeader = (
     <motion.header
       ref={wrapRef}
       className={`page-hero${hasAnimatedBackground ? ' page-hero--animated' : ''}`}
-      style={{ minHeight: minH, ...(hasAnimatedBackground ? { background: 'transparent' } : {}) }}
+      style={{
+        minHeight: minH,
+        height: '100%',
+        ...(hasAnimatedBackground ? { background: 'transparent' } : {}),
+      }}
       initial={false}
       onMouseMove={hasAnimatedBackground ? undefined : onMouseMove}
       onMouseLeave={hasAnimatedBackground ? undefined : onMouseLeave}
     >
       {!hasAnimatedBackground && (
-        <>
+        <div className="page-hero__photo-parallax" aria-hidden>
           <motion.div
             className="page-hero__photo"
-            aria-hidden
             style={
               reduce
                 ? { backgroundImage: `url(${backgroundImage})`, backgroundPosition }
                 : { x: photoX, y: photoY, backgroundImage: `url(${backgroundImage})`, backgroundPosition }
             }
           />
-          <div className="page-hero__photo-overlay" aria-hidden />
-        </>
+          <div className="page-hero__photo-overlay" />
+        </div>
       )}
       {!hasAnimatedBackground && <div className="page-hero__grain" aria-hidden />}
 
@@ -127,7 +139,21 @@ export default function PageHero({
     </motion.header>
   );
 
-  if (!background) return heroContent;
+  const stageClass = `page-hero-stage${size === 'compact' ? ' page-hero-stage--compact' : ''}${fillViewport ? ' page-hero-stage--fill-viewport' : ''}`;
 
-  return <HeroSection background={background}>{heroContent}</HeroSection>;
+  if (!background) {
+    return (
+      <section className={stageClass}>
+        <div className="page-hero-stage__sticky">{heroHeader}</div>
+      </section>
+    );
+  }
+
+  return (
+    <section className={stageClass}>
+      <div className="page-hero-stage__sticky">
+        <HeroSection background={background}>{heroHeader}</HeroSection>
+      </div>
+    </section>
+  );
 }

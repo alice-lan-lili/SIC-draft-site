@@ -1,35 +1,56 @@
 import { useState, useEffect } from 'react';
-import { Moon, Sun, Menu, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Menu, Moon, Sun, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTheme } from '../hooks/useTheme';
 
 const navLinks = [
-  { to: '/directory', label: 'Directory' },
-  { to: '/insights', label: 'Insights' },
-  { to: '/programs', label: 'Programs' },
-  { to: '/team', label: 'Team' },
-];
+  { key: 'home', to: '/', label: 'Home' },
+  { key: 'events', to: '/programs', label: 'Events' },
+  { key: 'directory', to: '/directory', label: 'Directory' },
+  { key: 'get-involved', to: '/get-involved', label: 'Get involved' },
+  { key: 'blog', to: '/insights', label: 'Blog' },
+] as const;
+
+function navLinkIsActive(pathname: string, to: string) {
+  if (to === '/') return pathname === '/';
+  if (to === '/directory') return pathname === '/directory' || pathname === '/the-cohort';
+  if (to === '/programs') return pathname === '/programs';
+  if (to === '/get-involved') return pathname === '/get-involved' || pathname === '/work-here';
+  if (to === '/insights') return pathname === '/insights' || pathname === '/mission-logs';
+  return pathname === to;
+}
 
 const COMPACT_BREAKPOINT = 960;
 const PROVIDED_LOGO = '/brand/logo.png';
 
+const menuPanelVariants = {
+  hidden: { opacity: 0, scale: 0.96, y: -8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.15, ease: [0.23, 1, 0.32, 1] as const },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.96,
+    y: -8,
+    transition: { duration: 0.12, ease: [0.32, 0.72, 0, 1] as const },
+  },
+};
+
+const backdropVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.15 } },
+  exit: { opacity: 0, transition: { duration: 0.12 } },
+};
+
 export default function Navbar() {
-  const [theme, setTheme] = useState('dark');
-  const [scrolled, setScrolled] = useState(false);
   const [isCompact, setIsCompact] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
-
-  useEffect(() => {
-    const saved = localStorage.getItem('theme') || 'dark';
-    setTheme(saved);
-    document.documentElement.setAttribute('data-theme', saved);
-  }, []);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const onResize = () => setIsCompact(window.innerWidth < COMPACT_BREAKPOINT);
@@ -39,7 +60,10 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    setMenuOpen(false);
+    const id = window.requestAnimationFrame(() => {
+      setMenuOpen(false);
+    });
+    return () => window.cancelAnimationFrame(id);
   }, [location.pathname, isCompact]);
 
   useEffect(() => {
@@ -49,43 +73,30 @@ export default function Navbar() {
     };
   }, [menuOpen]);
 
-  const toggleTheme = () => {
-    const next = theme === 'light' ? 'dark' : 'light';
-    setTheme(next);
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-  };
-
-  const isTransparent = !scrolled;
-  const navClass = `site-nav${isTransparent ? ' site-nav--transparent' : ''}`;
-
   return (
     <>
       <nav
-        className={navClass}
+        className="site-nav"
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           zIndex: 1000,
-          padding: '0 var(--page-gutter)',
+          paddingTop: 0,
+          paddingBottom: 0,
+          paddingLeft: 'max(var(--page-gutter), env(safe-area-inset-left, 0px))',
+          paddingRight: 'max(var(--page-gutter), env(safe-area-inset-right, 0px))',
           height: '64px',
           display: 'grid',
           gridTemplateColumns: isCompact ? 'minmax(0, 1fr) auto' : 'minmax(0, 1fr) auto minmax(0, 1fr)',
           alignItems: 'center',
           columnGap: '1rem',
-          background: isTransparent
-            ? 'transparent'
-            : theme === 'dark'
-              ? 'rgba(0,0,0,0.66)'
-              : 'rgba(255,255,255,0.74)',
-          backdropFilter: isTransparent ? 'none' : 'blur(14px) saturate(170%)',
-          WebkitBackdropFilter: isTransparent ? 'none' : 'blur(14px) saturate(170%)',
-          borderTop: 'none',
-          borderBottom: 'none',
+          backdropFilter: 'blur(14px) saturate(170%)',
+          WebkitBackdropFilter: 'blur(14px) saturate(170%)',
           boxShadow: 'none',
           transition: 'background 0.3s ease',
+          background: 'var(--nav-glass-bg)',
         }}
       >
         <Link
@@ -134,10 +145,10 @@ export default function Navbar() {
             }}
           >
             {navLinks.map((link) => {
-              const active = location.pathname === link.to;
+              const active = navLinkIsActive(location.pathname, link.to);
               return (
                 <Link
-                  key={link.to}
+                  key={link.key}
                   to={link.to}
                   className={`site-nav__link${active ? ' site-nav__link--active' : ''}`}
                 >
@@ -159,27 +170,26 @@ export default function Navbar() {
           <button
             type="button"
             onClick={toggleTheme}
-            className="site-nav__icon-btn site-nav__theme"
-            aria-label={theme === 'light' ? 'Use dark theme' : 'Use light theme'}
+            className="site-nav__icon-btn site-nav__theme-toggle"
+            aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
             style={{
               borderRadius: '5px',
-              cursor: 'pointer',
+              width: '36px',
+              height: '36px',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '36px',
-              height: '36px',
-              backdropFilter: 'blur(8px)',
+              cursor: 'pointer',
             }}
           >
-            {theme === 'light' ? <Moon size={17} /> : <Sun size={17} />}
+            {theme === 'light' ? <Moon size={18} strokeWidth={2} /> : <Sun size={18} strokeWidth={2} />}
           </button>
 
           {!isCompact && (
             <Link
               to="/signin"
               className="btn-primary btn-primary--cta-alt btn-burst nav-signin-btn"
-              style={{ padding: '8px 16px', fontSize: '0.82rem' }}
+              style={{ padding: '6px 12px', fontSize: '0.76rem' }}
             >
               Sign In
             </Link>
@@ -203,18 +213,34 @@ export default function Navbar() {
                 cursor: 'pointer',
               }}
             >
-              {menuOpen ? <X size={18} /> : <Menu size={18} />}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={menuOpen ? 'close' : 'open'}
+                  initial={{ opacity: 0, rotate: -30, scale: 0.8 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotate: 30, scale: 0.8 }}
+                  transition={{ duration: 0.12, ease: [0.23, 1, 0.32, 1] }}
+                  style={{ display: 'flex' }}
+                >
+                  {menuOpen ? <X size={18} /> : <Menu size={18} />}
+                </motion.span>
+              </AnimatePresence>
             </button>
           )}
         </div>
       </nav>
 
-      {isCompact && menuOpen && (
-        <>
-          <button
+      <AnimatePresence>
+        {isCompact && menuOpen && (
+          <motion.button
+            key="nav-backdrop"
             type="button"
             aria-label="Close menu"
             onClick={() => setMenuOpen(false)}
+            variants={backdropVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
             style={{
               position: 'fixed',
               inset: 0,
@@ -224,56 +250,79 @@ export default function Navbar() {
               cursor: 'pointer',
             }}
           />
-          <div
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isCompact && menuOpen && (
+          <motion.div
+            key="nav-menu"
+            className="site-nav__menu-panel"
+            variants={menuPanelVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
             style={{
               position: 'fixed',
               top: '72px',
-              left: 'auto',
-              right: 'var(--page-gutter)',
-              width: 'min(400px, calc(100vw - clamp(32px, 10%, 64px)))',
-              maxWidth: '400px',
               zIndex: 1002,
               border: '1px solid var(--border-strong)',
               borderRadius: '0',
-              background: theme === 'dark' ? 'rgba(12, 12, 12, 0.92)' : 'rgba(255, 255, 255, 0.94)',
+              background: 'var(--nav-drawer-bg)',
               backdropFilter: 'blur(18px)',
               WebkitBackdropFilter: 'blur(18px)',
               padding: '0.4rem',
               maxHeight: 'min(70vh, 520px)',
               overflowY: 'auto',
+              transformOrigin: 'top right',
             }}
           >
-            {navLinks.map((link) => {
-              const active = location.pathname === link.to;
+            {navLinks.map((link, idx) => {
+              const active = navLinkIsActive(location.pathname, link.to);
               return (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={`site-nav__drawer-link${active ? ' site-nav__drawer-link--active' : ''}`}
-                  style={{
-                    display: 'block',
-                    padding: '0.75rem 0.85rem',
-                    borderRadius: '0',
-                    color: active ? 'var(--text-primary)' : 'var(--text-secondary)',
-                    background: active ? 'rgba(255,255,255,0.06)' : 'transparent',
-                    fontSize: '0.95rem',
-                    whiteSpace: 'normal',
+                <motion.div
+                  key={link.key}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{
+                    delay: 0.04 + idx * 0.04,
+                    duration: 0.2,
+                    ease: [0.23, 1, 0.32, 1],
                   }}
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    to={link.to}
+                    className={`site-nav__drawer-link${active ? ' site-nav__drawer-link--active' : ''}`}
+                    style={{
+                      display: 'block',
+                      padding: '0.75rem 0.85rem',
+                      borderRadius: '0',
+                      color: active ? 'var(--text-primary)' : 'var(--text-secondary)',
+                      fontSize: '0.95rem',
+                      whiteSpace: 'normal',
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
               );
             })}
-            <Link
-              to="/signin"
-              className="btn-primary btn-primary--cta-alt btn-burst nav-signin-btn"
-              style={{ width: '100%', marginTop: '0.35rem' }}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.16, duration: 0.2 }}
             >
-              Sign In
-            </Link>
-          </div>
-        </>
-      )}
+              <Link
+                to="/signin"
+                className="btn-primary btn-primary--cta-alt btn-burst nav-signin-btn"
+                style={{ width: '100%', marginTop: '0.35rem' }}
+              >
+                Sign In
+              </Link>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

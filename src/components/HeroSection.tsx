@@ -4,15 +4,13 @@ import AuroraCentered from './backgrounds/AuroraCentered';
 import AuroraOriginal from './backgrounds/AuroraOriginal';
 import MeteorsDistant from './backgrounds/MeteorsDistant';
 import MeteorsOriginal from './backgrounds/MeteorsOriginal';
-import MeteorsStorm from './backgrounds/MeteorsStorm';
 
 export type HeroBackground =
   | 'aurora-original'
   | 'aurora-centered'
   | 'aurora-bottom'
   | 'meteors-original'
-  | 'meteors-distant'
-  | 'meteors-storm';
+  | 'meteors-distant';
 
 type HeroSectionProps = {
   background?: HeroBackground;
@@ -26,7 +24,6 @@ const BACKGROUNDS: Record<HeroBackground, ComponentType<{ className?: string }>>
   'aurora-bottom': AuroraBottom,
   'meteors-original': MeteorsOriginal,
   'meteors-distant': MeteorsDistant,
-  'meteors-storm': MeteorsStorm,
 };
 
 export default function HeroSection({
@@ -36,18 +33,22 @@ export default function HeroSection({
 }: HeroSectionProps) {
   const Background = BACKGROUNDS[background];
 
+  const bgLayer = (
+    <div
+      className="hero-section__bg"
+      style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}
+      aria-hidden
+    >
+      <Background />
+    </div>
+  );
+
   return (
     <section
       className={`hero-section relative overflow-hidden bg-black ${className}`.trim()}
-      style={{ position: 'relative', overflow: 'hidden', background: '#000' }}
+      style={{ position: 'relative', overflow: 'hidden', background: 'var(--hero-stage-bg, #0b0b0e)' }}
     >
-      <div
-        className="hero-section__bg"
-        style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}
-        aria-hidden
-      >
-        <Background />
-      </div>
+      {bgLayer}
       <div className="relative z-10" style={{ position: 'relative', zIndex: 10 }}>
         {children}
       </div>

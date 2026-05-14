@@ -1,9 +1,9 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import SpaceBackdrop from './components/SpaceBackdrop';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './components/Home';
 import Directory from './components/Directory';
 import Programs from './components/Programs';
+import GetInvolved from './components/GetInvolved';
 import Insights from './components/Insights';
 import Team from './components/Team';
 import SignIn from './components/SignIn';
@@ -11,13 +11,16 @@ import SignIn from './components/SignIn';
 function App() {
   return (
     <BrowserRouter>
-      <SpaceBackdrop />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="directory" element={<Directory />} />
+          <Route path="the-cohort" element={<Directory />} />
           <Route path="programs" element={<Programs />} />
+          <Route path="get-involved" element={<GetInvolved />} />
+          <Route path="work-here" element={<Navigate to="/get-involved" replace />} />
           <Route path="insights" element={<Insights />} />
+          <Route path="mission-logs" element={<Insights />} />
           <Route path="team" element={<Team />} />
           <Route path="signin" element={<SignIn />} />
         </Route>

@@ -6,24 +6,28 @@ export function StartupLinks({
   app,
   compact,
 }: {
-  website: string;
+  website?: string;
   app?: string;
   compact?: boolean;
 }) {
   const btnClass = compact ? 'startup-links__btn startup-links__btn--sm' : 'startup-links__btn';
 
+  if (!website && !app) return null;
+
   return (
     <div className="startup-links">
-      <motion.a
-        href={website}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={btnClass}
-        whileTap={{ scale: 0.97 }}
-      >
-        Website
-        <ExternalLink size={compact ? 14 : 15} aria-hidden strokeWidth={2} />
-      </motion.a>
+      {website ? (
+        <motion.a
+          href={website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={btnClass}
+          whileTap={{ scale: 0.97 }}
+        >
+          Website
+          <ExternalLink size={compact ? 14 : 15} aria-hidden strokeWidth={2} />
+        </motion.a>
+      ) : null}
       {app ? (
         <motion.a
           href={app}
